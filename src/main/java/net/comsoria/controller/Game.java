@@ -1,17 +1,10 @@
 package net.comsoria.controller;
 
-import net.comsoria.Utils;
 import net.comsoria.engine.IGameLogic;
 import net.comsoria.engine.Scene;
-import net.comsoria.engine.Tuple;
-import net.comsoria.engine.loaders.OBJLoader;
 import net.comsoria.engine.view.*;
 import net.comsoria.engine.view.Light.DirectionalLight;
 import net.comsoria.engine.view.Light.PointLight;
-import net.comsoria.engine.view.graph.BufferAttribute;
-import net.comsoria.engine.view.graph.Geometry;
-import net.comsoria.engine.view.graph.Material;
-import net.comsoria.engine.view.graph.Mesh;
 import net.comsoria.engine.view.input.KeyInput;
 import net.comsoria.engine.view.input.KeyListener;
 import net.comsoria.engine.view.input.MouseInput;
@@ -24,14 +17,12 @@ import net.comsoria.game.terrain.generation.PerlinGenerator;
 import org.joml.*;
 
 import java.lang.Math;
-import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Game implements IGameLogic {
     private Renderer renderer = new Renderer();
-    private Camera camera = new Camera();
-    private Hud hud = new Hud();
+    private GameHud hud = new GameHud();
     private Scene scene = new Scene(hud);
     private SkyDome skyDome;
 
@@ -46,14 +37,14 @@ public class Game implements IGameLogic {
     public void init(Window window, KeyInput keyInput) throws Exception {
         hud.init();
         renderer.init(window);
-        skyDome = new SkyDome(Utils.loadResourceAsString("$skydome_vertex"), Utils.loadResourceAsString("$skydome_fragment"), 1000);
-        scene.children.add(skyDome.getGameObject());
+//        skyDome = new SkyDome(Utils.loadResourceAsString("$skydome_vertex"), Utils.loadResourceAsString("$skydome_fragment"), 1000);
+//        scene.children.add(skyDome.getGameObject());
 
         Vector3f background = new Vector3f(23, 32, 42);
         background = background.div(255);
 
         window.setClearColor(background);
-        scene.fog = new Fog(0.001f, camera.far - 1000, background);
+        scene.fog = new Fog(0.001f, scene.camera.far - 1000);
 
         chunkLoader = new ChunkLoader(new PerlinGenerator(0.055), 65, 5000, 2, 200); // 0.075
         player = new Player(new Vector3f(0, 0, 0));
@@ -103,14 +94,14 @@ public class Game implements IGameLogic {
             }
 
             float speed = player.getSpeed(keys.isKeyPressed(GLFW_KEY_LEFT_CONTROL));
-            camera.movePosition((movement.x / 15f) * speed, ((movement.y / 15f) * speed), ((movement.z / 15f) * speed));
+            scene.camera.movePosition((movement.x / 15f) * speed, ((movement.y / 15f) * speed), ((movement.z / 15f) * speed));
 
             Vector2d pos = mouse.getMovementVec();
-            camera.rotation.x += (float) pos.y * 0.07f;
-            camera.rotation.y += (float) pos.x * 0.07f;
-            hud.rotateCompass(camera.rotation.y);
+            scene.camera.rotation.x += (float) pos.y * 0.07f;
+            scene.camera.rotation.y += (float) pos.x * 0.07f;
+            hud.rotateCompass(scene.camera.rotation.y);
 
-            player.setPosition(camera.position);
+            player.setPosition(scene.camera.position);
 
             if (keys.isKeyPressed(GLFW_KEY_UP)) {
                 time += 0.1;
@@ -128,7 +119,7 @@ public class Game implements IGameLogic {
         try {
             chunkLoader.updateAroundPlayer(player.get2DPosition(), world);
             for (Chunk chunk : world.getBuffer()) {
-                scene.children.add(chunk.getGameObject());
+                scene.add(chunk.getGameObject());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,7 +128,7 @@ public class Game implements IGameLogic {
     }
 
     public void render(Window window) throws Exception {
-        renderer.render(window, camera, scene);
+        renderer.render(window, scene);
     }
 
     public void cleanup() {

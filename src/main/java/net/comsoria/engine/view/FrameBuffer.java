@@ -3,7 +3,6 @@ package net.comsoria.engine.view;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.Timer;
 import net.comsoria.engine.Tuple;
-import net.comsoria.engine.view.GLSL.Programs.PostProcessingProgram;
 import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.Programs.custom.IExtractSceneData;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
@@ -19,7 +18,7 @@ import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
 import static org.lwjgl.opengl.GL30.glBindFramebuffer;
 import static org.lwjgl.opengl.GL32.glFramebufferTexture;
 
-public class FrameBuffer {
+public class FrameBuffer implements Renderable {
     private final Mesh mesh;
 
     private int fbo, drb;
@@ -38,23 +37,7 @@ public class FrameBuffer {
         Material material = new Material();
         material.shaderProgram = FrameBuffer.generateFrameBufferShader(vertex, fragment);
         mesh = new Mesh(geometry, material);
-
-//        fbo = glGenFramebuffers();
-//        this.bind();
-//
-//        drb = glGenRenderbuffers();
-//        glBindRenderbuffer(GL_RENDERBUFFER, drb);
-//        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-//        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, drb);
-//
-//        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, material.textures.get(0).getId(), 0);
-//        glDrawBuffers(new int[] {GL_COLOR_ATTACHMENT0});
-//        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-//            System.out.println("ERROR");
-//            return;
-//        }
-//
-//        FrameBuffer.unbind();
+        mesh.initShaderProgram();
 
         setSize(width, height);
     }
@@ -102,11 +85,13 @@ public class FrameBuffer {
         glDeleteRenderbuffers(drb);
     }
 
-    public void render() throws Exception {
-        if (this.mesh.needsInitialising()) this.mesh.init(null);
-        this.mesh.bind();
-        this.mesh.render();
-        this.mesh.unbind();
+    @Override
+    public void render(Window window) throws Exception {
+        this.mesh.geometry.bind();
+        this.mesh.material.shaderProgram.bind();
+        this.mesh.render(window);
+        this.mesh.geometry.unbind();
+        this.mesh.material.shaderProgram.unbind();
     }
 
     public static void unbind() {

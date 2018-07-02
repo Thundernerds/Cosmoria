@@ -6,12 +6,10 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Fog {
     public float density;
-    public Vector3f color;
     public float start;
 
-    public Fog(float density, float start, Vector3f color) {
+    public Fog(float density, float start) {
         this.density = density;
-        this.color = color;
         this.start = start;
     }
 }

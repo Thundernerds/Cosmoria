@@ -1,6 +1,6 @@
 package net.comsoria.controller;
 
-import net.comsoria.engine.IHud;
+import net.comsoria.engine.Hud;
 import net.comsoria.engine.loaders.OBJLoader;
 import net.comsoria.engine.view.GLSL.Programs.ShaderProgram2D;
 import net.comsoria.engine.view.GameObject;
@@ -13,18 +13,14 @@ import org.joml.Vector4f;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Hud implements IHud {
-    private List<GameObject> gameObjects = new ArrayList<>();
+public class GameHud extends Hud {
     private GameObject compass;
-
-    @Override
-    public List<GameObject> getGameItems() {
-        return gameObjects;
-    }
 
     void init() throws Exception {
         Mesh mesh = new Mesh(new Geometry(OBJLoader.loadGeometry("$compassobj")), new Material());
         mesh.material.ambientColour = new Vector4f(1, 0, 0, 1f);
+        mesh.material.shaderProgram = new ShaderProgram2D();
+        mesh.initShaderProgram();
 
         compass = new GameObject(mesh);
         compass.scale = 40.0f;

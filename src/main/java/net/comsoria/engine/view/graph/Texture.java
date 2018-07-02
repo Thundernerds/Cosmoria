@@ -93,4 +93,8 @@ public class Texture {
     public void cleanup() {
         glDeleteTextures(id);
     }
+
+    public static void unbind() {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 }

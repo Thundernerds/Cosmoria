@@ -41,7 +41,6 @@ public class ShaderProgram3D extends ShaderProgram {
 
     protected void createFogUniform(String name) throws Exception {
         this.createUniform(name + ".density");
-        this.createUniform(name + ".color");
         this.createUniform(name + ".start");
     }
 
@@ -126,7 +125,6 @@ public class ShaderProgram3D extends ShaderProgram {
 
     public void setUniform(String name, Fog fog) {
         this.setUniform(name + ".density", fog.density);
-        this.setUniform(name + ".color", fog.color);
         this.setUniform(name + ".start", fog.start);
     }
 
