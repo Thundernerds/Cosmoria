@@ -26,7 +26,7 @@ public class Game implements IGameLogic {
     private Scene scene = new Scene(hud);
     private SkyDome skyDome;
 
-    private World world = new World();
+    private World world;
     private ChunkLoader chunkLoader;
     private Player player;
 
@@ -37,6 +37,8 @@ public class Game implements IGameLogic {
     public void init(Window window, KeyInput keyInput) throws Exception {
         hud.init();
         renderer.init(window);
+
+        world = new World();
 //        skyDome = new SkyDome(Utils.loadResourceAsString("$skydome_vertex"), Utils.loadResourceAsString("$skydome_fragment"), 1000);
 //        scene.children.add(skyDome.getGameObject());
 
@@ -64,6 +66,8 @@ public class Game implements IGameLogic {
 //        scene.light.pointLightList.add(pointLight);
 
         hud.updateSize(window);
+
+        scene.add(chunkLoader.batchRenderer);
     }
 
     public void update(Window window, float interval, MouseInput mouse, KeyInput keys) {
@@ -118,9 +122,6 @@ public class Game implements IGameLogic {
 
         try {
             chunkLoader.updateAroundPlayer(player.get2DPosition(), world);
-            for (Chunk chunk : world.getBuffer()) {
-                scene.add(chunk.getGameObject());
-            }
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);

@@ -11,9 +11,6 @@ import net.comsoria.engine.view.graph.Mesh;
 import net.comsoria.engine.view.graph.Mesh2D;
 import org.joml.Vector4f;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GameHud extends Hud {
     private Mesh compass;
 

@@ -1,9 +1,8 @@
 package net.comsoria.engine.view.graph;
 
 import net.comsoria.engine.Scene;
-import net.comsoria.engine.view.GLSL.ShaderProgram;
+import net.comsoria.engine.view.Batch.RenderData;
 import net.comsoria.engine.view.GLSL.Transformation;
-import net.comsoria.engine.view.GLSL.Transformation0;
 import net.comsoria.engine.view.Renderable;
 import net.comsoria.engine.view.Window;
 import org.joml.Matrix4f;
@@ -12,7 +11,6 @@ import org.joml.Vector3f;
 import java.io.Closeable;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 
@@ -60,9 +58,9 @@ public class Mesh implements Renderable {
     }
 
     @Override
-    public Closeable render(Window window, Transformation transformation, Scene scene) throws Exception {
-        this.geometry.bind();
-        this.material.shaderProgram.bind();
+    public Closeable render(Transformation transformation, Scene scene, RenderData renderData) throws Exception {
+        if (renderData.shouldBindGeometry()) this.geometry.bind();
+        if (renderData.shouldBindShaderProgram()) this.material.shaderProgram.bind();
 
         if (!this.material.shaderProgram.isUpdated()) {
             this.material.shaderProgram.open();
@@ -88,10 +86,10 @@ public class Mesh implements Renderable {
         this.geometry.unbindAttributes();
         this.geometry.disableCull();
 
-        Texture.unbind();
+        if (this.material.textures.size() != 0) Texture.unbind();
 
-        this.geometry.unbind();
-        this.material.shaderProgram.unbind();
+        if (renderData.shouldBindGeometry()) this.geometry.unbind();
+        if (renderData.shouldBindShaderProgram()) this.material.shaderProgram.unbind();
 
         return this.material.shaderProgram;
     }

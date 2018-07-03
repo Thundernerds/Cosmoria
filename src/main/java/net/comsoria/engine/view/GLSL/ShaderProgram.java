@@ -1,11 +1,7 @@
 package net.comsoria.engine.view.GLSL;
 
 import net.comsoria.engine.Scene;
-import net.comsoria.engine.view.Light.DirectionalLight;
-import net.comsoria.engine.view.Light.PointLight;
-import net.comsoria.engine.view.Light.SpotLight;
 import net.comsoria.engine.view.graph.Mesh;
-import net.comsoria.engine.view.graph.Texture;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -18,10 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.lwjgl.opengl.GL11.GL_TEXTURE;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL20.glDeleteProgram;
-import static org.lwjgl.opengl.GL20.glUseProgram;
 
 public abstract class ShaderProgram implements Closeable {
     private final int programId;

@@ -1,6 +1,8 @@
 package net.comsoria.game.terrain;
 
 import net.comsoria.engine.Grid;
+import net.comsoria.engine.view.Batch.BatchRenderType;
+import net.comsoria.engine.view.Batch.BatchRenderer;
 import net.comsoria.game.coordinate.ChunkPosition;
 import net.comsoria.game.terrain.generation.ITerrainGenerator;
 import org.joml.Vector2f;
@@ -13,7 +15,7 @@ public class ChunkLoader {
     private final int graphicalSize;
     private final int range;
 
-    private final ChunkShaderProgram shaderProgram;
+    public final BatchRenderer batchRenderer = new BatchRenderer(new BatchRenderType());
 
     public ChunkLoader(ITerrainGenerator generator, int chunkSize, int graphicalSize, int radius, int range) throws Exception {
         this.generator = generator;
@@ -24,7 +26,7 @@ public class ChunkLoader {
 
         this.radius = radius;
 
-        this.shaderProgram = new ChunkShaderProgram((1.0f / graphicalSize) * this.range);
+        batchRenderer.batchRenderType.shaderProgram = new ChunkShaderProgram((1.0f / graphicalSize) * this.range);
     }
 
     private Chunk loadChunk(ChunkPosition position) throws Exception {
@@ -32,7 +34,7 @@ public class ChunkLoader {
         generator.updateGrid(grid, position);
 
         Chunk chunk = new Chunk(grid, position);
-        chunk.loadGameObject(this.graphicalSize, this.range, this.shaderProgram);
+        chunk.loadGameObject(this.graphicalSize, this.range, this.batchRenderer.batchRenderType.shaderProgram);
         return chunk;
     }
 
@@ -50,8 +52,11 @@ public class ChunkLoader {
                 ChunkPosition relativePosition = new ChunkPosition(x + chunkPosition.getX(), y + chunkPosition.getY());
                 Chunk existing = world.getChunk(relativePosition);
 
-                if (existing == null)
-                    world.addChunk(this.loadChunk(relativePosition));
+                if (existing == null) {
+                    Chunk chunk = this.loadChunk(relativePosition);
+                    world.addChunk(chunk);
+                    this.batchRenderer.gameObjects.add(chunk.getGameObject());
+                }
                 else if (!existing.getGameObject().visible)
                     existing.getGameObject().visible = true;
             }

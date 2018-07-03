@@ -1,11 +1,14 @@
 package net.comsoria.engine;
 
-import net.comsoria.engine.view.*;
+import net.comsoria.engine.view.Batch.RenderData;
+import net.comsoria.engine.view.Camera;
+import net.comsoria.engine.view.Fog;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.GLSL.Transformation;
-import net.comsoria.engine.view.GLSL.Transformation0;
 import net.comsoria.engine.view.Light.SceneLight;
-import org.joml.Matrix4f;
+import net.comsoria.engine.view.Renderable;
+import net.comsoria.engine.view.Window;
+import net.comsoria.engine.view.graph.Geometry;
 
 import java.io.Closeable;
 import java.util.ArrayList;
@@ -16,14 +19,12 @@ public class Scene {
     private final List<Renderable> children;
     public Hud hud;
     public Fog fog;
-    private Transformation0 transformation;
     public Camera camera;
 
     public Scene(Hud hud) {
         this.light = new SceneLight();
         this.children = new ArrayList<>();
         this.hud = hud;
-        this.transformation = new Transformation0();
         this.camera = new Camera();
     }
 
@@ -34,13 +35,13 @@ public class Scene {
         hud.cleanup();
     }
 
-    public void render(Window window, Transformation transformation) throws Exception {
+    public void render(Transformation transformation) throws Exception {
         List<Closeable> toClose = new ArrayList<>();
 
         for (Renderable gameItem : this.children) {
             if (!gameItem.shouldRender()) continue;
 
-            Closeable item = gameItem.render(window, transformation, this);
+            Closeable item = gameItem.render(transformation, this, RenderData.defaultRenderData);
             if (item != null && !toClose.contains(item)) toClose.add(item);
         }
 

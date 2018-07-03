@@ -3,6 +3,7 @@ package net.comsoria.engine.view;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.Timer;
 import net.comsoria.engine.Tuple;
+import net.comsoria.engine.view.Batch.RenderData;
 import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.Programs.custom.IExtractSceneData;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
@@ -79,8 +80,8 @@ public class FrameBuffer implements Renderable {
     }
 
     @Override
-    public Closeable render(Window window, Transformation transformation, Scene scene) throws Exception {
-        this.mesh.render(window, transformation, scene);
+    public Closeable render(Transformation transformation, Scene scene, RenderData renderData) throws Exception {
+        this.mesh.render(transformation, scene, renderData);
 
         return null;
     }

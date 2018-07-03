@@ -2,6 +2,7 @@ package net.comsoria.engine.view;
 
 import net.comsoria.Utils;
 import net.comsoria.engine.Scene;
+import net.comsoria.engine.view.Batch.RenderData;
 import net.comsoria.engine.view.GLSL.Transformation;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -68,12 +69,12 @@ public class Renderer {
 
         postProcessingFBO.bind();
         clear();
-        scene.render(window, transformation);
-        if (scene.hud != null) scene.hud.render(window, transformation);
+        scene.render(transformation);
+        if (scene.hud != null) scene.hud.render(transformation);
 
         FrameBuffer.unbind();
 
         clear();
-        postProcessingFBO.render(window, transformation, null);
+        postProcessingFBO.render(transformation, null, RenderData.defaultRenderData);
     }
 }

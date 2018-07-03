@@ -1,12 +1,7 @@
 package net.comsoria.engine.view.graph;
 
-import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.GLSL.Transformation;
-import net.comsoria.engine.view.Window;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
-
-import java.io.Closeable;
 
 public class Mesh2D extends Mesh {
     public Mesh2D(Geometry geometry, Material material) {
