@@ -3,73 +3,51 @@ package net.comsoria.engine;
 import net.comsoria.engine.view.*;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.GLSL.Transformation;
+import net.comsoria.engine.view.GLSL.Transformation0;
 import net.comsoria.engine.view.Light.SceneLight;
-import net.comsoria.engine.view.graph.Mesh;
 import org.joml.Matrix4f;
 
+import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Scene implements Renderable {
+public class Scene {
     public final SceneLight light;
-    private final List<GameObject> children;
+    private final List<Renderable> children;
     public Hud hud;
     public Fog fog;
-    private Transformation transformation;
+    private Transformation0 transformation;
     public Camera camera;
 
     public Scene(Hud hud) {
         this.light = new SceneLight();
         this.children = new ArrayList<>();
         this.hud = hud;
-        this.transformation = new Transformation();
+        this.transformation = new Transformation0();
         this.camera = new Camera();
     }
 
     public void cleanup() {
-        for (GameObject gameItem : this.children) {
-            gameItem.getMesh().cleanup();
+        for (Renderable gameItem : this.children) {
+            gameItem.cleanup();
         }
         hud.cleanup();
     }
 
-    @Override
-    public void render(Window window) throws Exception {
-        Matrix4f projectionMatrix = transformation.getProjectionMatrix(camera.fov, window.getWidth(), window.getHeight(), camera.near, camera.far);
-        Matrix4f viewMatrix = transformation.getViewMatrix(camera);
+    public void render(Window window, Transformation transformation) throws Exception {
+        List<Closeable> toClose = new ArrayList<>();
 
-        List<ShaderProgram> toClose = new ArrayList<>();
+        for (Renderable gameItem : this.children) {
+            if (!gameItem.shouldRender()) continue;
 
-        for (GameObject gameItem : this.children) {
-            if (!gameItem.visible) continue;
-
-            Mesh mesh = gameItem.getMesh();
-
-            ShaderProgram shaderProgram = mesh.material.shaderProgram;
-
-            mesh.geometry.bind();
-            mesh.material.shaderProgram.bind();
-
-            if (!shaderProgram.isUpdated()) {
-                shaderProgram.open();
-                shaderProgram.setupScene(this, projectionMatrix, viewMatrix);
-                toClose.add(shaderProgram);
-            }
-
-            shaderProgram.setupMesh(mesh, transformation.getModelViewMatrix(gameItem, viewMatrix));
-            mesh.render(window);
-
-            mesh.geometry.unbind();
-            mesh.material.shaderProgram.unbind();
+            Closeable item = gameItem.render(window, transformation, this);
+            if (item != null && !toClose.contains(item)) toClose.add(item);
         }
 
-        for (ShaderProgram shaderProgram : toClose) {
-            shaderProgram.close();
-        }
+        for (Closeable closeable : toClose) closeable.close();
     }
 
-    public void add(GameObject gameObject) throws Exception {
-        gameObject.getMesh().initShaderProgram();
+    public void add(Renderable gameObject) throws Exception {
         this.children.add(gameObject);
     }
 }

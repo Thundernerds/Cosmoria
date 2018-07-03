@@ -3,26 +3,28 @@ package net.comsoria.controller;
 import net.comsoria.engine.Hud;
 import net.comsoria.engine.loaders.OBJLoader;
 import net.comsoria.engine.view.GLSL.Programs.ShaderProgram2D;
-import net.comsoria.engine.view.GameObject;
+import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.Window;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
 import net.comsoria.engine.view.graph.Mesh;
+import net.comsoria.engine.view.graph.Mesh2D;
 import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameHud extends Hud {
-    private GameObject compass;
+    private Mesh compass;
 
     void init() throws Exception {
-        Mesh mesh = new Mesh(new Geometry(OBJLoader.loadGeometry("$compassobj")), new Material());
-        mesh.material.ambientColour = new Vector4f(1, 0, 0, 1f);
-        mesh.material.shaderProgram = new ShaderProgram2D();
-        mesh.initShaderProgram();
+        ShaderProgram shaderProgram = new ShaderProgram2D();
 
-        compass = new GameObject(mesh);
+        compass = new Mesh2D(new Geometry(OBJLoader.loadGeometry("$compassobj")), new Material());
+        compass.material.ambientColour = new Vector4f(1, 0, 0, 1f);
+        compass.material.shaderProgram = shaderProgram;
+        compass.initShaderProgram();
+
         compass.scale = 40.0f;
         gameObjects.add(compass);
 

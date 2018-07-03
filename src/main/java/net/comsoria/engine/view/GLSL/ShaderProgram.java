@@ -11,6 +11,7 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.system.MemoryStack;
 
+import java.io.Closeable;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL20.glDeleteProgram;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 
-public abstract class ShaderProgram {
+public abstract class ShaderProgram implements Closeable {
     private final int programId;
     private int vertexShaderId;
     private int fragmentShaderId;

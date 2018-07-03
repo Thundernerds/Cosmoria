@@ -6,9 +6,11 @@ import net.comsoria.engine.Tuple;
 import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.Programs.custom.IExtractSceneData;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
+import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.graph.*;
 import org.joml.Matrix4f;
 
+import java.io.Closeable;
 import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -76,6 +78,13 @@ public class FrameBuffer implements Renderable {
         return fbo;
     }
 
+    @Override
+    public Closeable render(Window window, Transformation transformation, Scene scene) throws Exception {
+        this.mesh.render(window, transformation, scene);
+
+        return null;
+    }
+
     public void cleanup() {
         glDeleteFramebuffers(fbo);
         if (this.mesh.material.isTextured()) {
@@ -86,12 +95,8 @@ public class FrameBuffer implements Renderable {
     }
 
     @Override
-    public void render(Window window) throws Exception {
-        this.mesh.geometry.bind();
-        this.mesh.material.shaderProgram.bind();
-        this.mesh.render(window);
-        this.mesh.geometry.unbind();
-        this.mesh.material.shaderProgram.unbind();
+    public boolean shouldRender() {
+        return true;
     }
 
     public static void unbind() {
