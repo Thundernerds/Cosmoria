@@ -1,40 +1,64 @@
 package net.comsoria;
 
+import org.json.JSONObject;
+
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 public final class Utils {
     private static final LinkedHashMap<String, String> directories = new LinkedHashMap<>();
     private static final LinkedHashMap<String, UnwrittenFile> files = new LinkedHashMap<>();
 
+    public static JSONObject settings;
+    private static boolean couldStart = false;
+
     static {
-        directories.put("home", getPath(System.getProperty("user.home") + "/Cosmoria"));
-        directories.put("saves", getPath("$home/Saves"));
-        directories.put("resources", getPath("$home/Resources"));
-        directories.put("shaders", getPath("$resources/Shaders"));
-        directories.put("models", getPath("$resources/Models"));
-        directories.put("textures", getPath("$resources/Textures"));
+        directories.put("home", System.getProperty("user.home") + "/Cosmoria");
+        directories.put("saves", "$home/Saves");
+        directories.put("resources", "$home/Resources");
+        directories.put("shaders", "$resources/Shaders");
+        directories.put("models", "$resources/Models");
+        directories.put("textures", "$resources/Textures");
 
-        files.put("vertex", new UnwrittenFile("$shaders/vertex.vs", "vertex.vs"));
-        files.put("fragment", new UnwrittenFile("$shaders/fragment.vs", "fragment.vs"));
-        files.put("hud_vertex", new UnwrittenFile("$shaders/hud_vertex.vs", "hud_vertex.vs"));
-        files.put("hud_fragment", new UnwrittenFile("$shaders/hud_fragment.vs", "hud_fragment.vs"));
-        files.put("chunk_vertex", new UnwrittenFile("$shaders/chunk_vertex.vs", "chunk_vertex.vs"));
-        files.put("chunk_fragment", new UnwrittenFile("$shaders/chunk_fragment.vs", "chunk_fragment.vs"));
-        files.put("pp_vertex", new UnwrittenFile("$shaders/postprocessing.v.glsl", "pp_v.v.glsl"));
-        files.put("pp_fragment", new UnwrittenFile("$shaders/postprocessing.f.glsl", "pp_f.f.glsl"));
-        files.put("skydome_vertex", new UnwrittenFile("$shaders/skydome.v.glsl", "skydome.v.glsl"));
-        files.put("skydome_fragment", new UnwrittenFile("$shaders/skydome.f.glsl", "skydome.f.glsl"));
+        try {
+            if (netIsAvailable()) {
+                String csv = loadResourceFromGithub("gitPath.csv");
+                String[] lines = csv.split("\n");
+                for (String line : lines) {
+                    String[] paths = line.replace("\"", "").split(",");
+                    files.put(paths[0], new UnwrittenFile(paths[1], paths[2]));
+                }
+                couldStart = true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-        files.put("cubeobj", new UnwrittenFile("$models/cube.obj", "cube.obj"));
-        files.put("compassobj", new UnwrittenFile("$models/compass.obj", "compass.obj"));
-        files.put("chunkplaneobj", new UnwrittenFile("$models/chunk_plane.obj", "chunk_plane.obj"));
-        files.put("skydomeobj", new UnwrittenFile("$models/skydome.obj", "skydome.obj"));
+    public static void saveSettings() throws IOException {
+        writeResource("$settings", settings.toString(4));
+    }
+
+    private static boolean netIsAvailable() {
+        try {
+            URL url = new URL("http://www.google.com");
+            URLConnection conn = url.openConnection();
+            conn.connect();
+            conn.getInputStream().close();
+            return true;
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     public static void init() throws IOException {
         for (String dirName : directories.keySet()) {
+            directories.put(dirName, getPath(directories.get(dirName)));
             File file = new File(directories.get(dirName));
             if (!file.exists()) file.mkdir();
         }
@@ -44,6 +68,14 @@ public final class Utils {
             unwrittenFile.updateName();
             unwrittenFile.create();
         }
+
+        if (!couldStart && !fileExists("$settings")) {
+            System.out.println("Failed to start - Wifi is needed the first time you start the game");
+            System.exit(0);
+        }
+        settings = new JSONObject(loadResourceAsString("$settings"));
+        settings.put("last", new Date().getTime());
+        saveSettings();
     }
 
     public static InputStream loadResourceAsStream(String path) throws FileNotFoundException {
@@ -99,12 +131,14 @@ public final class Utils {
         for (String key : directories.keySet()) {
             path = path.replace("$" + key, directories.get(key));
         }
-
         for (String key : files.keySet()) {
             path = path.replace("$" + key, files.get(key).clientPath);
         }
-
         return path.replace("/", File.separator);
+    }
+
+    public static boolean fileExists(String path) {
+        return new File(getPath(path)).exists();
     }
 
     private static class UnwrittenFile {

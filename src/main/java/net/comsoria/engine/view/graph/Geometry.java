@@ -60,14 +60,14 @@ public class Geometry {
         this.culledFace = face;
     }
 
-    void enableCull() {
+    public void enableCull() {
         if (this.culledFace != -1) {
             glEnable(GL_CULL_FACE);
             glCullFace(this.culledFace);
         }
     }
 
-    void disableCull() {
+    public void disableCull() {
         if (this.culledFace != -1) {
             glDisable(GL_CULL_FACE);
         }
@@ -94,13 +94,13 @@ public class Geometry {
         glDeleteVertexArrays(vaoId);
     }
 
-    void bindAttributes() {
+    public void bindAttributes() {
         for (int i = 0; i < vboIdList.size(); i++) {
             glEnableVertexAttribArray(i);
         }
     }
 
-    void unbindAttributes() {
+    public void unbindAttributes() {
         for (int i = 0; i < vboIdList.size(); i++) {
             glDisableVertexAttribArray(i);
         }

@@ -1,5 +1,6 @@
 package net.comsoria.controller;
 
+import net.comsoria.Utils;
 import net.comsoria.engine.IGameLogic;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.*;
@@ -39,16 +40,16 @@ public class Game implements IGameLogic {
         renderer.init(window);
 
         world = new World();
-//        skyDome = new SkyDome(Utils.loadResourceAsString("$skydome_vertex"), Utils.loadResourceAsString("$skydome_fragment"), 1000);
-//        scene.children.add(skyDome.getGameObject());
+        skyDome = new SkyDome(Utils.loadResourceAsString("$skydome_vertex"), Utils.loadResourceAsString("$skydome_fragment"), scene.camera.far - 100);
+        scene.add(skyDome.getGameObject());
 
         Vector3f background = new Vector3f(23, 32, 42);
         background = background.div(255);
 
         window.setClearColor(background);
-        scene.fog = new Fog(0.001f, scene.camera.far - 1000);
+        scene.fog = new Fog(0.001f, scene.camera.far - 1500);
 
-        chunkLoader = new ChunkLoader(new PerlinGenerator(0.055), 65, 5000, 2, 200); // 0.075
+        chunkLoader = new ChunkLoader(new PerlinGenerator(0.05), 65, 4000, 4, 200); // 0.075
         player = new Player(new Vector3f(0, 0, 0));
 
         keyInput.addListener(new KeyListener(new int[]{GLFW_KEY_ESCAPE}, (charCode, action) -> {
@@ -119,6 +120,18 @@ public class Game implements IGameLogic {
 
         scene.light.directionalLight.direction = new Vector3f((float) Math.sin(time), (float) Math.cos(time), 0);
         scene.light.ambientLight = new Vector3f((((float) Math.sin(time) + 1) / 2) * 1.3f + 1f);
+
+//        Vector3f day = new Vector3f(33, 150, 243).div(255);
+//        Vector3f night = new Vector3f(23, 32, 42).div(255);
+//        Vector3f day = new Vector3f();
+//        Vector3f night = new Vector3f(1);
+//        float dist = ((float) Math.sin(time) + 1) / 2;
+//        System.out.println(dist);
+//        day.x += (day.x - night.x) * dist;
+//        System.out.println(day.x);
+//        day.y += (day.y - night.y) * dist;
+//        day.z += (day.z - night.z) * dist;
+        skyDome.setColor(new Vector3f((float) Math.sin(time)), new Vector3f());
 
         try {
             chunkLoader.updateAroundPlayer(player.get2DPosition(), world);

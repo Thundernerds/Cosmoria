@@ -8,12 +8,11 @@ import net.comsoria.engine.view.Light.DirectionalLight;
 import net.comsoria.engine.view.Light.PointLight;
 import net.comsoria.engine.view.Light.SpotLight;
 import net.comsoria.engine.view.graph.Material;
-import net.comsoria.engine.view.graph.Mesh;
+import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import java.io.IOException;
 import java.util.List;
 
 public class ShaderProgram3D extends ShaderProgram {

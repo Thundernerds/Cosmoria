@@ -9,8 +9,10 @@ import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.graph.BufferAttribute;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
-import net.comsoria.engine.view.graph.Mesh;
+import net.comsoria.engine.view.graph.mesh.Mesh;
+import net.comsoria.engine.view.graph.mesh.SkyBox;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,20 +24,25 @@ public class SkyDome {
         Tuple<List<BufferAttribute>, int[]> data = OBJLoader.loadGeometry("$skydomeobj");
         data.getA().remove(1);
         data.getA().remove(1);
-        dome = new Mesh(new Geometry(data), new Material());
-        dome.material.shaderProgram = new CustomShaderProgram(fragment, vertex, Arrays.asList("time", "modelViewMatrix", "projectionMatrix"), Arrays.asList(), new IExtractSceneData() {
+        dome = new SkyBox(new Geometry(data), new Material());
+        dome.material.shaderProgram = new CustomShaderProgram(fragment, vertex, Arrays.asList("color1", "color2", "modelViewMatrix", "projectionMatrix"), Arrays.asList(), new IExtractSceneData() {
             @Override public void extractScene(Scene scene, ShaderProgram shaderProgram, Matrix4f projMatrix, Matrix4f viewMatrix) {
                 shaderProgram.setUniform("projectionMatrix", projMatrix);
             }
+
             @Override public void extractMesh(Mesh mesh, ShaderProgram shaderProgram, Matrix4f matrix) {
                 shaderProgram.setUniform("modelViewMatrix", matrix);
             }
         });
         dome.scale = size;
+        dome.initShaderProgram();
     }
 
-    public void setTime(float time) {
-        dome.material.shaderProgram.setUniform("time", time);
+    public void setColor(Vector3f main, Vector3f second) {
+        dome.material.shaderProgram.bind();
+        dome.material.shaderProgram.setUniform("color1", main);
+        dome.material.shaderProgram.setUniform("color2", second);
+        dome.material.shaderProgram.unbind();
     }
 
     public Mesh getGameObject() {

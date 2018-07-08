@@ -1,10 +1,12 @@
-package net.comsoria.engine.view.graph;
+package net.comsoria.engine.view.graph.mesh;
 
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.Batch.RenderData;
 import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.Renderable;
-import net.comsoria.engine.view.Window;
+import net.comsoria.engine.view.graph.Geometry;
+import net.comsoria.engine.view.graph.Material;
+import net.comsoria.engine.view.graph.Texture;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 

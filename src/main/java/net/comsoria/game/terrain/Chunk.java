@@ -1,6 +1,5 @@
 package net.comsoria.game.terrain;
 
-import net.comsoria.Utils;
 import net.comsoria.engine.Grid;
 import net.comsoria.engine.Tuple;
 import net.comsoria.engine.loaders.OBJLoader;
@@ -8,7 +7,7 @@ import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.graph.BufferAttribute;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
-import net.comsoria.engine.view.graph.Mesh;
+import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.game.coordinate.ChunkPosition;
 
 import java.util.List;

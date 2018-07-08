@@ -7,8 +7,8 @@ import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.Window;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
-import net.comsoria.engine.view.graph.Mesh;
-import net.comsoria.engine.view.graph.Mesh2D;
+import net.comsoria.engine.view.graph.mesh.Mesh;
+import net.comsoria.engine.view.graph.mesh.Mesh2D;
 import org.joml.Vector4f;
 
 public class GameHud extends Hud {

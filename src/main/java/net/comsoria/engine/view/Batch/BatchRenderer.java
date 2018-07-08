@@ -3,11 +3,10 @@ package net.comsoria.engine.view.Batch;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.Renderable;
-import net.comsoria.engine.view.graph.Mesh;
+import net.comsoria.engine.view.graph.mesh.Mesh;
 
 import java.io.Closeable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class BatchRenderer implements Renderable {

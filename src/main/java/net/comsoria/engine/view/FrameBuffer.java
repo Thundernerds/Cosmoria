@@ -9,6 +9,7 @@ import net.comsoria.engine.view.GLSL.Programs.custom.IExtractSceneData;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.graph.*;
+import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
 
 import java.io.Closeable;

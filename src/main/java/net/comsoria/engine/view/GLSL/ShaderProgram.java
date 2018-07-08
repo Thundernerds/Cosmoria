@@ -1,7 +1,7 @@
 package net.comsoria.engine.view.GLSL;
 
 import net.comsoria.engine.Scene;
-import net.comsoria.engine.view.graph.Mesh;
+import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;

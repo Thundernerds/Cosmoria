@@ -2,7 +2,7 @@ package net.comsoria.engine.view.GLSL.Programs.custom;
 
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
-import net.comsoria.engine.view.graph.Mesh;
+import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
 
 public interface IExtractSceneData {

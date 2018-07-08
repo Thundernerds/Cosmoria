@@ -3,9 +3,8 @@ package net.comsoria.game.terrain;
 import net.comsoria.Utils;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.GLSL.Programs.ShaderProgram3D;
-import net.comsoria.engine.view.graph.Mesh;
+import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 public class ChunkShaderProgram extends ShaderProgram3D {
     private final float range;
