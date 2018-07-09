@@ -14,6 +14,7 @@ import net.comsoria.game.SkyDome;
 import net.comsoria.game.terrain.Chunk;
 import net.comsoria.game.terrain.ChunkLoader;
 import net.comsoria.game.terrain.World;
+import net.comsoria.game.terrain.generation.Perlin2Generator;
 import net.comsoria.game.terrain.generation.PerlinGenerator;
 import org.joml.*;
 
@@ -49,7 +50,8 @@ public class Game implements IGameLogic {
         window.setClearColor(background);
         scene.fog = new Fog(0.001f, scene.camera.far - 1500);
 
-        chunkLoader = new ChunkLoader(new PerlinGenerator(0.05), 65, 4000, 4, 200); // 0.075
+//        chunkLoader = new ChunkLoader(new PerlinGenerator(0.05), 65, 4000, 4, 200); // 0.075
+        chunkLoader = new ChunkLoader(new Perlin2Generator(0.05, 0.001, 8), 65, 4000, 4, 200); // 0.075
         player = new Player(new Vector3f(0, 0, 0));
 
         keyInput.addListener(new KeyListener(new int[]{GLFW_KEY_ESCAPE}, (charCode, action) -> {
