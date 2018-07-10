@@ -30,7 +30,7 @@ public class ChunkShaderProgram extends ShaderProgram3D {
     @Override
     public void setupScene(Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix) {
         this.setUniform("projectionMatrix", projectionMatrix);
-        this.setUniform("ambientLight", scene.light.ambientLight);
+        this.setUniform("ambientLight", scene.light.ambientLight.getVec3());
 
         this.setUniform("fog", scene.fog);
         this.setUniform("directionalLight", scene.light.directionalLight);

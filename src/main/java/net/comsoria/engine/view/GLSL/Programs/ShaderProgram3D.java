@@ -90,7 +90,7 @@ public class ShaderProgram3D extends ShaderProgram {
 
 
     public void setUniform(String uniformName, PointLight pointLight) {
-        setUniform(uniformName + ".colour", pointLight.color);
+        setUniform(uniformName + ".colour", pointLight.color.getVec3());
         setUniform(uniformName + ".position", pointLight.position);
         setUniform(uniformName + ".intensity", pointLight.intensity);
         PointLight.Attenuation att = pointLight.attenuation;
@@ -110,7 +110,7 @@ public class ShaderProgram3D extends ShaderProgram {
     }
 
     public void setUniform(String uniformName, DirectionalLight dirLight) {
-        setUniform(uniformName + ".colour", dirLight.color);
+        setUniform(uniformName + ".colour", dirLight.color.getVec3());
         setUniform(uniformName + ".direction", dirLight.direction);
         setUniform(uniformName + ".intensity", dirLight.intensity);
     }
@@ -132,7 +132,7 @@ public class ShaderProgram3D extends ShaderProgram {
     public void setupScene(Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix) {
         this.setUniform("projectionMatrix", projectionMatrix);
 
-        this.setUniform("ambientLight", scene.light.ambientLight);
+        this.setUniform("ambientLight", scene.light.ambientLight.getVec3());
         this.setUniform("specularPower", 10f);
 
         List<PointLight> pointLightList = scene.light.pointLightList;

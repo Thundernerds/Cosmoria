@@ -1,6 +1,6 @@
 package net.comsoria.engine.view;
 
-import org.joml.Vector3f;
+import net.comsoria.engine.Color;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -88,8 +88,8 @@ public class Window {
         glClearColor(r, g, b, alpha);
     }
 
-    public void setClearColor(Vector3f color) {
-        setClearColor(color.x, color.y, color.z, 1.0f);
+    public void setClearColor(Color color) {
+        setClearColor(color.r, color.g, color.b, color.a);
     }
 
     public void setPosition(double xP, double yP) { //Percentages

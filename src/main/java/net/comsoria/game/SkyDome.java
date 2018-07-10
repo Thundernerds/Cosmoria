@@ -3,6 +3,7 @@ package net.comsoria.game;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.Tuple;
 import net.comsoria.engine.loaders.OBJLoader;
+import net.comsoria.engine.Color;
 import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.Programs.custom.IExtractSceneData;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
@@ -12,7 +13,6 @@ import net.comsoria.engine.view.graph.Material;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.engine.view.graph.mesh.SkyBox;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,10 +38,10 @@ public class SkyDome {
         dome.initShaderProgram();
     }
 
-    public void setColor(Vector3f main, Vector3f second) {
+    public void setColor(Color main, Color second) {
         dome.material.shaderProgram.bind();
-        dome.material.shaderProgram.setUniform("color1", main);
-        dome.material.shaderProgram.setUniform("color2", second);
+        dome.material.shaderProgram.setUniform("color1", main.getVec3());
+        dome.material.shaderProgram.setUniform("color2", second.getVec3());
         dome.material.shaderProgram.unbind();
     }
 

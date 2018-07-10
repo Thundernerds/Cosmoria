@@ -7,18 +7,17 @@ import net.comsoria.engine.view.GLSL.Transformation;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
-    private FrameBuffer postProcessingFBO = null;
     private Matrix4f projectionMatrix = new Matrix4f();
     private Matrix4f viewMatrix = new Matrix4f();
     private Matrix4f orthoMatrix = new Matrix4f();
 
-    public void init(Window window) throws Exception {
-        postProcessingFBO = new FrameBuffer(window.getWidth(), window.getHeight(),
-                Utils.loadResourceAsString("$pp_vertex"), Utils.loadResourceAsString("$pp_fragment"));
-    }
+    public List<FrameBuffer> frameBuffers = new ArrayList<>();
 
     public void clear() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -57,7 +56,7 @@ public class Renderer {
     public void render(Window window, Scene scene) throws Exception {
         if (window.isResized()) {
             glViewport(0, 0, window.getWidth(), window.getHeight());
-            postProcessingFBO.setSize(window.getWidth(), window.getHeight());
+            for (FrameBuffer frameBuffer : frameBuffers) frameBuffer.setSize(window.getWidth(), window.getHeight());
             window.setResized(false);
             scene.hud.updateSize(window);
         }
@@ -67,14 +66,28 @@ public class Renderer {
         transformation.view = getViewMatrix(scene.camera);
         transformation.ortho = getOrthoProjectionMatrix(0, window.getWidth(), window.getHeight(), 0);
 
-        postProcessingFBO.bind();
+        if (frameBuffers.size() != 0) frameBuffers.get(0).bind();
+
         clear();
         scene.render(transformation);
         if (scene.hud != null) scene.hud.render(transformation);
 
-        FrameBuffer.unbind();
+        for (int i = 1; i < frameBuffers.size(); i++) {
+            FrameBuffer frameBuffer = frameBuffers.get(i);
+            frameBuffer.bind();
 
-        clear();
-        postProcessingFBO.render(transformation, null, RenderData.defaultRenderData);
+            clear();
+            frameBuffers.get(i - 1).render(transformation, null, RenderData.defaultRenderData);
+        }
+
+        if (frameBuffers.size() != 0) {
+            FrameBuffer.unbind();
+
+            clear();
+            frameBuffers.get(frameBuffers.size() - 1).render(transformation, null, RenderData.defaultRenderData);
+        }
+
+//        clear();
+//        postProcessingFBO.render(transformation, null, RenderData.defaultRenderData);
     }
 }
