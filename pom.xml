@@ -17,6 +17,18 @@
                     <target>9</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <!--<version>2.6</version>-->
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>net.comsoria.controller.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
