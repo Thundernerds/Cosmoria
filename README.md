@@ -12,11 +12,12 @@
 ## What to do if it *does* work... (yay!)
 - Become a button samurai:
   - Press `ESC` to toggle paused mode (the game starts in this state)
-  - Use WASD to move around in 2D space
+  - Use WASD to move forward, backward etc - you know the drill
   - Use `shift` and `space` to move up and down in that order
   - Use `up` and `down` to fast forward in time (but only kind of)
 - In the likely event of a bug:
   - Get it exiled from the game by putting it in our issues tracker[here](https://github.com/Thundernerds/Cosmoria/issues).
-  - Tell us what you think at [devs.thundernerds@gmail.com]() - maybe we will reply!
+
+Tell us what you think of our game at [devs.thundernerds@gmail.com](mailto:devs.thundernerds@gmail.com) - maybe we will reply!
   
 Thanks for playing our game! - Mindstormer and the Thundernerds
