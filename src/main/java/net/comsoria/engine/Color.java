@@ -4,8 +4,8 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 public class Color {
-    public final static Color WHITE = Color.grayScale(0);
-    public final static Color BLACK = Color.grayScale(1);
+    public final static Color WHITE = Color.grayScale(1);
+    public final static Color BLACK = Color.grayScale(0);
     public final static Color GRAY = Color.grayScale(0.5f);
     public final static Color RED = new Color(1, 0, 0);
     public final static Color BLUE = new Color(0, 0, 1);
