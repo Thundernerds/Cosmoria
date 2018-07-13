@@ -10,6 +10,7 @@ import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.graph.BufferAttribute;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
+import net.comsoria.engine.view.graph.Texture;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.engine.view.graph.mesh.SkyBox;
 import org.joml.Matrix4f;
@@ -20,7 +21,7 @@ import java.util.List;
 public class SkyDome {
     private final Mesh dome;
 
-    public SkyDome(String fragment, String vertex, float size) throws Exception {
+    public SkyDome(String fragment, String vertex, float size, Texture sun) throws Exception {
         Tuple<List<BufferAttribute>, int[]> data = OBJLoader.loadGeometry("$skydomeobj");
         data.getA().remove(1);
         data.getA().remove(1);
@@ -36,6 +37,10 @@ public class SkyDome {
         });
         dome.scale = size;
         dome.initShaderProgram();
+        dome.geometry.bind();
+        dome.material.textures.add(sun);
+        dome.material.shaderProgram.createTextureUniform("sun");
+        dome.geometry.unbind();
     }
 
     public void setColor(Color main, Color second) {

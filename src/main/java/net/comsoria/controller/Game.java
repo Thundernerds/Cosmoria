@@ -7,6 +7,7 @@ import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.*;
 import net.comsoria.engine.view.Light.DirectionalLight;
 import net.comsoria.engine.view.Light.PointLight;
+import net.comsoria.engine.view.graph.Texture;
 import net.comsoria.engine.view.input.KeyInput;
 import net.comsoria.engine.view.input.KeyListener;
 import net.comsoria.engine.view.input.MouseInput;
@@ -42,9 +43,9 @@ public class Game implements IGameLogic {
 
         world = new World();
 
-        SkyDome skyDome = new SkyDome(Utils.loadResourceAsString("$skydome_vertex"), Utils.loadResourceAsString("$skydome_fragment"), scene.camera.far - 100);
+        SkyDome skyDome = new SkyDome(Utils.loadResourceAsString("$skydome_vertex"), Utils.loadResourceAsString("$skydome_fragment"), scene.camera.far - 100, new Texture("$sun"));
         scene.add(skyDome.getGameObject());
-        dayNightHandler = new DayNightHandler(skyDome, -0.2f, scene.light);
+        dayNightHandler = new DayNightHandler(skyDome, -0.5f, scene.light, 0.15f, 0.25f);
 
         Color background = new Color(23, 32, 42).getOneToZero();
 
