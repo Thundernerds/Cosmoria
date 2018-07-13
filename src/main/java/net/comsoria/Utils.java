@@ -2,15 +2,18 @@ package net.comsoria;
 
 import org.json.JSONObject;
 
+import java.awt.*;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
+import java.util.List;
 
 public final class Utils {
     private static final LinkedHashMap<String, String> directories = new LinkedHashMap<>();
     private static final LinkedHashMap<String, UnwrittenFile> files = new LinkedHashMap<>();
+    private static final String charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     public static JSONObject settings;
     private static boolean couldStart = false;
@@ -22,20 +25,45 @@ public final class Utils {
         directories.put("shaders", "$resources/Shaders");
         directories.put("models", "$resources/Models");
         directories.put("textures", "$resources/Textures");
+        directories.put(UUID(), "$shaders/chunk");
+        directories.put(UUID(), "$shaders/main");
+        directories.put(UUID(), "$shaders/hud");
+        directories.put(UUID(), "$shaders/postprocessing");
+        directories.put(UUID(), "$shaders/skydome");
 
         try {
             if (netIsAvailable()) {
                 String csv = loadResourceFromGithub("gitPath.csv");
+
                 String[] lines = csv.split("\n");
                 for (String line : lines) {
+                    if (line.trim().equals("")) continue;
+
                     String[] paths = line.replace("\"", "").split(",");
-                    files.put(paths[0], new UnwrittenFile(paths[1], paths[2]));
+                    UnwrittenFile unwrittenFile = paths[1].endsWith(".png")? new UnwrittenImage(paths[1], paths[2]):new UnwrittenFile(paths[1], paths[2]);
+                    files.put(paths[0], unwrittenFile);
                 }
                 couldStart = true;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static String UUID() {
+        StringJoiner result = new StringJoiner("-");
+
+        int parts = (int) ((Math.random() * 3) + 4);
+        for (int i = 0; i < parts; i++) {
+            int chars = (int) ((Math.random() * 5) + 10);
+            StringBuilder part = new StringBuilder();
+            for (int c = 0; c < chars; c++) {
+                part.append(charset.charAt((int) (Math.random() * charset.length())));
+            }
+            result.add(part.toString());
+        }
+
+        return result.toString();
     }
 
     public static void saveSettings() throws IOException {
@@ -70,7 +98,7 @@ public final class Utils {
         }
 
         if (!couldStart && !fileExists("$settings")) {
-            System.out.println("Failed to start - Wifi is needed the first time you start the game");
+            System.out.println("Failed to start - An internet connection is needed the first time you start the game");
             System.exit(0);
         }
         settings = new JSONObject(loadResourceAsString("$settings"));
@@ -99,6 +127,22 @@ public final class Utils {
         return loadResourceAsStringFromStream(resource.openStream());
     }
 
+    public static void copyImageFromGithub(String imageUrl, String destinationFile) throws IOException {
+        URL url = new URL("https://raw.githubusercontent.com/Thundernerds/CosmoriaResources/master/" + imageUrl);
+        InputStream is = url.openStream();
+        OutputStream os = new FileOutputStream(destinationFile);
+
+        byte[] b = new byte[2048];
+        int length;
+
+        while ((length = is.read(b)) != -1) {
+            os.write(b, 0, length);
+        }
+
+        is.close();
+        os.close();
+    }
+
     public static String loadResourceAsStringFromStream(InputStream stream) throws IOException {
         StringJoiner stringBuilder = new StringJoiner(System.getProperty("line.separator"));
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
@@ -107,6 +151,7 @@ public final class Utils {
         while ((inputLine = reader.readLine()) != null)
             stringBuilder.add(inputLine);
         reader.close();
+        stream.close();
 
         return stringBuilder.toString();
     }
@@ -142,8 +187,8 @@ public final class Utils {
     }
 
     private static class UnwrittenFile {
-        private String clientPath;
-        private final String gitPath;
+        String clientPath;
+        final String gitPath;
 
         UnwrittenFile(String clientPath, String gitPath) {
             this.clientPath = clientPath;
@@ -160,6 +205,16 @@ public final class Utils {
                 file.createNewFile();
                 writeResource(file, loadResourceFromGithub(this.gitPath));
             }
+        }
+    }
+
+    private static class UnwrittenImage extends UnwrittenFile {
+        UnwrittenImage(String clientPath, String gitPath) {
+            super(clientPath, gitPath);
+        }
+
+        void create() throws IOException {
+            copyImageFromGithub(this.gitPath, this.clientPath);
         }
     }
 
