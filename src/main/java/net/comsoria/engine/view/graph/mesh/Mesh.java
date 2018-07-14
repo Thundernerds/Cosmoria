@@ -26,6 +26,7 @@ public class Mesh implements Renderable {
     public final Vector3f rotation = new Vector3f();
     public float scale = 1f;
     public boolean visible = true;
+    public RenderOrder renderPosition = RenderOrder.Any;
 
     final static Matrix4f modelViewMatrix = new Matrix4f();
 
@@ -45,9 +46,12 @@ public class Mesh implements Renderable {
         material.cleanup();
     }
 
-    @Override
-    public boolean shouldRender() {
+    @Override public boolean shouldRender() {
         return visible;
+    }
+
+    @Override public RenderOrder getRenderOrder() {
+        return renderPosition;
     }
 
     public Matrix4f getModelViewMatrix(Transformation transformation) {
@@ -61,8 +65,7 @@ public class Mesh implements Renderable {
         return viewCurr.mul(modelViewMatrix);
     }
 
-    @Override
-    public Closeable render(Transformation transformation, Scene scene, RenderData renderData) throws Exception {
+    @Override public Closeable render(Transformation transformation, Scene scene, RenderData renderData) throws Exception {
         if (renderData.shouldBindGeometry()) this.geometry.bind();
         if (renderData.shouldBindShaderProgram()) this.material.shaderProgram.bind();
 

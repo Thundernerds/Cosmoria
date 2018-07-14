@@ -10,11 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BatchRenderer implements Renderable {
-    public final List<Mesh> gameObjects;
+    public final List<Renderable> gameObjects;
     public BatchRenderType batchRenderType;
-    public boolean shouldRender = true;
 
-    public BatchRenderer(BatchRenderType batchRenderType, List<Mesh> gameObjects) {
+    public boolean shouldRender = true;
+    public RenderOrder renderPosition = RenderOrder.Any;
+
+    public BatchRenderer(BatchRenderType batchRenderType, List<Renderable> gameObjects) {
         this.gameObjects = gameObjects;
         this.batchRenderType = batchRenderType;
     }
@@ -39,7 +41,27 @@ public class BatchRenderer implements Renderable {
         if (!meshRenderData.shouldBindGeometry()) batchRenderType.geometry.bind();
         if (!meshRenderData.shouldBindShaderProgram()) batchRenderType.shaderProgram.bind();
 
-        for (Mesh gameItem : gameObjects) {
+        List<Renderable> start = new ArrayList<>();
+        List<Renderable> middle = new ArrayList<>();
+        List<Renderable> end = new ArrayList<>();
+        for (Renderable renderable : gameObjects)
+            switch (renderable.getRenderOrder()) {
+                case First:
+                    start.add(renderable);
+                    break;
+                case End:
+                    end.add(renderable);
+                    break;
+                default:
+                    middle.add(renderable);
+                    break;
+            }
+
+        List<Renderable> total = new ArrayList<>(start);
+        total.addAll(middle);
+        total.addAll(end);
+
+        for (Renderable gameItem : total) {
             if (!gameItem.shouldRender()) continue;
 
             Closeable item = gameItem.render(transformation, scene, meshRenderData);
@@ -55,11 +77,16 @@ public class BatchRenderer implements Renderable {
     }
 
     @Override public void cleanup() {
-        for (Mesh renderable : gameObjects) renderable.cleanup();
+        for (Renderable renderable : gameObjects) renderable.cleanup();
     }
 
     @Override
     public boolean shouldRender() {
         return shouldRender;
+    }
+
+    @Override
+    public RenderOrder getRenderOrder() {
+        return this.renderPosition;
     }
 }

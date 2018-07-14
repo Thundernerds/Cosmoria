@@ -102,6 +102,11 @@ public class FrameBuffer implements Renderable {
         return true;
     }
 
+    @Override
+    public RenderOrder getRenderOrder() {
+        return RenderOrder.Any;
+    }
+
     public static void unbind() {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }

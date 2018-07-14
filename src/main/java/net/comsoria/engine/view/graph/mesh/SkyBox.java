@@ -1,6 +1,7 @@
 package net.comsoria.engine.view.graph.mesh;
 
 import net.comsoria.engine.view.GLSL.Transformation;
+import net.comsoria.engine.view.Renderable;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
 import org.joml.Matrix4f;
@@ -8,6 +9,7 @@ import org.joml.Matrix4f;
 public class SkyBox extends Mesh {
     public SkyBox(Geometry geometry, Material material) {
         super(geometry, material);
+        this.renderPosition = RenderOrder.First;
     }
 
     @Override

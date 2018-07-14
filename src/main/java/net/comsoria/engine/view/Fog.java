@@ -11,6 +11,11 @@ public class Fog implements GLSLUniformBindable {
     public float density;
     public float start;
 
+    public Fog() {
+        this.density = 0;
+        this.start = 0;
+    }
+
     public Fog(float density, float start) {
         this.density = density;
         this.start = start;

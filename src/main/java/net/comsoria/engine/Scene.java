@@ -38,7 +38,27 @@ public class Scene {
     public void render(Transformation transformation) throws Exception {
         List<Closeable> toClose = new ArrayList<>();
 
-        for (Renderable gameItem : this.children) {
+        List<Renderable> start = new ArrayList<>();
+        List<Renderable> middle = new ArrayList<>();
+        List<Renderable> end = new ArrayList<>();
+        for (Renderable renderable : this.children)
+            switch (renderable.getRenderOrder()) {
+                case First:
+                    start.add(renderable);
+                    break;
+                case End:
+                    end.add(renderable);
+                    break;
+                default:
+                    middle.add(renderable);
+                    break;
+            }
+
+        List<Renderable> total = new ArrayList<>(start);
+        total.addAll(middle);
+        total.addAll(end);
+
+        for (Renderable gameItem : total) {
             if (!gameItem.shouldRender()) continue;
 
             Closeable item = gameItem.render(transformation, this, RenderData.defaultRenderData);

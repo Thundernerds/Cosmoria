@@ -10,4 +10,12 @@ public interface Renderable {
     Closeable render(Transformation transformation, Scene scene, RenderData renderData) throws Exception;
     void cleanup();
     boolean shouldRender();
+    RenderOrder getRenderOrder();
+
+    enum RenderOrder {
+        First,
+        Middle,
+        End,
+        Any
+    }
 }

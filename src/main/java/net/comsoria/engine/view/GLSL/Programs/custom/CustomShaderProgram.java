@@ -33,7 +33,7 @@ public class CustomShaderProgram extends ShaderProgram {
     }
 
     @Override
-    public void init() throws Exception {
+    public void init() {
         this.create(vertex, fragment);
         for (String name : uniforms) this.createUniform(name);
         for (String name : textures) this.createUniform(name);
