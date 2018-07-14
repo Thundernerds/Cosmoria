@@ -1,6 +1,6 @@
 package net.comsoria.game;
 
-import net.comsoria.engine.Color;
+import net.comsoria.engine.view.Color;
 import net.comsoria.engine.view.Light.SceneLight;
 import org.joml.Vector3f;
 
@@ -38,7 +38,7 @@ public class DayNightHandler {
             ambient += nCos * 0.5;
         }
 
-        sceneLight.ambientLight = Color.grayScale(ambient);
+        sceneLight.ambientLight.set(ambient);
 
         float dist = Math.abs(mod - sunsetTime);
         Color secondary = color.mix(sunset, 1f - Math.min(Math.max(dist * (1f / sunsetBand), 0), 1));

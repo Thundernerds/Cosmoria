@@ -1,7 +1,7 @@
 package net.comsoria.controller;
 
 import net.comsoria.Utils;
-import net.comsoria.engine.Color;
+import net.comsoria.engine.view.Color;
 import net.comsoria.engine.IGameLogic;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.*;
@@ -62,7 +62,6 @@ public class Game implements IGameLogic {
             else window.hideCursor();
         }, false));
 
-        scene.light.ambientLight = new Color(1f, 1f, 1f);
         scene.light.directionalLight = new DirectionalLight(new Color(250, 215, 160).getOneToZero(), new Vector3f(), 0.55f);
 
         PointLight pointLight = new PointLight(new Color(1, 1, 1), new Vector3f(0, 0, 1.5f), 0.5f);

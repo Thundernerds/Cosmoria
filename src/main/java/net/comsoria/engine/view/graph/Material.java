@@ -1,5 +1,6 @@
 package net.comsoria.engine.view.graph;
 
+import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import org.joml.Vector4f;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL11.glDeleteTextures;
 
-public class Material {
+public class Material implements GLSLUniformBindable {
     private static final Vector4f DEFAULT_COLOUR = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
     public Vector4f ambientColour;
     public Vector4f diffuseColour;
@@ -55,5 +56,21 @@ public class Material {
 
     public boolean isTextured() {
         return this.textures.size() != 0 && this.textures.get(0) != null;
+    }
+
+    @Override
+    public void set(ShaderProgram shaderProgram, String name) {
+        shaderProgram.setUniform(name + ".ambient", this.ambientColour);
+        shaderProgram.setUniform(name + ".diffuse", this.diffuseColour);
+        shaderProgram.setUniform(name + ".specular", this.specularColour);
+        shaderProgram.setUniform(name + ".reflectance", this.reflectance);
+    }
+
+    public static void create(ShaderProgram shaderProgram, String name) throws Exception {
+        shaderProgram.createUniform(name + ".ambient");
+        shaderProgram.createUniform(name + ".diffuse");
+        shaderProgram.createUniform(name + ".specular");
+        shaderProgram.createUniform(name + ".hasTexture");
+        shaderProgram.createUniform(name + ".reflectance");
     }
 }

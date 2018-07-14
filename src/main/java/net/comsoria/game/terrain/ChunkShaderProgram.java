@@ -2,9 +2,13 @@ package net.comsoria.game.terrain;
 
 import net.comsoria.Utils;
 import net.comsoria.engine.Scene;
+import net.comsoria.engine.view.Fog;
 import net.comsoria.engine.view.GLSL.Programs.ShaderProgram3D;
+import net.comsoria.engine.view.Light.DirectionalLight;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class ChunkShaderProgram extends ShaderProgram3D {
     private final float range;
@@ -23,8 +27,8 @@ public class ChunkShaderProgram extends ShaderProgram3D {
 
         this.createUniform("ambientLight");
 
-        this.createFogUniform("fog");
-        this.createDirectionalLightUniform("directionalLight");
+        Fog.create(this, "fog");
+        DirectionalLight.create(this, "directionalLight");
     }
 
     @Override
@@ -33,7 +37,12 @@ public class ChunkShaderProgram extends ShaderProgram3D {
         this.setUniform("ambientLight", scene.light.ambientLight.getVec3());
 
         this.setUniform("fog", scene.fog);
-        this.setUniform("directionalLight", scene.light.directionalLight);
+
+        DirectionalLight currDirLight = new DirectionalLight(scene.light.directionalLight);
+        Vector4f dir = new Vector4f(currDirLight.direction, 0);
+        dir.mul(viewMatrix);
+        currDirLight.direction = new Vector3f(dir.x, dir.y, dir.z);
+        this.setUniform("directionalLight", currDirLight);
     }
 
     @Override

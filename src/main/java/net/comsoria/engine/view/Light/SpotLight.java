@@ -1,8 +1,10 @@
 package net.comsoria.engine.view.Light;
 
+import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
+import net.comsoria.engine.view.GLSL.ShaderProgram;
 import org.joml.Vector3f;
 
-public class SpotLight {
+public class SpotLight implements GLSLUniformBindable {
     public PointLight pointLight;
     public Vector3f coneDirection;
     public float cutOff;
@@ -20,5 +22,18 @@ public class SpotLight {
 
     public final void setCutOffAngle(float cutOffAngle) {
         this.cutOff = (float) Math.cos(Math.toRadians(cutOffAngle));
+    }
+
+    @Override
+    public void set(ShaderProgram shaderProgram, String name) {
+        shaderProgram.setUniform(name + ".pl", this.pointLight);
+        shaderProgram.setUniform(name + ".conedir", this.coneDirection);
+        shaderProgram.setUniform(name + ".cutoff", this.cutOff);
+    }
+
+    public static void create(ShaderProgram shaderProgram, String name) throws Exception {
+        PointLight.create(shaderProgram, name + ".pl");
+        shaderProgram.createUniform(name + ".conedir");
+        shaderProgram.createUniform(name + ".cutoff");
     }
 }

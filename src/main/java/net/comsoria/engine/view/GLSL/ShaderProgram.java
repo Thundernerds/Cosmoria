@@ -52,7 +52,6 @@ public abstract class ShaderProgram implements Closeable {
         }
     }
 
-
     public void setUniform(String uniformName, Matrix4f value) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             // Dump the matrix into a float buffer
@@ -76,6 +75,10 @@ public abstract class ShaderProgram implements Closeable {
 
     public void setUniform(String uniformName, Vector4f value) {
         glUniform4f(uniforms.get(uniformName), value.x, value.y, value.z, value.w);
+    }
+
+    public void setUniform(String name, GLSLUniformBindable object) {
+        object.set(this, name);
     }
 
 

@@ -1,9 +1,11 @@
-package net.comsoria.engine;
+package net.comsoria.engine.view;
 
+import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
+import net.comsoria.engine.view.GLSL.ShaderProgram;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-public class Color {
+public class Color implements GLSLUniformBindable {
     public final static Color WHITE = Color.grayScale(1);
     public final static Color BLACK = Color.grayScale(0);
     public final static Color GRAY = Color.grayScale(0.5f);
@@ -15,6 +17,11 @@ public class Color {
     public float g;
     public float b;
     public float a = 1;
+
+    /**
+     * Dictates if is bound as a vec3 (false) or vec4 (true)
+     **/
+    public boolean isTransparent = true;
 
     public Color() {
         this(0, 0, 0, 1f);
@@ -41,6 +48,7 @@ public class Color {
 
     public Color(Color color) {
         this(color.r, color.g, color.b, color.a);
+        this.isTransparent = color.isTransparent;
     }
 
     public float getR() {
@@ -70,6 +78,11 @@ public class Color {
     }
     public Color setB(float b) {
         this.b = b;
+        return this;
+    }
+
+    public Color setTransparent(boolean transparent) {
+        if (isTransparent != transparent) isTransparent = transparent;
         return this;
     }
 
@@ -109,9 +122,21 @@ public class Color {
         return this;
     }
 
+    public Color set(float x) {
+        this.r = x;
+        this.g = x;
+        this.a = x;
+
+        return this;
+    }
+
     public Color set(float r, float g, float b) {
         return this.set(r, g, b, this.a);
     }
 
-
+    @Override
+    public void set(ShaderProgram shaderProgram, String name) {
+        if (this.isTransparent) shaderProgram.setUniform(name, this.getVec4());
+        else shaderProgram.setUniform(name, this.getVec3());
+    }
 }
