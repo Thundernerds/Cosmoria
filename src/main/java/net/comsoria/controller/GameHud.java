@@ -11,10 +11,12 @@ import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.engine.view.graph.mesh.Mesh2D;
 import org.joml.Vector4f;
 
+import java.io.IOException;
+
 public class GameHud extends Hud {
     private Mesh compass;
 
-    void init() throws Exception {
+    void init() throws IOException {
         ShaderProgram shaderProgram = new ShaderProgram2D();
 
         compass = new Mesh2D(new Geometry(OBJLoader.loadGeometry("$compassobj")), new Material());

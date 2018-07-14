@@ -7,6 +7,8 @@ import net.comsoria.game.coordinate.ChunkPosition;
 import net.comsoria.game.terrain.generation.ITerrainGenerator;
 import org.joml.Vector2f;
 
+import java.io.IOException;
+
 public class ChunkLoader {
     private final ITerrainGenerator generator;
     private final int radius;
@@ -17,7 +19,7 @@ public class ChunkLoader {
 
     public final BatchRenderer batchRenderer = new BatchRenderer(new BatchRenderType());
 
-    public ChunkLoader(ITerrainGenerator generator, int chunkSize, int graphicalSize, int radius, int range) throws Exception {
+    public ChunkLoader(ITerrainGenerator generator, int chunkSize, int graphicalSize, int radius, int range) {
         this.generator = generator;
 
         this.chunkSize = chunkSize;
@@ -29,7 +31,7 @@ public class ChunkLoader {
         batchRenderer.batchRenderType.shaderProgram = new ChunkShaderProgram((1.0f / graphicalSize) * this.range);
     }
 
-    private Chunk loadChunk(ChunkPosition position) throws Exception {
+    private Chunk loadChunk(ChunkPosition position) throws IOException {
         Grid<Float> grid = new Grid<>(this.chunkSize, this.chunkSize);
         generator.updateGrid(grid, position);
 

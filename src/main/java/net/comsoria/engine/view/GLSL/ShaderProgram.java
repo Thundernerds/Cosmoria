@@ -5,9 +5,11 @@ import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import java.io.Closeable;
+import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,29 +26,29 @@ public abstract class ShaderProgram implements Closeable {
     public final List<String> textures;
     private boolean updated = false;
 
-    public ShaderProgram() throws Exception {
+    public ShaderProgram() {
         programId = glCreateProgram();
         if (programId == 0) {
-            throw new Exception("Could not create Shader");
+            throw new GLSLException("Could not create Shader");
         }
         uniforms = new HashMap<>();
         textures = new ArrayList<>();
     }
 
-    public void createUniform(String uniformName) throws Exception {
+    public void createUniform(String uniformName) {
         int uniformLocation = glGetUniformLocation(programId, uniformName);
         if (uniformLocation < 0) {
-            throw new Exception("Uniform '" + uniformName + "' not used in GLSL. Failed to create.");
+            throw new GLSLException("Uniform '" + uniformName + "' not used in GLSL. Failed to create.");
         }
         uniforms.put(uniformName, uniformLocation);
     }
 
-    public void createTextureUniform(String name) throws Exception {
+    public void createTextureUniform(String name) {
         textures.add(name);
         createUniform(name);
     }
 
-    public void createListUniform(String name, int length) throws Exception {
+    public void createListUniform(String name, int length) {
         for (int i = 0; i < length; i++) {
             createUniform(name + "[" + i + "]");
         }
@@ -57,50 +59,75 @@ public abstract class ShaderProgram implements Closeable {
             // Dump the matrix into a float buffer
             FloatBuffer fb = stack.mallocFloat(16);
             value.get(fb);
-            glUniformMatrix4fv(uniforms.get(uniformName), false, fb);
+            try {
+                glUniformMatrix4fv(uniforms.get(uniformName), false, fb);
+            } catch (Exception e) {
+                throw new GLSLException(e.getMessage());
+            }
+
         }
     }
 
     public void setUniform(String uniformName, int value) {
-        glUniform1i(uniforms.get(uniformName), value);
+        try {
+            glUniform1i(uniforms.get(uniformName), value);
+        } catch (Exception e) {
+            throw new GLSLException(e.getMessage());
+        }
     }
 
     public void setUniform(String uniformName, float value) {
-        glUniform1f(uniforms.get(uniformName), value);
+        try {
+            glUniform1f(uniforms.get(uniformName), value);
+        } catch (Exception e) {
+            throw new GLSLException(e.getMessage());
+        }
     }
 
     public void setUniform(String uniformName, Vector3f value) {
-        glUniform3f(uniforms.get(uniformName), value.x, value.y, value.z);
+        try {
+            glUniform3f(uniforms.get(uniformName), value.x, value.y, value.z);
+        } catch (Exception e) {
+            throw new GLSLException(e.getMessage());
+        }
     }
 
     public void setUniform(String uniformName, Vector4f value) {
-        glUniform4f(uniforms.get(uniformName), value.x, value.y, value.z, value.w);
+        try {
+            glUniform4f(uniforms.get(uniformName), value.x, value.y, value.z, value.w);
+        } catch (Exception e) {
+            throw new GLSLException(e.getMessage());
+        }
     }
 
     public void setUniform(String name, GLSLUniformBindable object) {
-        object.set(this, name);
+        try {
+            object.set(this, name);
+        } catch (Exception e) {
+            throw new GLSLException(e.getMessage());
+        }
     }
 
 
-    private void createVertexShader(String shaderCode) throws Exception {
+    private void createVertexShader(String shaderCode) {
         vertexShaderId = createShader(shaderCode, GL_VERTEX_SHADER);
     }
 
-    private void createFragmentShader(String shaderCode) throws Exception {
+    private void createFragmentShader(String shaderCode) {
         fragmentShaderId = createShader(shaderCode, GL_FRAGMENT_SHADER);
     }
 
-    private int createShader(String shaderCode, int shaderType) throws Exception {
+    private int createShader(String shaderCode, int shaderType) {
         int shaderId = glCreateShader(shaderType);
         if (shaderId == 0) {
-            throw new Exception("Error creating shader. Type: " + shaderType);
+            throw new GLSLException("Error creating shader. Type: " + shaderType);
         }
 
         glShaderSource(shaderId, shaderCode);
         glCompileShader(shaderId);
 
         if (glGetShaderi(shaderId, GL_COMPILE_STATUS) == 0) {
-            throw new Exception("Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024));
+            throw new GLSLException("Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024));
         }
 
         glAttachShader(programId, shaderId);
@@ -131,10 +158,10 @@ public abstract class ShaderProgram implements Closeable {
     }
 
 
-    private void link() throws Exception {
+    private void link() {
         glLinkProgram(programId);
         if (glGetProgrami(programId, GL_LINK_STATUS) == 0) {
-            throw new Exception("Error linking Shader code: " + glGetProgramInfoLog(programId, 1024));
+            throw new GLSLException("Error linking Shader code: " + glGetProgramInfoLog(programId, 1024));
         }
 
         if (vertexShaderId != 0) {
@@ -165,15 +192,16 @@ public abstract class ShaderProgram implements Closeable {
         }
     }
 
-    public void create(String vertex, String fragment) throws Exception {
+    public void create(String vertex, String fragment) {
         this.createVertexShader(vertex);
         this.createFragmentShader(fragment);
         this.link();
     }
 
-    public void init() throws Exception {
+    public void init() throws IOException {
 
     }
+
 
     public int getProgramId() {
         return programId;

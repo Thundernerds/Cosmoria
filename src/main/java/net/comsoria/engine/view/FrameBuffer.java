@@ -13,6 +13,7 @@ import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
 
 import java.io.Closeable;
+import java.io.IOException;
 import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -27,7 +28,7 @@ public class FrameBuffer implements Renderable {
 
     private int fbo, drb;
 
-    public FrameBuffer(int width, int height, String vertex, String fragment) throws Exception {
+    public FrameBuffer(int width, int height, String vertex, String fragment) throws IOException {
         BufferAttribute vertices = new BufferAttribute(new float[] {
                 -1, -1,
                 1, -1,
@@ -105,7 +106,7 @@ public class FrameBuffer implements Renderable {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-    public static ShaderProgram generateFrameBufferShader(String vertex, String fragment) throws Exception {
+    public static ShaderProgram generateFrameBufferShader(String vertex, String fragment) {
         return new CustomShaderProgram(vertex, fragment, Arrays.asList("time"), Arrays.asList("frameBufferTexture"), new IExtractSceneData() {
             @Override
             public void extractScene(Scene scene, ShaderProgram shaderProgram, Matrix4f projMatrix, Matrix4f viewMatrix) {

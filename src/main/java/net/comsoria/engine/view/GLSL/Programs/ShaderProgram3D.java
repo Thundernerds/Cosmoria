@@ -15,14 +15,15 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 
 public class ShaderProgram3D extends ShaderProgram {
-    public ShaderProgram3D() throws Exception {
+    public ShaderProgram3D() {
         super();
     }
 
-    public void init() throws Exception {
+    public void init() throws IOException {
         this.create(Utils.loadResourceAsString("$vertex"), Utils.loadResourceAsString("$fragment"));
 
         this.createUniform("projectionMatrix");

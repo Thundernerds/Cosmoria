@@ -38,7 +38,7 @@ public class PointLight implements GLSLUniformBindable {
         shaderProgram.setUniform(name + ".att.exponent", att.exponent);
     }
 
-    public static void create(ShaderProgram shaderProgram, String name) throws Exception {
+    public static void create(ShaderProgram shaderProgram, String name) {
         shaderProgram.createUniform(name + ".colour");
         shaderProgram.createUniform(name + ".position");
         shaderProgram.createUniform(name + ".intensity");

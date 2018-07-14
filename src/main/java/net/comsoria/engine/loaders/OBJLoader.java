@@ -6,11 +6,12 @@ import net.comsoria.engine.view.graph.BufferAttribute;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OBJLoader {
-    public static Tuple<List<BufferAttribute>, int[]> loadGeometry(String fileName) throws Exception {
+    public static Tuple<List<BufferAttribute>, int[]> loadGeometry(String fileName) throws IOException {
         List<String> lines = Utils.loadResourceLines(fileName);
 
         List<Vector3f> vertices = new ArrayList<>();

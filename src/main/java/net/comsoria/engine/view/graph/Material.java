@@ -66,7 +66,7 @@ public class Material implements GLSLUniformBindable {
         shaderProgram.setUniform(name + ".reflectance", this.reflectance);
     }
 
-    public static void create(ShaderProgram shaderProgram, String name) throws Exception {
+    public static void create(ShaderProgram shaderProgram, String name) {
         shaderProgram.createUniform(name + ".ambient");
         shaderProgram.createUniform(name + ".diffuse");
         shaderProgram.createUniform(name + ".specular");

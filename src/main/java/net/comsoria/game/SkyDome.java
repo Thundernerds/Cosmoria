@@ -15,13 +15,14 @@ import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.engine.view.graph.mesh.SkyBox;
 import org.joml.Matrix4f;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 public class SkyDome {
     private final Mesh dome;
 
-    public SkyDome(String fragment, String vertex, float size, Texture sun) throws Exception {
+    public SkyDome(String fragment, String vertex, float size, Texture sun) throws IOException {
         Tuple<List<BufferAttribute>, int[]> data = OBJLoader.loadGeometry("$skydomeobj");
         data.getA().remove(1);
         data.getA().remove(1);

@@ -27,7 +27,7 @@ public class DirectionalLight implements GLSLUniformBindable {
         shaderProgram.setUniform(name + ".intensity", this.intensity);
     }
 
-    public static void create(ShaderProgram shaderProgram, String name) throws Exception {
+    public static void create(ShaderProgram shaderProgram, String name) {
         shaderProgram.createUniform(name + ".color");
         shaderProgram.createUniform(name + ".direction");
         shaderProgram.createUniform(name + ".intensity");

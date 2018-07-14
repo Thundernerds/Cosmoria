@@ -70,6 +70,7 @@ public class Renderer {
 
         clear();
         scene.render(transformation);
+
         if (scene.hud != null) scene.hud.render(transformation);
 
         for (int i = 1; i < frameBuffers.size(); i++) {
@@ -86,8 +87,5 @@ public class Renderer {
             clear();
             frameBuffers.get(frameBuffers.size() - 1).render(transformation, null, RenderData.defaultRenderData);
         }
-
-//        clear();
-//        postProcessingFBO.render(transformation, null, RenderData.defaultRenderData);
     }
 }

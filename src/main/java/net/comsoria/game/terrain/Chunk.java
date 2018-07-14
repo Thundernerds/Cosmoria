@@ -10,6 +10,7 @@ import net.comsoria.engine.view.graph.Material;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.game.coordinate.ChunkPosition;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.GL_BACK;
@@ -28,7 +29,7 @@ public class Chunk {
         return grid.get(x, y);
     }
 
-    public void loadGameObject(int graphicalSize, int range, ShaderProgram shaderProgram) throws Exception {
+    public void loadGameObject(int graphicalSize, int range, ShaderProgram shaderProgram) throws IOException {
         Tuple<List<BufferAttribute>, int[]> data = OBJLoader.loadGeometry("$chunkplaneobj");
         data.getA().remove(1); // Texture Coordinates are not used for terrain so remove them
 

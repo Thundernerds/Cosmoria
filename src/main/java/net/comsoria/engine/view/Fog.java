@@ -1,5 +1,6 @@
 package net.comsoria.engine.view;
 
+import net.comsoria.engine.view.GLSL.GLSLException;
 import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import org.joml.Vector3f;
@@ -15,7 +16,7 @@ public class Fog implements GLSLUniformBindable {
         this.start = start;
     }
 
-    public static void create(ShaderProgram shaderProgram, String name) throws Exception {
+    public static void create(ShaderProgram shaderProgram, String name) {
         shaderProgram.createUniform(name + ".density");
         shaderProgram.createUniform(name + ".start");
     }

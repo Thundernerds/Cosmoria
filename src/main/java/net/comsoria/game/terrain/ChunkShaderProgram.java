@@ -10,16 +10,18 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.io.IOException;
+
 public class ChunkShaderProgram extends ShaderProgram3D {
     private final float range;
 
-    public ChunkShaderProgram(float range) throws Exception {
+    public ChunkShaderProgram(float range) {
         super();
 
         this.range = range;
     }
 
-    public void init() throws Exception {
+    public void init() throws IOException {
         this.create(Utils.loadResourceAsString("$chunk_vertex"), Utils.loadResourceAsString("$chunk_fragment"));
 
         this.createUniform("projectionMatrix");

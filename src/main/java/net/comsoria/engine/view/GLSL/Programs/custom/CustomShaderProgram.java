@@ -13,7 +13,7 @@ public class CustomShaderProgram extends ShaderProgram {
     private final List<String> uniforms;
     private final IExtractSceneData extractSceneData;
 
-    public CustomShaderProgram(String vertex, String fragment, List<String> uniforms, List<String> textures, IExtractSceneData extractSceneData) throws Exception {
+    public CustomShaderProgram(String vertex, String fragment, List<String> uniforms, List<String> textures, IExtractSceneData extractSceneData) {
         super();
 
         this.vertex = vertex;
@@ -23,7 +23,7 @@ public class CustomShaderProgram extends ShaderProgram {
         this.textures.addAll(textures);
     }
 
-    public CustomShaderProgram(String vertex, String fragment, List<String> uniforms, IExtractSceneData extractSceneData) throws Exception {
+    public CustomShaderProgram(String vertex, String fragment, List<String> uniforms, IExtractSceneData extractSceneData) {
         super();
 
         this.vertex = vertex;

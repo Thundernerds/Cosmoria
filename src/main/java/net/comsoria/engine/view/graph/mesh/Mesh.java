@@ -2,6 +2,7 @@ package net.comsoria.engine.view.graph.mesh;
 
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.Batch.RenderData;
+import net.comsoria.engine.view.GLSL.GLSLException;
 import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.Renderable;
 import net.comsoria.engine.view.graph.Geometry;
@@ -11,6 +12,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.io.Closeable;
+import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
@@ -32,7 +34,7 @@ public class Mesh implements Renderable {
         this.material = material;
     }
 
-    public void initShaderProgram() throws Exception {
+    public void initShaderProgram() throws IOException {
         this.geometry.bind();
         this.material.shaderProgram.init();
         this.geometry.unbind();

@@ -31,7 +31,7 @@ public class SpotLight implements GLSLUniformBindable {
         shaderProgram.setUniform(name + ".cutoff", this.cutOff);
     }
 
-    public static void create(ShaderProgram shaderProgram, String name) throws Exception {
+    public static void create(ShaderProgram shaderProgram, String name) {
         PointLight.create(shaderProgram, name + ".pl");
         shaderProgram.createUniform(name + ".conedir");
         shaderProgram.createUniform(name + ".cutoff");

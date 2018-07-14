@@ -5,17 +5,18 @@ import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
 
+import java.io.IOException;
+
 public class ShaderProgram2D extends ShaderProgram {
-    public ShaderProgram2D() throws Exception {
+    public ShaderProgram2D() {
         super();
     }
 
-    public void init() throws Exception {
+    public void init() throws IOException {
         this.create(Utils.loadResourceAsString("$hud_vertex"), Utils.loadResourceAsString("$hud_fragment"));
 
         this.createUniform("projModelMatrix");
         this.createUniform("color");
-//        this.createUniform("texture_0");
     }
 
     @Override
