@@ -214,7 +214,8 @@ public final class Utils {
         }
 
         void create() throws IOException {
-            copyImageFromGithub(this.gitPath, this.clientPath);
+            if (!new File(clientPath).exists())
+                copyImageFromGithub(this.gitPath, this.clientPath);
         }
     }
 
