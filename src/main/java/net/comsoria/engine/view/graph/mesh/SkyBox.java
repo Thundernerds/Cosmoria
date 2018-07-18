@@ -6,10 +6,14 @@ import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
 import org.joml.Matrix4f;
 
+import static org.lwjgl.opengl.GL11.GL_BACK;
+import static org.lwjgl.opengl.GL11.GL_FRONT;
+
 public class SkyBox extends Mesh {
     public SkyBox(Geometry geometry, Material material) {
         super(geometry, material);
         this.renderPosition = RenderOrder.First;
+        this.geometry.setCullFace(GL_FRONT);
     }
 
     @Override

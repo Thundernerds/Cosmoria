@@ -3,7 +3,7 @@ package net.comsoria.engine.view;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.Timer;
 import net.comsoria.engine.Tuple;
-import net.comsoria.engine.view.Batch.RenderData;
+import net.comsoria.engine.view.batch.RenderData;
 import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.Programs.custom.IExtractSceneData;
 import net.comsoria.engine.view.GLSL.ShaderProgram;

@@ -1,4 +1,4 @@
-package net.comsoria.engine.view.Batch;
+package net.comsoria.engine.view.batch;
 
 import java.io.Closeable;
 import java.io.IOException;

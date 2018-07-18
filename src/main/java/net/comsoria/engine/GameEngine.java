@@ -44,6 +44,10 @@ public class GameEngine implements Runnable {
     private void gameLoop() throws Exception {
         long last = 0;
 
+        update(0);
+        render();
+        window.show();
+
         boolean running = true;
         while (running && !window.windowShouldClose()) {
             long startTime = Timer.getTime();

@@ -1,8 +1,7 @@
 package net.comsoria.engine.view.graph.mesh;
 
 import net.comsoria.engine.Scene;
-import net.comsoria.engine.view.Batch.RenderData;
-import net.comsoria.engine.view.GLSL.GLSLException;
+import net.comsoria.engine.view.batch.RenderData;
 import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.Renderable;
 import net.comsoria.engine.view.graph.Geometry;

@@ -3,6 +3,7 @@ package net.comsoria.engine.view.GLSL;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL;
@@ -29,7 +30,7 @@ public abstract class ShaderProgram implements Closeable {
     public ShaderProgram() {
         programId = glCreateProgram();
         if (programId == 0) {
-            throw new GLSLException("Could not create Shader");
+            throw new GLSLException("Failed to create Shader program");
         }
         uniforms = new HashMap<>();
         textures = new ArrayList<>();
@@ -62,7 +63,7 @@ public abstract class ShaderProgram implements Closeable {
             try {
                 glUniformMatrix4fv(uniforms.get(uniformName), false, fb);
             } catch (Exception e) {
-                throw new GLSLException(e.getMessage());
+                throw new GLSLException("Failed to find uniform of name '" + uniformName + "'");
             }
 
         }
@@ -72,7 +73,7 @@ public abstract class ShaderProgram implements Closeable {
         try {
             glUniform1i(uniforms.get(uniformName), value);
         } catch (Exception e) {
-            throw new GLSLException(e.getMessage());
+            throw new GLSLException("Failed to find uniform of name '" + uniformName + "'");
         }
     }
 
@@ -80,7 +81,15 @@ public abstract class ShaderProgram implements Closeable {
         try {
             glUniform1f(uniforms.get(uniformName), value);
         } catch (Exception e) {
-            throw new GLSLException(e.getMessage());
+            throw new GLSLException("Failed to find uniform of name '" + uniformName + "'");
+        }
+    }
+
+    public void setUniform(String uniformName, Vector2f value) {
+        try {
+            glUniform2f(uniforms.get(uniformName), value.x, value.y);
+        } catch (Exception e) {
+            throw new GLSLException("Failed to find uniform of name '" + uniformName + "'");
         }
     }
 
@@ -88,7 +97,7 @@ public abstract class ShaderProgram implements Closeable {
         try {
             glUniform3f(uniforms.get(uniformName), value.x, value.y, value.z);
         } catch (Exception e) {
-            throw new GLSLException(e.getMessage());
+            throw new GLSLException("Failed to find uniform of name '" + uniformName + "'");
         }
     }
 
@@ -96,7 +105,7 @@ public abstract class ShaderProgram implements Closeable {
         try {
             glUniform4f(uniforms.get(uniformName), value.x, value.y, value.z, value.w);
         } catch (Exception e) {
-            throw new GLSLException(e.getMessage());
+            throw new GLSLException("Failed to find uniform of name '" + uniformName + "'");
         }
     }
 
@@ -104,7 +113,7 @@ public abstract class ShaderProgram implements Closeable {
         try {
             object.set(this, name);
         } catch (Exception e) {
-            throw new GLSLException(e.getMessage());
+            throw new GLSLException("Failed to find uniform of name '" + name + "'");
         }
     }
 

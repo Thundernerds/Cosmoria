@@ -32,13 +32,13 @@ public class Window {
         if (!glfwInit()) throw new IllegalStateException("Unable to initialize GLFW");
 
         glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
+        glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        glfwWindowHint(GLFW_FOCUSED, GL_TRUE);
+//        glfwWindowHint(GLFW_FOCUSED, GL_TRUE);
 
         windowHandle = glfwCreateWindow(width, height, title, NULL, NULL);
         if (windowHandle == NULL) throw new RuntimeException("Failed to create the GLFW window");
@@ -73,9 +73,10 @@ public class Window {
 
         //Enable for point lines
 //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
 
+    public void show() {
         glfwShowWindow(windowHandle);
-
         glfwFocusWindow(windowHandle);
     }
 

@@ -1,14 +1,11 @@
 package net.comsoria.engine;
 
-import net.comsoria.engine.view.Batch.RenderData;
+import net.comsoria.engine.view.batch.RenderData;
 import net.comsoria.engine.view.Camera;
 import net.comsoria.engine.view.Fog;
-import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.Light.SceneLight;
 import net.comsoria.engine.view.Renderable;
-import net.comsoria.engine.view.Window;
-import net.comsoria.engine.view.graph.Geometry;
 
 import java.io.Closeable;
 import java.util.ArrayList;

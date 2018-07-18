@@ -1,4 +1,4 @@
-package net.comsoria.engine.view.Batch;
+package net.comsoria.engine.view.batch;
 
 public abstract class RenderData {
     public final static RenderData defaultRenderData = new RenderData() {

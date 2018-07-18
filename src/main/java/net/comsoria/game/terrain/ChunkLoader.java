@@ -1,8 +1,8 @@
 package net.comsoria.game.terrain;
 
 import net.comsoria.engine.Grid;
-import net.comsoria.engine.view.Batch.BatchRenderType;
-import net.comsoria.engine.view.Batch.BatchRenderer;
+import net.comsoria.engine.view.batch.BatchRenderType;
+import net.comsoria.engine.view.batch.BatchRenderer;
 import net.comsoria.game.coordinate.ChunkPosition;
 import net.comsoria.game.terrain.generation.ITerrainGenerator;
 import org.joml.Vector2f;

@@ -1,8 +1,10 @@
 package net.comsoria.game;
 
+import net.comsoria.Utils;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.Tuple;
 import net.comsoria.engine.loaders.OBJLoader;
+import net.comsoria.engine.math.Circle;
 import net.comsoria.engine.view.Color;
 import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.Programs.custom.IExtractSceneData;
@@ -14,6 +16,8 @@ import net.comsoria.engine.view.graph.Texture;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.engine.view.graph.mesh.SkyBox;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -27,10 +31,12 @@ public class SkyDome {
         data.getA().remove(1);
         data.getA().remove(1);
         dome = new SkyBox(new Geometry(data), new Material());
-        dome.material.shaderProgram = new CustomShaderProgram(fragment, vertex, Arrays.asList("color1", "color2", "modelViewMatrix", "projectionMatrix", "sunDirection"), Arrays.asList("sun"), new IExtractSceneData() {
+        dome.material.shaderProgram = new CustomShaderProgram(fragment, vertex, Arrays.asList("color1", "color2", "modelViewMatrix", "projectionMatrix", "sunDirection", "sunLine"), Arrays.asList("sun"), new IExtractSceneData() {
             @Override public void extractScene(Scene scene, ShaderProgram shaderProgram, Matrix4f projMatrix, Matrix4f viewMatrix) {
                 shaderProgram.setUniform("projectionMatrix", projMatrix);
-                shaderProgram.setUniform("sunDirection", scene.light.directionalLight.direction);
+                Vector3f direction = scene.light.directionalLight.direction;
+                shaderProgram.setUniform("sunDirection", direction);
+                shaderProgram.setUniform("sunLine", new Circle().getTangent(Utils.toAngle(new Vector2f(direction.x, direction.y))));
             }
 
             @Override public void extractMesh(Mesh mesh, ShaderProgram shaderProgram, Matrix4f matrix) {

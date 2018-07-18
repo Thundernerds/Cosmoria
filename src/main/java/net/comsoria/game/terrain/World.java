@@ -1,11 +1,7 @@
 package net.comsoria.game.terrain;
 
-import net.comsoria.engine.Scene;
-import net.comsoria.engine.view.Batch.BatchRenderType;
-import net.comsoria.engine.view.Batch.BatchRenderer;
 import net.comsoria.game.coordinate.ChunkPosition;
 
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 

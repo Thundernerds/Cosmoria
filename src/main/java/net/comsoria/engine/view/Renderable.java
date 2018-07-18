@@ -1,7 +1,7 @@
 package net.comsoria.engine.view;
 
 import net.comsoria.engine.Scene;
-import net.comsoria.engine.view.Batch.RenderData;
+import net.comsoria.engine.view.batch.RenderData;
 import net.comsoria.engine.view.GLSL.Transformation;
 
 import java.io.Closeable;

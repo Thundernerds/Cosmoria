@@ -1,6 +1,6 @@
 package net.comsoria.engine;
 
-import net.comsoria.engine.view.Batch.RenderData;
+import net.comsoria.engine.view.batch.RenderData;
 import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.Renderable;
 import net.comsoria.engine.view.Window;

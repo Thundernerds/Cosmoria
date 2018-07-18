@@ -1,4 +1,4 @@
-package net.comsoria.engine.view.Batch;
+package net.comsoria.engine.view.batch;
 
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.graph.Geometry;
