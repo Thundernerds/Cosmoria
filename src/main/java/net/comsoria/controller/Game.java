@@ -1,13 +1,18 @@
 package net.comsoria.controller;
 
 import net.comsoria.Utils;
+import net.comsoria.engine.Timer;
 import net.comsoria.engine.view.Color;
 import net.comsoria.engine.IGameLogic;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.*;
+import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
+import net.comsoria.engine.view.GLSL.Programs.custom.IExtractSceneData;
+import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.Light.DirectionalLight;
 import net.comsoria.engine.view.Light.PointLight;
 import net.comsoria.engine.view.graph.Texture;
+import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.engine.view.input.KeyInput;
 import net.comsoria.engine.view.input.KeyListener;
 import net.comsoria.engine.view.input.MouseInput;
@@ -18,6 +23,8 @@ import net.comsoria.game.terrain.ChunkLoader;
 import net.comsoria.game.terrain.World;
 import net.comsoria.game.terrain.generation.Perlin2Generator;
 import org.joml.*;
+
+import java.util.Arrays;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -38,8 +45,23 @@ public class Game implements IGameLogic {
     public void init(Window window, KeyInput keyInput) throws Exception {
         hud.init();
 
-        renderer.frameBuffers.add(new FrameBuffer(window.getWidth(), window.getHeight(),
-                Utils.loadResourceAsString("$pp_vertex"), Utils.loadResourceAsString("$pp_fragment")));
+//        renderer.frameBuffers.add(new FrameBuffer(window.getWidth(), window.getHeight(),
+//                Utils.loadResourceAsString("$pp_vertex"), Utils.loadResourceAsString("$pp_fragment")));
+
+        ShaderProgram shaderProgram = new CustomShaderProgram(Utils.loadResourceAsString("$pp_vertex"), Utils.loadResourceAsString("$pp_fragment"), Arrays.asList("time"), Arrays.asList("crosshair"), new IExtractSceneData() {
+            @Override
+            public void extractScene(Scene scene, ShaderProgram shaderProgram, Matrix4f projMatrix, Matrix4f viewMatrix) {
+                shaderProgram.setUniform("time", Timer.getTime());
+            }
+
+            @Override
+            public void extractMesh(Mesh mesh, ShaderProgram shaderProgram, Matrix4f matrix) {
+
+            }
+        });
+        FrameBuffer frameBuffer = new FrameBuffer(window.getWidth(), window.getHeight(), shaderProgram);
+        frameBuffer.getMesh().material.textures.add(new Texture("$textures/VeryVeryVeryBadCrosshair.png"));
+        renderer.frameBuffers.add(frameBuffer);
 
         world = new World();
 
