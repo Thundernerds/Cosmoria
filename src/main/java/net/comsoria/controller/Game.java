@@ -50,7 +50,8 @@ public class Game implements IGameLogic {
         Color background = new Color(23, 32, 42).getOneToZero();
 
         window.setClearColor(background);
-        scene.fog = new Fog(0.001f, scene.camera.far - 1500);
+//        scene.fog = new Fog(0.001f, scene.camera.far - 1500);
+        scene.fog = new Fog(0.005f, scene.camera.far - 1500);
 
         chunkLoader = new ChunkLoader(new Perlin2Generator(0.05, 0.005, 2), 65, 4000, 4, 200);
         player = new Player(new Vector3f(0, 0, 0));

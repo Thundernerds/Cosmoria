@@ -1,5 +1,6 @@
 package net.comsoria;
 
+import org.joml.Vector2f;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -73,13 +74,9 @@ public final class Utils {
     private static boolean netIsAvailable() {
         try {
             URL url = new URL("http://www.google.com");
-            URLConnection conn = url.openConnection();
-            conn.connect();
-            conn.getInputStream().close();
+            url.openStream();
             return true;
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -97,9 +94,25 @@ public final class Utils {
             unwrittenFile.create();
         }
 
-        if (!couldStart && !fileExists("$settings")) {
-            System.out.println("Failed to start - An internet connection is needed the first time you start the game");
-            System.exit(0);
+        if (!couldStart) {
+            if (!fileExists("$home/settings.json")) {
+                System.err.println("Failed to start - An internet connection is needed the first time you start the game");
+                System.exit(-1);
+            } else {
+                String csv = loadResourceAsString("$home/gitPath.csv");
+
+                String[] lines = csv.split("\n");
+                for (String line : lines) {
+                    if (line.trim().equals("")) continue;
+
+                    String[] paths = line.replace("\"", "").split(",");
+                    UnwrittenFile unwrittenFile = paths[1].endsWith(".png")? new UnwrittenImage(paths[1], paths[2]):new UnwrittenFile(paths[1], paths[2]);
+                    files.put(paths[0], unwrittenFile);
+
+                    unwrittenFile.updateName();
+                    unwrittenFile.create();
+                }
+            }
         }
         settings = new JSONObject(loadResourceAsString("$settings"));
         settings.put("last", new Date().getTime());
@@ -244,5 +257,9 @@ public final class Utils {
         StringBuilder string = new StringBuilder();
         for (int f : array) string.append(f).append(" ");
         System.out.println(string.toString());
+    }
+
+    public static float toAngle(Vector2f vector2f) {
+        return (float) Math.atan2(vector2f.x, vector2f.y);
     }
 }
