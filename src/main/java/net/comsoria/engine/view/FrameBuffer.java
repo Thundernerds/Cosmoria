@@ -29,6 +29,10 @@ public class FrameBuffer implements Renderable {
     private int fbo, drb;
 
     public FrameBuffer(int width, int height, String vertex, String fragment) throws IOException {
+        this(width, height, FrameBuffer.generateFrameBufferShader(vertex, fragment));
+    }
+
+    public FrameBuffer(int width, int height, ShaderProgram shaderProgram) throws IOException {
         BufferAttribute vertices = new BufferAttribute(new float[] {
                 -1, -1,
                 1, -1,
@@ -40,7 +44,7 @@ public class FrameBuffer implements Renderable {
         }));
 
         Material material = new Material();
-        material.shaderProgram = FrameBuffer.generateFrameBufferShader(vertex, fragment);
+        material.shaderProgram = shaderProgram;
         mesh = new Mesh(geometry, material);
         mesh.initShaderProgram();
 
