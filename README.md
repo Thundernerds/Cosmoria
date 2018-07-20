@@ -22,4 +22,4 @@ Tell us what you think of our game at [devs.thundernerds@gmail.com](mailto:devs.
   
 Thanks for playing our game! - Mindstormer and the Thundernerds
 
-+ also if you have been searching for the glsl files these, with the rest of the games resources are at github.com/Thundernerds/CosmoriaResources
++ also if you have been searching for the glsl files these, with the rest of the games resources are at [github.com/Thundernerds/CosmoriaResources](https://github.com/Thundernerds/CosmoriaResources)
