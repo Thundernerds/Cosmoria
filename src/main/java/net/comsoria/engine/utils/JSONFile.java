@@ -1,4 +1,4 @@
-package net.comsoria.engine;
+package net.comsoria.engine.utils;
 
 import net.comsoria.engine.loaders.FileLoader;
 import org.json.JSONObject;

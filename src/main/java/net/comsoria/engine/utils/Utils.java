@@ -1,7 +1,6 @@
-package net.comsoria.engine;
+package net.comsoria.engine.utils;
 
 import java.io.*;
-import java.net.URL;
 import java.util.*;
 
 public class Utils {

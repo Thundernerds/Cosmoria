@@ -1,5 +1,6 @@
 package net.comsoria.engine.view;
 
+import net.comsoria.engine.utils.Logger;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;

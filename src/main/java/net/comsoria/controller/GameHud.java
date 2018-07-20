@@ -1,20 +1,16 @@
 package net.comsoria.controller;
 
 import net.comsoria.engine.Hud;
-import net.comsoria.engine.Utils;
+import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.OBJLoader;
 import net.comsoria.engine.view.GLSL.Programs.ShaderProgram2D;
-import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.Window;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
-import net.comsoria.engine.view.graph.Texture;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.engine.view.graph.mesh.Mesh2D;
 import org.joml.Vector4f;
-
-import java.io.IOException;
 
 public class GameHud extends Hud {
     private Mesh compass;

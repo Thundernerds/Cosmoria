@@ -1,4 +1,6 @@
-package net.comsoria.engine;
+package net.comsoria.engine.utils;
+
+import net.comsoria.engine.IterationCallback;
 
 import java.util.ArrayList;
 import java.util.List;

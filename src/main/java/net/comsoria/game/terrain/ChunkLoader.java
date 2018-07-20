@@ -1,6 +1,6 @@
 package net.comsoria.game.terrain;
 
-import net.comsoria.engine.Grid;
+import net.comsoria.engine.utils.Grid;
 import net.comsoria.engine.view.batch.BatchRenderType;
 import net.comsoria.engine.view.batch.BatchRenderer;
 import net.comsoria.game.coordinate.ChunkPosition;

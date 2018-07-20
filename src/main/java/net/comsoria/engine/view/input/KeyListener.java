@@ -1,6 +1,6 @@
 package net.comsoria.engine.view.input;
 
-import net.comsoria.engine.Utils;
+import net.comsoria.engine.utils.Utils;
 
 import java.util.List;
 

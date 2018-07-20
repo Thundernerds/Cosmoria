@@ -1,9 +1,8 @@
 package net.comsoria.engine.view.graph;
 
-import net.comsoria.engine.Tuple;
+import net.comsoria.engine.utils.Tuple;
 import org.lwjgl.system.MemoryUtil;
 
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;

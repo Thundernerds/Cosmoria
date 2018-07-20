@@ -1,8 +1,8 @@
 package net.comsoria.game;
 
 import net.comsoria.engine.Scene;
-import net.comsoria.engine.Tuple;
-import net.comsoria.engine.Utils;
+import net.comsoria.engine.utils.Tuple;
+import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.OBJLoader;
 import net.comsoria.engine.math.Circle;
 import net.comsoria.engine.view.Color;
@@ -16,7 +16,6 @@ import net.comsoria.engine.view.graph.Texture;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.engine.view.graph.mesh.SkyBox;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.io.IOException;

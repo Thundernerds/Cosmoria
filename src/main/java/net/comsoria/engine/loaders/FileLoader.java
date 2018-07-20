@@ -1,6 +1,6 @@
 package net.comsoria.engine.loaders;
 
-import net.comsoria.engine.Utils;
+import net.comsoria.engine.utils.Utils;
 
 import java.io.*;
 import java.util.ArrayList;

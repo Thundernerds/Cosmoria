@@ -1,8 +1,8 @@
 package net.comsoria.game.terrain;
 
-import net.comsoria.engine.Grid;
-import net.comsoria.engine.Tuple;
-import net.comsoria.engine.Utils;
+import net.comsoria.engine.utils.Grid;
+import net.comsoria.engine.utils.Tuple;
+import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.OBJLoader;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.graph.BufferAttribute;

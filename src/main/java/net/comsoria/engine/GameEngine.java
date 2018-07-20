@@ -1,5 +1,7 @@
 package net.comsoria.engine;
 
+import net.comsoria.engine.utils.Logger;
+import net.comsoria.engine.utils.Timer;
 import net.comsoria.engine.view.Window;
 import net.comsoria.engine.view.input.KeyInput;
 import net.comsoria.engine.view.input.MouseInput;
@@ -14,14 +16,19 @@ public class GameEngine implements Runnable {
     private Timer timer = new Timer();
     private MouseInput mouseInput = new MouseInput();
     private KeyInput keyInput = new KeyInput();
+    private boolean verbose;
 
-    public GameEngine(String title, int width, int height, IGameLogic gameLogic) {
+    public GameEngine(String title, int width, int height, IGameLogic gameLogic, boolean verbose) {
+        this.verbose = verbose;
+
+        if (this.verbose) Logger.log("Creating window...");
         window = new Window(title, width, height);
         this.gameLogic = gameLogic;
         loopThread = new Thread(this, "LOOP_THREAD");
     }
 
     public void start() {
+        if (this.verbose) Logger.log("Starting loop...");
         if (System.getProperty("os.name").contains("Mac")) {
             this.run();
         } else {
@@ -47,6 +54,7 @@ public class GameEngine implements Runnable {
         update(0);
         render();
         window.show();
+        if (this.verbose) Logger.log("Done first render...");
 
         boolean running = true;
         while (running && !window.windowShouldClose()) {
@@ -57,6 +65,7 @@ public class GameEngine implements Runnable {
             render();
             sync(startTime);
         }
+        if (this.verbose) Logger.log("Stopping.");
     }
 
     private void render() throws Exception {
@@ -79,6 +88,7 @@ public class GameEngine implements Runnable {
     }
 
     private void init() throws Exception {
+        if (this.verbose) Logger.log("Initialising...");
         window.init();
         gameLogic.init(window, keyInput);
         keyInput.init(window);

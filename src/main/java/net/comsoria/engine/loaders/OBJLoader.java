@@ -1,6 +1,6 @@
 package net.comsoria.engine.loaders;
 
-import net.comsoria.engine.Tuple;
+import net.comsoria.engine.utils.Tuple;
 import net.comsoria.engine.view.graph.BufferAttribute;
 import org.joml.Vector2f;
 import org.joml.Vector3f;

@@ -1,7 +1,8 @@
 package net.comsoria.controller;
 
-import net.comsoria.engine.JSONFile;
-import net.comsoria.engine.Utils;
+import net.comsoria.engine.utils.JSONFile;
+import net.comsoria.engine.utils.Logger;
+import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.CSVLoader;
 import net.comsoria.engine.loaders.FileLoader;
 import net.comsoria.engine.loaders.WebLoader;
@@ -20,6 +21,8 @@ public class StartupFileHandler {
         Utils.utils.addName("shaders", "$res/shaders");
         Utils.utils.addName("models", "$res/models");
         Utils.utils.addName("textures", "$res/textures");
+
+        Logger.log("Creating new dirs...");
         Utils.utils.createDirs(new String[] {
                 "$home", "$saves", "$res", "$models", "$shaders", "$textures"
         });
@@ -28,6 +31,7 @@ public class StartupFileHandler {
 
         Utils.utils.addName("git", "https://raw.githubusercontent.com/Thundernerds/CosmoriaResources/master/", true);
         try {
+            Logger.log("Downloading new data...");
             CSVLoader csvFile = new CSVLoader(WebLoader.loadResourceFromNet(Utils.utils.p("$git/gitPath.csv")));
 
             for (int i = 0; i < csvFile.rows(); i++) {
@@ -36,12 +40,15 @@ public class StartupFileHandler {
                 String path = Utils.utils.getPath(row.getPart(0));
                 String gitPath = row.getPart(1);
 
-                if (gitPath.equals("null")) {
-                    new File(path).mkdir();
-                } else if (gitPath.endsWith(".png")) {
-                    WebLoader.copyImageFromNet(Utils.utils.p("$git/" + gitPath), path);
-                } else {
-                    FileLoader.writeResource(path, WebLoader.loadResourceFromNet(Utils.utils.p("$git/" + gitPath)));
+                File file = new File(path);
+                if (!file.exists()) {
+                    if (gitPath.equals("null")) {
+                        file.mkdir();
+                    } else if (gitPath.endsWith(".png")) {
+                        WebLoader.copyImageFromNet(Utils.utils.p("$git/" + gitPath), path);
+                    } else {
+                        FileLoader.writeResource(file, WebLoader.loadResourceFromNet(Utils.utils.p("$git/" + gitPath)));
+                    }
                 }
             }
         } catch (Exception e) {

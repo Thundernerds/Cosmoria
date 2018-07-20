@@ -1,6 +1,5 @@
 package net.comsoria.engine.view.input;
 
-import net.comsoria.engine.Timer;
 import net.comsoria.engine.view.Window;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
@@ -9,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 

@@ -1,21 +1,15 @@
 package net.comsoria.controller;
 
-import net.comsoria.engine.Utils;
-import net.comsoria.engine.Timer;
-import net.comsoria.engine.loaders.CSVLoader;
+import net.comsoria.engine.utils.Logger;
+import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.FileLoader;
-import net.comsoria.engine.loaders.WebLoader;
 import net.comsoria.engine.view.Color;
 import net.comsoria.engine.IGameLogic;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.*;
-import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
-import net.comsoria.engine.view.GLSL.Programs.custom.IExtractSceneData;
-import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.Light.DirectionalLight;
 import net.comsoria.engine.view.Light.PointLight;
 import net.comsoria.engine.view.graph.Texture;
-import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.engine.view.input.KeyInput;
 import net.comsoria.engine.view.input.KeyListener;
 import net.comsoria.engine.view.input.MouseInput;
@@ -26,8 +20,6 @@ import net.comsoria.game.terrain.ChunkLoader;
 import net.comsoria.game.terrain.World;
 import net.comsoria.game.terrain.generation.Perlin2Generator;
 import org.joml.*;
-
-import java.util.Arrays;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -48,6 +40,8 @@ public class Game implements IGameLogic {
     public void init(Window window, KeyInput keyInput) throws Exception {
         StartupFileHandler.load();
 
+        Logger.log("Loaded files, creating game...");
+
         hud.init();
 
         renderer.frameBuffers.add(new FrameBuffer(window.getWidth(), window.getHeight(),
@@ -66,7 +60,6 @@ public class Game implements IGameLogic {
         Color background = new Color(23, 32, 42).getOneToZero();
 
         window.setClearColor(background);
-//        scene.fog = new Fog(0.001f, scene.camera.far - 1500);
         scene.fog = new Fog(0.005f, scene.camera.far - 1500);
 
         chunkLoader = new ChunkLoader(new Perlin2Generator(0.05, 0.005, 2), 65, 4000, 4, 200);
@@ -88,6 +81,8 @@ public class Game implements IGameLogic {
         hud.updateSize(window);
 
         scene.add(chunkLoader.batchRenderer);
+
+        Logger.log("Loaded game...");
     }
 
     public void update(Window window, float interval, MouseInput mouse, KeyInput keys) {

@@ -1,4 +1,4 @@
-package net.comsoria.engine;
+package net.comsoria.engine.utils;
 
 public class Tuple<A,B> {
     public A a;
