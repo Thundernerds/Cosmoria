@@ -1,6 +1,5 @@
 package net.comsoria.engine.loaders;
 
-import net.comsoria.Utils;
 import net.comsoria.engine.Tuple;
 import net.comsoria.engine.view.graph.BufferAttribute;
 import org.joml.Vector2f;
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class OBJLoader {
     public static Tuple<List<BufferAttribute>, int[]> loadGeometry(String fileName) throws IOException {
-        List<String> lines = Utils.loadResourceLines(fileName);
+        List<String> lines = FileLoader.loadResourceLines(fileName);
 
         List<Vector3f> vertices = new ArrayList<>();
         List<Vector2f> textures = new ArrayList<>();

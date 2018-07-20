@@ -1,8 +1,8 @@
 package net.comsoria.game;
 
-import net.comsoria.Utils;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.Tuple;
+import net.comsoria.engine.Utils;
 import net.comsoria.engine.loaders.OBJLoader;
 import net.comsoria.engine.math.Circle;
 import net.comsoria.engine.view.Color;
@@ -27,7 +27,7 @@ public class SkyDome {
     private final Mesh dome;
 
     public SkyDome(String fragment, String vertex, float size, Texture sun) throws IOException {
-        Tuple<List<BufferAttribute>, int[]> data = OBJLoader.loadGeometry("$skydomeobj");
+        Tuple<List<BufferAttribute>, int[]> data = OBJLoader.loadGeometry(Utils.utils.p("$models/skydome.obj"));
         data.getA().remove(1);
         data.getA().remove(1);
         dome = new SkyBox(new Geometry(data), new Material());
@@ -36,7 +36,7 @@ public class SkyDome {
                 shaderProgram.setUniform("projectionMatrix", projMatrix);
                 Vector3f direction = scene.light.directionalLight.direction;
                 shaderProgram.setUniform("sunDirection", direction);
-                shaderProgram.setUniform("sunLine", new Circle().getTangent(Utils.toAngle(new Vector2f(direction.x, direction.y))));
+                shaderProgram.setUniform("sunLine", new Circle().getTangent((float) Math.atan2(direction.x, direction.y)));
             }
 
             @Override public void extractMesh(Mesh mesh, ShaderProgram shaderProgram, Matrix4f matrix) {

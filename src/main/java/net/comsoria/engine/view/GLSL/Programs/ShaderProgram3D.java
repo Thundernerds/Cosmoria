@@ -1,7 +1,7 @@
 package net.comsoria.engine.view.GLSL.Programs;
 
-import net.comsoria.Utils;
 import net.comsoria.engine.Scene;
+import net.comsoria.engine.loaders.FileLoader;
 import net.comsoria.engine.view.Fog;
 import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
@@ -24,7 +24,8 @@ public class ShaderProgram3D extends ShaderProgram {
     }
 
     public void init() throws IOException {
-        this.create(Utils.loadResourceAsString("$vertex"), Utils.loadResourceAsString("$fragment"));
+        this.create(FileLoader.loadResourceAsStringFromPath("$shaders/main/vertex.v.glsl"),
+                FileLoader.loadResourceAsStringFromPath("$shaders/main/fragment.f.glsl"));
 
         this.createUniform("projectionMatrix");
         this.createUniform("modelViewMatrix");

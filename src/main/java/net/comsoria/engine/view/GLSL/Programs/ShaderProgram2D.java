@@ -1,6 +1,6 @@
 package net.comsoria.engine.view.GLSL.Programs;
 
-import net.comsoria.Utils;
+import net.comsoria.engine.loaders.FileLoader;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
@@ -13,7 +13,8 @@ public class ShaderProgram2D extends ShaderProgram {
     }
 
     public void init() throws IOException {
-        this.create(Utils.loadResourceAsString("$hud_vertex"), Utils.loadResourceAsString("$hud_fragment"));
+        this.create(FileLoader.loadResourceAsStringFromPath("$shaders/hud/hud_vertex.v.glsl"),
+                FileLoader.loadResourceAsStringFromPath("$shaders/hud/hud_fragment.f.glsl"));
 
         this.createUniform("projModelMatrix");
         this.createUniform("color");

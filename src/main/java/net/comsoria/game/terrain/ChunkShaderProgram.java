@@ -1,7 +1,7 @@
 package net.comsoria.game.terrain;
 
-import net.comsoria.Utils;
 import net.comsoria.engine.Scene;
+import net.comsoria.engine.loaders.FileLoader;
 import net.comsoria.engine.view.Fog;
 import net.comsoria.engine.view.GLSL.Programs.ShaderProgram3D;
 import net.comsoria.engine.view.Light.DirectionalLight;
@@ -22,7 +22,8 @@ public class ChunkShaderProgram extends ShaderProgram3D {
     }
 
     public void init() throws IOException {
-        this.create(Utils.loadResourceAsString("$chunk_vertex"), Utils.loadResourceAsString("$chunk_fragment"));
+        this.create(FileLoader.loadResourceAsStringFromPath("$shaders/chunk/chunk_vertex.v.glsl"),
+                FileLoader.loadResourceAsStringFromPath("$shaders/chunk/chunk_fragment.f.glsl"));
 
         this.createUniform("projectionMatrix");
         this.createUniform("modelViewMatrix");

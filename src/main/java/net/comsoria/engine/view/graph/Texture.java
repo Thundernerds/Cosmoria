@@ -1,7 +1,7 @@
 package net.comsoria.engine.view.graph;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
-import net.comsoria.Utils;
+import net.comsoria.engine.loaders.FileLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,7 +38,7 @@ public class Texture {
 
     private static int loadTexture(String fileName) throws Exception {
         // Load Texture file
-        PNGDecoder decoder = new PNGDecoder(Utils.loadResourceAsStream(fileName));
+        PNGDecoder decoder = new PNGDecoder(FileLoader.loadResourceAsStream(fileName));
 
         // Load texture contents into a byte buffer
         ByteBuffer buf = ByteBuffer.allocateDirect(

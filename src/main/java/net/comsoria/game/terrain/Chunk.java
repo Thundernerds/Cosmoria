@@ -2,6 +2,7 @@ package net.comsoria.game.terrain;
 
 import net.comsoria.engine.Grid;
 import net.comsoria.engine.Tuple;
+import net.comsoria.engine.Utils;
 import net.comsoria.engine.loaders.OBJLoader;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.graph.BufferAttribute;
@@ -30,7 +31,7 @@ public class Chunk {
     }
 
     public void loadGameObject(int graphicalSize, int range, ShaderProgram shaderProgram) throws IOException {
-        Tuple<List<BufferAttribute>, int[]> data = OBJLoader.loadGeometry("$chunkplaneobj");
+        Tuple<List<BufferAttribute>, int[]> data = OBJLoader.loadGeometry(Utils.utils.p("$models/chunk_plane.obj"));
         data.getA().remove(1); // Texture Coordinates are not used for terrain so remove them
 
         Float[] array = grid.getArray(Float.class);

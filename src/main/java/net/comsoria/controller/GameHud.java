@@ -1,12 +1,15 @@
 package net.comsoria.controller;
 
 import net.comsoria.engine.Hud;
+import net.comsoria.engine.Utils;
 import net.comsoria.engine.loaders.OBJLoader;
 import net.comsoria.engine.view.GLSL.Programs.ShaderProgram2D;
+import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.Window;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
+import net.comsoria.engine.view.graph.Texture;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.engine.view.graph.mesh.Mesh2D;
 import org.joml.Vector4f;
@@ -16,13 +19,19 @@ import java.io.IOException;
 public class GameHud extends Hud {
     private Mesh compass;
 
-    void init() throws IOException {
+    void init() throws Exception {
         ShaderProgram shaderProgram = new ShaderProgram2D();
 
-        compass = new Mesh2D(new Geometry(OBJLoader.loadGeometry("$compassobj")), new Material());
+        compass = new Mesh2D(new Geometry(OBJLoader.loadGeometry(Utils.utils.p("$models/compass.obj"))), new Material());
         compass.material.ambientColour = new Vector4f(1, 0, 0, 1f);
         compass.material.shaderProgram = shaderProgram;
         compass.initShaderProgram();
+
+//        Mesh crosshair = new Mesh2D(new Geometry(OBJLoader.loadGeometry("")), new Material());
+//        crosshair.material.shaderProgram = shaderProgram.clone();
+//        crosshair.material.shaderProgram.createTextureUniform("crosshair");
+//        crosshair.material.textures.add(new Texture("$textures/VeryVeryVeryBadCrosshair"));
+//        crosshair.initShaderProgram();
 
         compass.scale = 40.0f;
         gameObjects.add(compass);
