@@ -51,10 +51,11 @@ public class GameEngine implements Runnable {
     private void gameLoop() throws Exception {
         long last = 0;
 
+        if (this.verbose) Logger.log("Doing first render...");
         update(0);
         render();
         window.show();
-        if (this.verbose) Logger.log("Done first render...");
+        if (this.verbose) Logger.log("Done first render.");
 
         boolean running = true;
         while (running && !window.windowShouldClose()) {
