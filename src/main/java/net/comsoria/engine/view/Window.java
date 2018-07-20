@@ -28,6 +28,8 @@ public class Window {
     }
 
     public void init() {
+        System.setProperty("java.awt.headless", "true");
+
         GLFWErrorCallback.createPrint(System.err).set();
 
         if (!glfwInit()) throw new IllegalStateException("Unable to initialize GLFW");

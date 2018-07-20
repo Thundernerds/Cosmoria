@@ -18,11 +18,13 @@ public class ShaderProgram2D extends ShaderProgram {
 
         this.createUniform("projModelMatrix");
         this.createUniform("color");
+        this.createUniform("hasTexture");
     }
 
     @Override
     public void setupMesh(Mesh mesh, Matrix4f modelViewMatrix) {
-        mesh.material.shaderProgram.setUniform("projModelMatrix", modelViewMatrix);
-        mesh.material.shaderProgram.setUniform("color", mesh.material.ambientColour);
+        this.setUniform("projModelMatrix", modelViewMatrix);
+        this.setUniform("color", mesh.material.ambientColour);
+        this.setUniform("hasTexture", mesh.material.textures.size() == 0? 0:1);
     }
 }

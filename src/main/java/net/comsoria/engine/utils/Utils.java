@@ -63,4 +63,10 @@ public class Utils {
         }
         return list;
     }
+
+    public static float[] listToArray(List<Float> input) {
+        float[] result = new float[input.size()];
+        for (int i = 0; i < input.size(); i++) result[i] = input.get(i);
+        return result;
+    }
 }
