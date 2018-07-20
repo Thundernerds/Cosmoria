@@ -16,8 +16,10 @@
   - Use `shift` and `space` to move up and down in that order
   - Use `up` and `down` to fast forward in time (but only kind of)
 - In the likely event of a bug:
-  - Get it exiled from the game by putting it in our issues tracker[here](https://github.com/Thundernerds/Cosmoria/issues).
+  - Get it exiled from the game by putting it in our issues tracker [here](https://github.com/Thundernerds/Cosmoria/issues).
 
 Tell us what you think of our game at [devs.thundernerds@gmail.com](mailto:devs.thundernerds@gmail.com) - maybe we will reply!
   
 Thanks for playing our game! - Mindstormer and the Thundernerds
+
++ also if you have been searching for the glsl files these, with the rest of the games resources are at [github.com/Thundernerds/CosmoriaResources](https://github.com/Thundernerds/CosmoriaResources)
