@@ -18,13 +18,15 @@ public class StartupFileHandler {
         Utils.utils.addName("home", System.getProperty("user.home") + "/Cosmoria");
         Utils.utils.addName("saves", "$home/saves");
         Utils.utils.addName("res", "$home/resources");
+
         Utils.utils.addName("shaders", "$res/shaders");
         Utils.utils.addName("models", "$res/models");
         Utils.utils.addName("textures", "$res/textures");
+        Utils.utils.addName("uis", "$res/UIs");
 
         Logger.log("Creating new dirs...");
         Utils.utils.createDirs(new String[] {
-                "$home", "$saves", "$res", "$models", "$shaders", "$textures"
+                "$home", "$saves", "$res", "$models", "$shaders", "$textures", "$uis"
         });
 
         File settings = new File(Utils.utils.p("$home/settings.json"));

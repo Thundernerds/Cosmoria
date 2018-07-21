@@ -26,5 +26,9 @@ public class ShaderProgram2D extends ShaderProgram {
         this.setUniform("projModelMatrix", modelViewMatrix);
         this.setUniform("color", mesh.material.ambientColour);
         this.setUniform("hasTexture", mesh.material.textures.size() == 0? 0:1);
+
+//        System.out.println(mesh.material.ambientColour);
+//        System.out.println(mesh.geometry.getVertexCount());
+//        System.out.println("-------");
     }
 }

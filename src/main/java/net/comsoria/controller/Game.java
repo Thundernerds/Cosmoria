@@ -134,7 +134,7 @@ public class Game implements IGameLogic {
         dayNightHandler.update(time);
 
         try {
-            chunkLoader.updateAroundPlayer(player.get2DPosition(), world);
+            chunkLoader.updateAroundPlayer(player.get2DPosition(), world, hud.label.material); //TODO: cache geometry
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);

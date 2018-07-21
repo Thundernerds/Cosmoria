@@ -30,7 +30,7 @@ public class Chunk {
         return grid.get(x, y);
     }
 
-    public void loadGameObject(int graphicalSize, int range, ShaderProgram shaderProgram) throws IOException {
+    public void loadGameObject(int graphicalSize, int range, ShaderProgram shaderProgram, Material debug) throws IOException {
         Tuple<List<BufferAttribute>, int[]> data = OBJLoader.loadGeometry(Utils.utils.p("$models/chunk_plane.obj"));
         data.getA().remove(1); // Texture Coordinates are not used for terrain so remove them
 
@@ -40,13 +40,13 @@ public class Chunk {
         }
 
         gameObject = new Mesh(new Geometry(data), new Material());
+
         gameObject.material.ambientColour.set(0, 0, 0, 0);
         gameObject.material.shaderProgram = shaderProgram;
         gameObject.geometry.setCullFace(GL_BACK);
 
         gameObject.position.set(position.getX() * graphicalSize, 0, position.getY() * graphicalSize);
         gameObject.scale = graphicalSize;
-
         gameObject.initShaderProgram();
     }
 

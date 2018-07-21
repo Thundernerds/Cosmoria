@@ -19,9 +19,9 @@ public class Material implements GLSLUniformBindable {
     public ShaderProgram shaderProgram = null;
 
     public Material() {
-        this.ambientColour = DEFAULT_COLOUR;
-        this.diffuseColour = DEFAULT_COLOUR;
-        this.specularColour = DEFAULT_COLOUR;
+        this.ambientColour = new Vector4f(DEFAULT_COLOUR);
+        this.diffuseColour = new Vector4f(DEFAULT_COLOUR);
+        this.specularColour = new Vector4f(DEFAULT_COLOUR);
         this.textures = new ArrayList<>();
         this.reflectance = 0;
     }
@@ -31,11 +31,11 @@ public class Material implements GLSLUniformBindable {
     }
 
     public Material(Texture texture) {
-        this(DEFAULT_COLOUR, DEFAULT_COLOUR, DEFAULT_COLOUR, texture, 0);
+        this(new Vector4f(DEFAULT_COLOUR), new Vector4f(DEFAULT_COLOUR), new Vector4f(DEFAULT_COLOUR), texture, 0);
     }
 
     public Material(Texture texture, float reflectance) {
-        this(DEFAULT_COLOUR, DEFAULT_COLOUR, DEFAULT_COLOUR, texture, reflectance);
+        this(new Vector4f(DEFAULT_COLOUR), new Vector4f(DEFAULT_COLOUR), new Vector4f(DEFAULT_COLOUR), texture, reflectance);
     }
 
     public Material(Vector4f ambientColour, Vector4f diffuseColour, Vector4f specularColour, Texture texture, float reflectance) {

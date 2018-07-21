@@ -3,6 +3,7 @@ package net.comsoria.game.terrain;
 import net.comsoria.engine.utils.Grid;
 import net.comsoria.engine.view.batch.BatchRenderType;
 import net.comsoria.engine.view.batch.BatchRenderer;
+import net.comsoria.engine.view.graph.Material;
 import net.comsoria.game.coordinate.ChunkPosition;
 import net.comsoria.game.terrain.generation.ITerrainGenerator;
 import org.joml.Vector2f;
@@ -31,16 +32,16 @@ public class ChunkLoader {
         batchRenderer.batchRenderType.shaderProgram = new ChunkShaderProgram((1.0f / graphicalSize) * this.range);
     }
 
-    private Chunk loadChunk(ChunkPosition position) throws IOException {
+    private Chunk loadChunk(ChunkPosition position, Material debug) throws IOException {
         Grid<Float> grid = new Grid<>(this.chunkSize, this.chunkSize);
         generator.updateGrid(grid, position);
 
         Chunk chunk = new Chunk(grid, position);
-        chunk.loadGameObject(this.graphicalSize, this.range, this.batchRenderer.batchRenderType.shaderProgram);
+        chunk.loadGameObject(this.graphicalSize, this.range, this.batchRenderer.batchRenderType.shaderProgram, debug);
         return chunk;
     }
 
-    public void updateAroundPlayer(Vector2f position, World world) throws Exception {
+    public void updateAroundPlayer(Vector2f position, World world, Material debug) throws Exception {
         ChunkPosition chunkPosition = ChunkPosition.toChunkPosition(this.graphicalSize, position);
 
         for (Chunk chunk : world.chunks) {
@@ -55,11 +56,10 @@ public class ChunkLoader {
                 Chunk existing = world.getChunk(relativePosition);
 
                 if (existing == null) {
-                    Chunk chunk = this.loadChunk(relativePosition);
+                    Chunk chunk = this.loadChunk(relativePosition, debug);
                     world.addChunk(chunk);
                     this.batchRenderer.gameObjects.add(chunk.getGameObject());
-                }
-                else if (!existing.getGameObject().visible)
+                } else if (!existing.getGameObject().visible)
                     existing.getGameObject().visible = true;
             }
         }

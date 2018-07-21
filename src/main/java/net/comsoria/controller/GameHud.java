@@ -1,8 +1,8 @@
 package net.comsoria.controller;
 
 import net.comsoria.engine.Hud;
-import net.comsoria.engine.loaders.xhtml.ui.text.FontTexture;
-import net.comsoria.engine.loaders.xhtml.ui.text.TextLoader;
+import net.comsoria.engine.loaders.text.FontTexture;
+import net.comsoria.engine.loaders.text.TextLoader;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.OBJLoader;
 import net.comsoria.engine.view.GLSL.Programs.ShaderProgram2D;
@@ -18,7 +18,7 @@ import java.awt.*;
 
 public class GameHud extends Hud {
     private Mesh compass;
-    private Mesh label;
+    public Mesh label;
 
     void init() throws Exception {
         ShaderProgram shaderProgram = new ShaderProgram2D();

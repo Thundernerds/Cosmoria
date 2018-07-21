@@ -1,14 +1,12 @@
-package net.comsoria.engine.loaders.xhtml.ui.text;
+package net.comsoria.engine.loaders.text;
 
 import net.comsoria.engine.view.graph.Texture;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
@@ -84,6 +82,7 @@ public class FontTexture {
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         g2D = img.createGraphics();
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
         g2D.setFont(font);
         fontMetrics = g2D.getFontMetrics();
         g2D.setColor(Color.WHITE);

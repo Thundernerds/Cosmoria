@@ -1,4 +1,4 @@
-package net.comsoria.engine.loaders.xhtml.ui.text;
+package net.comsoria.engine.loaders.text;
 
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.view.GLSL.Programs.ShaderProgram2D;
@@ -25,7 +25,7 @@ public class TextLoader {
         int numChars = characters.length;
 
         float startx = 0;
-        for(int i=0; i<numChars; i++) {
+        for(int i = 0; i < numChars; i++) {
             FontTexture.CharInfo charInfo = texture.getCharInfo(characters[i]);
 
             // Build a character tile composed by two triangles
@@ -36,7 +36,7 @@ public class TextLoader {
             positions.add(ZPOS); //z
             textCoords.add( (float)charInfo.getStartX() / (float)texture.getWidth());
             textCoords.add(0.0f);
-            indices.add(i*VERTICES_PER_QUAD);
+            indices.add(i * VERTICES_PER_QUAD);
 
             // Left Bottom vertex
             positions.add(startx); // x
@@ -44,27 +44,27 @@ public class TextLoader {
             positions.add(ZPOS); //z
             textCoords.add((float)charInfo.getStartX() / (float)texture.getWidth());
             textCoords.add(1.0f);
-            indices.add(i*VERTICES_PER_QUAD + 1);
+            indices.add((i * VERTICES_PER_QUAD) + 1);
 
             // Right Bottom vertex
             positions.add(startx + charInfo.getWidth()); // x
             positions.add((float)texture.getHeight()); //y
             positions.add(ZPOS); //z
-            textCoords.add((float)(charInfo.getStartX() + charInfo.getWidth() )/ (float)texture.getWidth());
+            textCoords.add((float) (charInfo.getStartX() + charInfo.getWidth()) / (float) texture.getWidth());
             textCoords.add(1.0f);
-            indices.add(i*VERTICES_PER_QUAD + 2);
+            indices.add((i * VERTICES_PER_QUAD) + 2);
 
             // Right Top vertex
             positions.add(startx + charInfo.getWidth()); // x
             positions.add(0.0f); //y
             positions.add(ZPOS); //z
-            textCoords.add((float)(charInfo.getStartX() + charInfo.getWidth() )/ (float)texture.getWidth());
+            textCoords.add((float) (charInfo.getStartX() + charInfo.getWidth()) / (float)texture.getWidth());
             textCoords.add(0.0f);
-            indices.add(i*VERTICES_PER_QUAD + 3);
+            indices.add((i * VERTICES_PER_QUAD) + 3);
 
             // Add indices por left top and bottom right vertices
-            indices.add(i*VERTICES_PER_QUAD);
-            indices.add(i*VERTICES_PER_QUAD + 2);
+            indices.add(i * VERTICES_PER_QUAD);
+            indices.add((i * VERTICES_PER_QUAD) + 2);
 
             startx += charInfo.getWidth();
         }
@@ -81,7 +81,7 @@ public class TextLoader {
         mesh.initShaderProgram();
         mesh.material.textures.add(texture.getTexture());
         mesh.material.shaderProgram.createTextureUniform("texture_sampler");
-        mesh.material.ambientColour.set(1, 1, 1, 1);
+        mesh.material.ambientColour.set(1f, 1f, 1f, 1f);
 
         return mesh;
     }

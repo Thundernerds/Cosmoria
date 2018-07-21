@@ -4,6 +4,7 @@ import net.comsoria.engine.view.batch.RenderData;
 import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.Renderable;
 import net.comsoria.engine.view.Window;
+import net.comsoria.engine.view.graph.mesh.Mesh;
 
 import java.io.Closeable;
 import java.util.ArrayList;

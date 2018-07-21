@@ -221,7 +221,6 @@ public abstract class ShaderProgram implements Closeable {
     }
 
     public ShaderProgram clone() {
-        System.out.println(glGetShaderSource(this.vertexShaderId));
         return new CustomShaderProgram(glGetShaderSource(this.vertexShaderId), glGetShaderSource(this.fragmentShaderId), new ArrayList<>(this.uniforms.keySet()), this.textures, new IExtractSceneData() {
             @Override
             public void extractScene(Scene scene, ShaderProgram shaderProgram, Matrix4f projMatrix, Matrix4f viewMatrix) {
