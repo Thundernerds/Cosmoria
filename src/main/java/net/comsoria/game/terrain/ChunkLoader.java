@@ -32,16 +32,16 @@ public class ChunkLoader {
         batchRenderer.batchRenderType.shaderProgram = new ChunkShaderProgram((1.0f / graphicalSize) * this.range);
     }
 
-    private Chunk loadChunk(ChunkPosition position, Material debug) throws IOException {
+    private Chunk loadChunk(ChunkPosition position) throws IOException {
         Grid<Float> grid = new Grid<>(this.chunkSize, this.chunkSize);
         generator.updateGrid(grid, position);
 
         Chunk chunk = new Chunk(grid, position);
-        chunk.loadGameObject(this.graphicalSize, this.range, this.batchRenderer.batchRenderType.shaderProgram, debug);
+        chunk.loadGameObject(this.graphicalSize, this.range, this.batchRenderer.batchRenderType.shaderProgram);
         return chunk;
     }
 
-    public void updateAroundPlayer(Vector2f position, World world, Material debug) throws Exception {
+    public void updateAroundPlayer(Vector2f position, World world) throws Exception {
         ChunkPosition chunkPosition = ChunkPosition.toChunkPosition(this.graphicalSize, position);
 
         for (Chunk chunk : world.chunks) {
@@ -56,7 +56,7 @@ public class ChunkLoader {
                 Chunk existing = world.getChunk(relativePosition);
 
                 if (existing == null) {
-                    Chunk chunk = this.loadChunk(relativePosition, debug);
+                    Chunk chunk = this.loadChunk(relativePosition);
                     world.addChunk(chunk);
                     this.batchRenderer.gameObjects.add(chunk.getGameObject());
                 } else if (!existing.getGameObject().visible)

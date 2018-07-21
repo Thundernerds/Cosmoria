@@ -12,11 +12,16 @@ import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.game.coordinate.ChunkPosition;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static net.comsoria.engine.utils.Utils.utils;
 import static org.lwjgl.opengl.GL11.GL_BACK;
 
 public class Chunk {
+    private static Tuple<List<BufferAttribute>, int[]> vertices;
+
     private final Grid<Float> grid;
     public final ChunkPosition position;
     private Mesh gameObject;
@@ -26,13 +31,29 @@ public class Chunk {
         this.position = position;
     }
 
+    static {
+        try {
+            vertices = OBJLoader.loadGeometry(Utils.utils.p("$models/chunk_plane.obj"));
+            vertices.getA().remove(1);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("ERROR");
+        }
+    }
+
     public double getHeight(int x, int y) {
         return grid.get(x, y);
     }
 
-    public void loadGameObject(int graphicalSize, int range, ShaderProgram shaderProgram, Material debug) throws IOException {
-        Tuple<List<BufferAttribute>, int[]> data = OBJLoader.loadGeometry(Utils.utils.p("$models/chunk_plane.obj"));
-        data.getA().remove(1); // Texture Coordinates are not used for terrain so remove them
+    private static Tuple<List<BufferAttribute>, int[]> getVertices() {
+        Tuple<List<BufferAttribute>, int[]> result = new Tuple<>();
+        result.setA(Arrays.asList(vertices.getA().get(0)));
+        result.setB(vertices.getB());
+        return result;
+    }
+
+    public void loadGameObject(int graphicalSize, int range, ShaderProgram shaderProgram) throws IOException {
+        Tuple<List<BufferAttribute>, int[]> data = getVertices();
 
         Float[] array = grid.getArray(Float.class);
         for (int i = 0; i < array.length; i++) {
