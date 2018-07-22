@@ -18,8 +18,13 @@ import net.comsoria.game.Player;
 import net.comsoria.game.SkyDome;
 import net.comsoria.game.terrain.ChunkLoader;
 import net.comsoria.game.terrain.World;
+import net.comsoria.game.terrain.generation.OctaveGenerator;
 import net.comsoria.game.terrain.generation.Perlin2Generator;
 import org.joml.*;
+
+import java.lang.Math;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -58,11 +63,15 @@ public class Game implements IGameLogic {
         dayNightHandler = new DayNightHandler(skyDome, -0.5f, scene.light, 0.15f, 0.25f);
 
         Color background = new Color(23, 32, 42).getOneToZero();
-
         window.setClearColor(background);
         scene.fog = new Fog(0.005f, scene.camera.far - 1500);
 
-        chunkLoader = new ChunkLoader(new Perlin2Generator(0.05, 0.005, 2), 65, 4000, 4, 200);
+        List<OctaveGenerator.Octave> octaves = new ArrayList<>();
+        octaves.add(new OctaveGenerator.Octave(0.05f, 1.2f));
+        octaves.add(new OctaveGenerator.Octave(0.02f, 1.2f));
+
+        chunkLoader = new ChunkLoader(new OctaveGenerator(octaves, (float) Math.random()), 65, 4000, 4, 200);
+
         player = new Player(new Vector3f(0, 0, 0));
 
         keyInput.addListener(new KeyListener(new int[]{GLFW_KEY_ESCAPE}, (charCode, action) -> {
@@ -130,11 +139,11 @@ public class Game implements IGameLogic {
             }
         }
 
-        time += 0.005;
+//        time += 0.005;
         dayNightHandler.update(time);
 
         try {
-            chunkLoader.updateAroundPlayer(player.get2DPosition(), world); //TODO: cache geometry
+            chunkLoader.updateAroundPlayer(player.get2DPosition(), world);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);

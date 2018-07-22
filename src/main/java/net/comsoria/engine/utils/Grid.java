@@ -1,5 +1,8 @@
 package net.comsoria.engine.utils;
 
+import org.joml.Vector2f;
+import org.joml.Vector2i;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,5 +92,11 @@ public class Grid<T> {
     @Override
     public String toString() {
         return "Grid[" + this.length() + "]";
+    }
+
+    public Vector2i getXY(int i) {
+        int x = i % this.width;
+        int y = (i - x) / this.height;
+        return new Vector2i(x, y);
     }
 }

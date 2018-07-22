@@ -10,6 +10,7 @@ import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.game.coordinate.ChunkPosition;
+import org.joml.Vector2i;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,6 +32,10 @@ public class Chunk {
         this.position = position;
     }
 
+    public float random(int x, int y, float seed) {
+        return (float) (((Math.abs(Math.sin((x * 172.192) + (y * 827.232)) * seed) % 1) - 0.5) * 2);
+    }
+
     static {
         try {
             vertices = OBJLoader.loadGeometry(Utils.utils.p("$models/chunk_plane.obj"));
@@ -47,7 +52,7 @@ public class Chunk {
 
     private static Tuple<List<BufferAttribute>, int[]> getVertices() {
         Tuple<List<BufferAttribute>, int[]> result = new Tuple<>();
-        result.setA(Arrays.asList(vertices.getA().get(0)));
+        result.setA(new ArrayList<>(Arrays.asList(vertices.getA().get(0).clone())));
         result.setB(vertices.getB());
         return result;
     }
@@ -56,9 +61,20 @@ public class Chunk {
         Tuple<List<BufferAttribute>, int[]> data = getVertices();
 
         Float[] array = grid.getArray(Float.class);
+        float[] displacement = new float[grid.getHeight() * grid.getWidth() * 2];
+
         for (int i = 0; i < array.length; i++) {
+            Vector2i vec = grid.getXY(i);
+            vec.x = (vec.x + (position.getX() * grid.getWidth()) - position.getX());
+            vec.y = (vec.y + (position.getY() * grid.getHeight()) - position.getY());
+
+            displacement[i * 2] = random(vec.x, vec.y, 10) * 0.006f;
+            displacement[(i * 2) + 1] = random(vec.x, vec.y, 76) * 0.006f;
+
             data.getA().get(0).set((i * 3) + 1, (array[i] / graphicalSize) * range);
         }
+
+        data.getA().add(new BufferAttribute(displacement, 2));
 
         gameObject = new Mesh(new Geometry(data), new Material());
 

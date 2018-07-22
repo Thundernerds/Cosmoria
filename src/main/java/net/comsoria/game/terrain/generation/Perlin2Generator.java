@@ -8,7 +8,7 @@ public class Perlin2Generator implements ITerrainGenerator {
     private final double multiplier2;
     private float multiplier2AddRange;
 
-    public Perlin2Generator(double multiplier1, double multiplier2, double multiplier2AddRange) {
+    public Perlin2Generator(double multiplier1, double multiplier2, double multiplier2AddRange, float seed) {
         this.multiplier1 = multiplier1;
         this.multiplier2 = multiplier2;
         this.multiplier2AddRange = (float) multiplier2AddRange;

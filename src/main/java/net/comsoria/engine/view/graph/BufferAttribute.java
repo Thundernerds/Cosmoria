@@ -41,7 +41,15 @@ public class BufferAttribute {
         return data;
     }
 
+    public float get(int x) {
+        return data[x];
+    }
+
     public void set(int x, float value) {
         data[x] = value;
+    }
+
+    public BufferAttribute clone() {
+        return new BufferAttribute(this.data.clone(), this.indices);
     }
 }
