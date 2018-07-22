@@ -1,5 +1,6 @@
 package net.comsoria.engine.view.graph;
 
+import net.comsoria.engine.view.Color;
 import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import org.joml.Vector4f;
@@ -10,35 +11,35 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.glDeleteTextures;
 
 public class Material implements GLSLUniformBindable {
-    private static final Vector4f DEFAULT_COLOUR = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
-    public Vector4f ambientColour;
-    public Vector4f diffuseColour;
-    public Vector4f specularColour;
+    private static final Color DEFAULT_COLOUR = Color.WHITE;
+    public Color ambientColour;
+    public Color diffuseColour;
+    public Color specularColour;
     public float reflectance;
     public List<Texture> textures;
     public ShaderProgram shaderProgram = null;
 
     public Material() {
-        this.ambientColour = new Vector4f(DEFAULT_COLOUR);
-        this.diffuseColour = new Vector4f(DEFAULT_COLOUR);
-        this.specularColour = new Vector4f(DEFAULT_COLOUR);
+        this.ambientColour = DEFAULT_COLOUR.clone();
+        this.diffuseColour = DEFAULT_COLOUR.clone();
+        this.specularColour = DEFAULT_COLOUR.clone();
         this.textures = new ArrayList<>();
         this.reflectance = 0;
     }
 
-    public Material(Vector4f colour, float reflectance) {
+    public Material(Color colour, float reflectance) {
         this(colour, colour, colour, null, reflectance);
     }
 
     public Material(Texture texture) {
-        this(new Vector4f(DEFAULT_COLOUR), new Vector4f(DEFAULT_COLOUR), new Vector4f(DEFAULT_COLOUR), texture, 0);
+        this(DEFAULT_COLOUR.clone(), DEFAULT_COLOUR.clone(), DEFAULT_COLOUR.clone(), texture, 0);
     }
 
     public Material(Texture texture, float reflectance) {
-        this(new Vector4f(DEFAULT_COLOUR), new Vector4f(DEFAULT_COLOUR), new Vector4f(DEFAULT_COLOUR), texture, reflectance);
+        this(DEFAULT_COLOUR.clone(), DEFAULT_COLOUR.clone(), DEFAULT_COLOUR.clone(), texture, reflectance);
     }
 
-    public Material(Vector4f ambientColour, Vector4f diffuseColour, Vector4f specularColour, Texture texture, float reflectance) {
+    public Material(Color ambientColour, Color diffuseColour, Color specularColour, Texture texture, float reflectance) {
         this.ambientColour = ambientColour;
         this.diffuseColour = diffuseColour;
         this.specularColour = specularColour;

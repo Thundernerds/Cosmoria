@@ -71,4 +71,9 @@ public class Utils {
         for (int i = 0; i < input.size(); i++) result[i] = input.get(i);
         return result;
     }
+
+    public static float map(float startMin, float startMax, float endMin, float endMax, float number) {
+        float pc = (number - startMin) / (startMax - startMin);
+        return ((endMax - endMin) * pc) + endMin;
+    }
 }

@@ -1,5 +1,6 @@
 package net.comsoria.game;
 
+import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.view.Color;
 import net.comsoria.engine.view.Light.SceneLight;
 import org.joml.Vector3f;
@@ -30,12 +31,12 @@ public class DayNightHandler {
         sceneLight.directionalLight.direction = new Vector3f((float) Math.sin(time), cos, 0);
 
         Color color = night;
-        float ambient = 1;
+        float ambient = 1.5f;
         if (cos > dayStart) {
             float nCos = cos - dayStart;
 
             color = color.mix(day, nCos);
-            ambient += nCos * 0.5;
+            ambient += nCos * 0.3;
         }
 
         sceneLight.ambientLight.set(ambient);

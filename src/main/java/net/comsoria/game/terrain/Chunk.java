@@ -68,8 +68,8 @@ public class Chunk {
             vec.x = (vec.x + (position.getX() * grid.getWidth()) - position.getX());
             vec.y = (vec.y + (position.getY() * grid.getHeight()) - position.getY());
 
-            displacement[i * 2] = random(vec.x, vec.y, 10) * 0.006f;
-            displacement[(i * 2) + 1] = random(vec.x, vec.y, 76) * 0.006f;
+            displacement[i * 2] = random(vec.x, vec.y, 10) * 0.005f;
+            displacement[(i * 2) + 1] = random(vec.x, vec.y, 76) * 0.005f; //0.006w
 
             data.getA().get(0).set((i * 3) + 1, (array[i] / graphicalSize) * range);
         }

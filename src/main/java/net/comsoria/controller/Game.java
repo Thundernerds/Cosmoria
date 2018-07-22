@@ -64,14 +64,13 @@ public class Game implements IGameLogic {
 
         Color background = new Color(23, 32, 42).getOneToZero();
         window.setClearColor(background);
-        scene.fog = new Fog(0.005f, scene.camera.far - 1500);
+        scene.fog = new Fog(0.003f, scene.camera.far - 1500); //0.005
 
         List<OctaveGenerator.Octave> octaves = new ArrayList<>();
         octaves.add(new OctaveGenerator.Octave(0.05f, 1.2f));
         octaves.add(new OctaveGenerator.Octave(0.02f, 1.2f));
 
         chunkLoader = new ChunkLoader(new OctaveGenerator(octaves, (float) Math.random()), 65, 4000, 4, 200);
-
         player = new Player(new Vector3f(0, 0, 0));
 
         keyInput.addListener(new KeyListener(new int[]{GLFW_KEY_ESCAPE}, (charCode, action) -> {

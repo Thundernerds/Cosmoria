@@ -6,9 +6,9 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 public class Color implements GLSLUniformBindable {
-    public final static Color WHITE = Color.grayScale(1);
-    public final static Color BLACK = Color.grayScale(0);
-    public final static Color GRAY = Color.grayScale(0.5f);
+    public final static Color WHITE = new Color(1);
+    public final static Color BLACK = new Color(0);
+    public final static Color GRAY = new Color(0.5f);
     public final static Color RED = new Color(1, 0, 0);
     public final static Color BLUE = new Color(0, 0, 1);
     public final static Color GREEN = new Color(0, 1, 0);
@@ -18,9 +18,6 @@ public class Color implements GLSLUniformBindable {
     public float b;
     public float a = 1;
 
-    /**
-     * Dictates if is bound as a vec3 (false) or vec4 (true)
-     **/
     public boolean isTransparent = true;
 
     public Color() {
@@ -32,6 +29,10 @@ public class Color implements GLSLUniformBindable {
         this.g = g;
         this.b = b;
         this.a = a;
+    }
+
+    public Color(float value) {
+        this(value, value, value);
     }
 
     public Color(float x, float y, float z) {
@@ -103,10 +104,6 @@ public class Color implements GLSLUniformBindable {
         float z = this.b + ((color2.b - this.b) * dist);
         float w = this.a + ((color2.a - this.a) * dist);
         return new Color(x, y, z, w);
-    }
-
-    public static Color grayScale(float dist) {
-        return new Color(dist, dist, dist);
     }
 
     public Color clone() {

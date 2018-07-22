@@ -15,7 +15,6 @@ import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
 public class Texture {
-
     private final int id;
 
     public Texture(String fileName) throws Exception {
