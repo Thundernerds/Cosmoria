@@ -1,6 +1,7 @@
 package net.comsoria.controller;
 
 import net.comsoria.engine.utils.Logger;
+import net.comsoria.engine.utils.Timer;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.FileLoader;
 import net.comsoria.engine.view.Color;
@@ -13,7 +14,6 @@ import net.comsoria.engine.view.graph.Texture;
 import net.comsoria.engine.view.input.KeyInput;
 import net.comsoria.engine.view.input.KeyListener;
 import net.comsoria.engine.view.input.MouseInput;
-import net.comsoria.game.DayNightHandler;
 import net.comsoria.game.Player;
 import net.comsoria.game.SkyDome;
 import net.comsoria.game.terrain.ChunkLoader;
@@ -23,6 +23,7 @@ import net.comsoria.game.terrain.generation.Perlin2Generator;
 import org.joml.*;
 
 import java.lang.Math;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,15 +33,14 @@ public class Game implements IGameLogic {
     private Renderer renderer = new Renderer();
     private GameHud hud = new GameHud();
     private Scene scene = new Scene(hud);
-    private DayNightHandler dayNightHandler;
+//    private DayNightHandler dayNightHandler;
 
     private World world;
     private ChunkLoader chunkLoader;
     private Player player;
 
     private boolean paused = true;
-
-    private float time = 0;
+    private float time;
 
     public void init(Window window, KeyInput keyInput) throws Exception {
         StartupFileHandler.load();
@@ -55,22 +55,18 @@ public class Game implements IGameLogic {
 
         world = new World();
 
-        SkyDome skyDome = new SkyDome(FileLoader.loadResourceAsStringFromPath("$shaders/skydome/skydome.v.glsl"),
+        float skyDomeR = scene.camera.far - 100;
+        scene.add(SkyDome.genSkyDome(
+                FileLoader.loadResourceAsStringFromPath("$shaders/skydome/skydome.v.glsl"),
                 FileLoader.loadResourceAsStringFromPath("$shaders/skydome/skydome.f.glsl"),
-                scene.camera.far - 100, new Texture(Utils.utils.getPath("$textures/sun.png")));
-        scene.add(skyDome.getGameObject());
-
-        dayNightHandler = new DayNightHandler(skyDome, -0.5f, scene.light, 0.15f, 0.25f);
-
-        Color background = new Color(23, 32, 42).getOneToZero();
-        window.setClearColor(background);
-        scene.fog = new Fog(0.003f, scene.camera.far - 1500); //0.005
+                skyDomeR, new Texture(Utils.utils.getPath("$textures/sun.png"))
+        ));
 
         List<OctaveGenerator.Octave> octaves = new ArrayList<>();
         octaves.add(new OctaveGenerator.Octave(0.05f, 1.2f));
         octaves.add(new OctaveGenerator.Octave(0.02f, 1.2f));
 
-        chunkLoader = new ChunkLoader(new OctaveGenerator(octaves, (float) Math.random()), 65, 4000, 4, 200);
+        chunkLoader = new ChunkLoader(new OctaveGenerator(octaves, (float) Math.random()), 65, 4000, 4, 200, skyDomeR);
         player = new Player(new Vector3f(0, 0, 0));
 
         keyInput.addListener(new KeyListener(new int[]{GLFW_KEY_ESCAPE}, (charCode, action) -> {
@@ -80,10 +76,14 @@ public class Game implements IGameLogic {
             else window.hideCursor();
         }, false));
 
+        Color background = new Color(23, 32, 42).getOneToZero();
+        window.setClearColor(background);
+        scene.fog = new Fog(0.0015f, skyDomeR - 1000); //0.002
+
         scene.light.directionalLight = new DirectionalLight(new Color(250, 215, 160).getOneToZero(), new Vector3f(), 0.55f);
 
-        PointLight pointLight = new PointLight(new Color(1, 1, 1), new Vector3f(0, 0, 1.5f), 0.5f);
-        pointLight.attenuation = new PointLight.Attenuation(0.0f, 0.0f, 1.0f);
+//        PointLight pointLight = new PointLight(new Color(1, 1, 1), new Vector3f(0, 0, 1.5f), 0.5f);
+//        pointLight.attenuation = new PointLight.Attenuation(0.0f, 0.0f, 1.0f);
 //        scene.light.pointLightList.add(pointLight);
 
         hud.updateSize(window);
@@ -131,15 +131,15 @@ public class Game implements IGameLogic {
             player.setPosition(scene.camera.position);
 
             if (keys.isKeyPressed(GLFW_KEY_UP)) {
-                time += 0.1;
+                time += 0.1f;
             }
             if (keys.isKeyPressed(GLFW_KEY_DOWN)) {
-                time -= 0.1;
+                time -= 0.1f;
             }
         }
 
 //        time += 0.005;
-        dayNightHandler.update(time);
+        scene.updateLight(time);
 
         try {
             chunkLoader.updateAroundPlayer(player.get2DPosition(), world);

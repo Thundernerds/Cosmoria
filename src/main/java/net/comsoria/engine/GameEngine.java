@@ -65,6 +65,8 @@ public class GameEngine implements Runnable {
             last = startTime;
             render();
             sync(startTime);
+
+            Timer.update();
         }
         if (this.verbose) Logger.log("Stopping.");
     }

@@ -3,12 +3,14 @@ package net.comsoria.game.terrain;
 import net.comsoria.engine.utils.Grid;
 import net.comsoria.engine.view.batch.BatchRenderType;
 import net.comsoria.engine.view.batch.BatchRenderer;
-import net.comsoria.engine.view.graph.Material;
 import net.comsoria.game.coordinate.ChunkPosition;
 import net.comsoria.game.terrain.generation.ITerrainGenerator;
+import net.comsoria.game.terrain.mesh.ChunkShaderProgram;
 import org.joml.Vector2f;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChunkLoader {
     private final ITerrainGenerator generator;
@@ -20,7 +22,7 @@ public class ChunkLoader {
 
     public final BatchRenderer batchRenderer = new BatchRenderer(new BatchRenderType());
 
-    public ChunkLoader(ITerrainGenerator generator, int chunkSize, int graphicalSize, int radius, int range) {
+    public ChunkLoader(ITerrainGenerator generator, int chunkSize, int graphicalSize, int radius, int range, float skyDomeRad) throws IOException {
         this.generator = generator;
 
         this.chunkSize = chunkSize;
@@ -29,7 +31,13 @@ public class ChunkLoader {
 
         this.radius = radius;
 
-        batchRenderer.batchRenderType.shaderProgram = new ChunkShaderProgram((1.0f / graphicalSize) * this.range);
+        ChunkShaderProgram shaderProgram = new ChunkShaderProgram();
+        shaderProgram.constants.put("range", this.range + ".0");
+        shaderProgram.constants.put("graphicalSize", this.graphicalSize + ".0");
+        shaderProgram.constants.put("skyDomeRadius", skyDomeRad + "");
+
+        batchRenderer.batchRenderType.shaderProgram = shaderProgram;
+        batchRenderer.batchRenderType.shaderProgram.init();
     }
 
     private Chunk loadChunk(ChunkPosition position) throws IOException {
@@ -63,5 +71,13 @@ public class ChunkLoader {
                     existing.getGameObject().visible = true;
             }
         }
+    }
+
+    public int getGraphicalSize() {
+        return graphicalSize;
+    }
+
+    public int getRange() {
+        return range;
     }
 }

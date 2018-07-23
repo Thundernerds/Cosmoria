@@ -114,11 +114,7 @@ public abstract class ShaderProgram implements Closeable {
     }
 
     public void setUniform(String name, GLSLUniformBindable object) {
-        try {
-            object.set(this, name);
-        } catch (Exception e) {
-            throw new GLSLException("Failed to find uniform of name '" + name + "'");
-        }
+        object.set(this, name);
     }
 
 

@@ -27,7 +27,7 @@ public class Mesh implements Renderable {
     public boolean visible = true;
     public RenderOrder renderPosition = RenderOrder.Any;
 
-    final static Matrix4f modelViewMatrix = new Matrix4f();
+    protected final static Matrix4f modelViewMatrix = new Matrix4f();
 
     public Mesh(Geometry geometry, Material material) {
         this.geometry = geometry;
@@ -65,8 +65,8 @@ public class Mesh implements Renderable {
     }
 
     @Override public Closeable render(Transformation transformation, Scene scene, RenderData renderData) throws Exception {
-        if (renderData.shouldBindGeometry()) this.geometry.bind();
-        if (renderData.shouldBindShaderProgram()) this.material.shaderProgram.bind();
+        if (renderData.shouldBindOwnGeometry()) this.geometry.bind();
+        if (renderData.shouldBindOwnShaderProgram()) this.material.shaderProgram.bind();
 
         if (!this.material.shaderProgram.isUpdated()) {
             this.material.shaderProgram.open();
@@ -94,8 +94,8 @@ public class Mesh implements Renderable {
 
         if (this.material.textures.size() != 0) Texture.unbind();
 
-        if (renderData.shouldBindGeometry()) this.geometry.unbind();
-        if (renderData.shouldBindShaderProgram()) this.material.shaderProgram.unbind();
+        if (renderData.shouldBindOwnGeometry()) this.geometry.unbind();
+        if (renderData.shouldBindOwnShaderProgram()) this.material.shaderProgram.unbind();
 
         return this.material.shaderProgram;
     }

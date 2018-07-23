@@ -6,6 +6,7 @@ import net.comsoria.engine.view.GLSL.Transformation;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,19 +73,23 @@ public class Renderer {
 
         if (scene.hud != null) scene.hud.render(transformation);
 
+        List<Closeable> closeables = new ArrayList<>();
+
         for (int i = 1; i < frameBuffers.size(); i++) {
             FrameBuffer frameBuffer = frameBuffers.get(i);
             frameBuffer.bind();
 
             clear();
-            frameBuffers.get(i - 1).render(transformation, null, RenderData.defaultRenderData);
+            closeables.add(frameBuffers.get(i - 1).render(transformation, scene, RenderData.defaultRenderData));
         }
 
         if (frameBuffers.size() != 0) {
             FrameBuffer.unbind();
 
             clear();
-            frameBuffers.get(frameBuffers.size() - 1).render(transformation, null, RenderData.defaultRenderData);
+            closeables.add(frameBuffers.get(frameBuffers.size() - 1).render(transformation, scene, RenderData.defaultRenderData));
         }
+
+        for (Closeable closeable : closeables) closeable.close();
     }
 }

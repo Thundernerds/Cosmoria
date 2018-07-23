@@ -16,7 +16,10 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT24;
+import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT32;
 import static org.lwjgl.opengl.GL20.glDrawBuffers;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
@@ -54,8 +57,9 @@ public class FrameBuffer implements Renderable {
     public void setSize(int width, int height) {
         cleanup();
         mesh.material.textures.add(new Texture(width, height));
+        mesh.material.textures.add(new Texture(() -> glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0)));
 
-        fbo = glGenFramebuffers();
+        fbo = glGenFramebuffersEXT();
         this.bind();
 
         drb = glGenRenderbuffers();
@@ -63,9 +67,12 @@ public class FrameBuffer implements Renderable {
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, drb);
 
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mesh.material.textures.get(0).getId(), 0);
-        glDrawBuffers(new int[] {GL_COLOR_ATTACHMENT0});
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, mesh.material.textures.get(0).getId(), 0);
+        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, mesh.material.textures.get(1).getId(), 0);
+
+        glDrawBuffers(new int[] {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT});
+
+        if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE_EXT) {
             System.out.println("ERROR");
             return;
         }
@@ -74,7 +81,7 @@ public class FrameBuffer implements Renderable {
     }
 
     public void bind() {
-        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
     }
 
     public Mesh getMesh() {
@@ -87,16 +94,17 @@ public class FrameBuffer implements Renderable {
 
     @Override
     public Closeable render(Transformation transformation, Scene scene, RenderData renderData) throws Exception {
-        this.mesh.render(transformation, scene, renderData);
-
-        return null;
+        return this.mesh.render(transformation, scene, renderData);
     }
 
     public void cleanup() {
-        glDeleteFramebuffers(fbo);
+        glDeleteFramebuffersEXT(fbo);
         if (this.mesh.material.isTextured()) {
-            this.mesh.material.textures.get(0).cleanup();
-            this.mesh.material.textures.remove(0);
+            int len = this.mesh.material.textures.size();
+            for (int i = 0; i < len; i++) {
+                this.mesh.material.textures.get(0).cleanup();
+                this.mesh.material.textures.remove(0);
+            }
         }
         glDeleteRenderbuffers(drb);
     }
@@ -112,19 +120,23 @@ public class FrameBuffer implements Renderable {
     }
 
     public static void unbind() {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
     }
 
     public static ShaderProgram generateFrameBufferShader(String vertex, String fragment) {
-        return new CustomShaderProgram(vertex, fragment, Arrays.asList("time"), Arrays.asList("frameBufferTexture"), new IExtractSceneData() {
+        ShaderProgram shaderProgram = new CustomShaderProgram(vertex, fragment, Arrays.asList("time", "fog.density", "fog.start"), Arrays.asList("colorTexture", "depthTexture"), new IExtractSceneData() {
             @Override
             public void extractScene(Scene scene, ShaderProgram shaderProgram, Matrix4f projMatrix, Matrix4f viewMatrix) {
                 shaderProgram.setUniform("time", Timer.getTime());
+                shaderProgram.setUniform("fog", scene.fog);
             }
+
             @Override
             public void extractMesh(Mesh mesh, ShaderProgram shaderProgram, Matrix4f matrix) {
 
             }
         });
+
+        return shaderProgram;
     }
 }

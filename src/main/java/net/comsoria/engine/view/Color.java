@@ -127,6 +127,15 @@ public class Color implements GLSLUniformBindable {
         return this;
     }
 
+    public Color set(Color color) {
+        this.r = color.r;
+        this.g = color.g;
+        this.b = color.b;
+        this.a = color.a;
+
+        return this;
+    }
+
     public Color set(float r, float g, float b) {
         return this.set(r, g, b, this.a);
     }

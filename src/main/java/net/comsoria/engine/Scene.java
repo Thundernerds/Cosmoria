@@ -1,5 +1,6 @@
 package net.comsoria.engine;
 
+import net.comsoria.engine.utils.Timer;
 import net.comsoria.engine.view.batch.RenderData;
 import net.comsoria.engine.view.Camera;
 import net.comsoria.engine.view.Fog;
@@ -16,13 +17,15 @@ public class Scene {
     private final List<Renderable> children;
     public Hud hud;
     public Fog fog;
-    public Camera camera;
+    public final Camera camera;
+    public Sky sky;
 
     public Scene(Hud hud) {
         this.light = new SceneLight();
         this.children = new ArrayList<>();
         this.hud = hud;
         this.camera = new Camera();
+        this.sky = new Sky(-0.5f, 0.25f, 0.15f);
     }
 
     public void cleanup() {
@@ -67,5 +70,11 @@ public class Scene {
 
     public void add(Renderable gameObject) throws Exception {
         this.children.add(gameObject);
+    }
+
+    public void updateLight(float time) {
+        this.sky.calcColors(time);
+        this.light.ambientLight.set(this.sky.getAmbience());
+        this.light.directionalLight.direction.set(this.sky.getSunDirection());
     }
 }

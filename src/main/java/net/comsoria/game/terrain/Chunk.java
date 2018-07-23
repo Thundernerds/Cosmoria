@@ -10,6 +10,7 @@ import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.game.coordinate.ChunkPosition;
+import net.comsoria.game.terrain.mesh.ChunkMesh;
 import org.joml.Vector2i;
 
 import java.io.IOException;
@@ -69,14 +70,14 @@ public class Chunk {
             vec.y = (vec.y + (position.getY() * grid.getHeight()) - position.getY());
 
             displacement[i * 2] = random(vec.x, vec.y, 10) * 0.005f;
-            displacement[(i * 2) + 1] = random(vec.x, vec.y, 76) * 0.005f; //0.006w
+            displacement[(i * 2) + 1] = random(vec.x, vec.y, 76) * 0.005f;
 
             data.getA().get(0).set((i * 3) + 1, (array[i] / graphicalSize) * range);
         }
 
         data.getA().add(new BufferAttribute(displacement, 2));
 
-        gameObject = new Mesh(new Geometry(data), new Material());
+        gameObject = new ChunkMesh(new Geometry(data), new Material());
 
         gameObject.material.ambientColour.set(0, 0, 0, 0);
         gameObject.material.shaderProgram = shaderProgram;
@@ -84,7 +85,6 @@ public class Chunk {
 
         gameObject.position.set(position.getX() * graphicalSize, 0, position.getY() * graphicalSize);
         gameObject.scale = graphicalSize;
-        gameObject.initShaderProgram();
     }
 
     public Mesh getGameObject() {

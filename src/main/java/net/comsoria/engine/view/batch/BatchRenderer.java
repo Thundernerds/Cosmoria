@@ -29,16 +29,16 @@ public class BatchRenderer implements Renderable {
         List<Closeable> toClose = new ArrayList<>();
 
         RenderData meshRenderData = new RenderData() {
-            @Override public boolean shouldBindGeometry() {
+            @Override public boolean shouldBindOwnGeometry() {
                 return batchRenderType.geometry == null;
             }
-            @Override public boolean shouldBindShaderProgram() {
+            @Override public boolean shouldBindOwnShaderProgram() {
                 return batchRenderType.shaderProgram == null;
             }
         };
 
-        if (!meshRenderData.shouldBindGeometry()) batchRenderType.geometry.bind();
-        if (!meshRenderData.shouldBindShaderProgram()) batchRenderType.shaderProgram.bind();
+        if (!meshRenderData.shouldBindOwnGeometry()) batchRenderType.geometry.bind();
+        if (!meshRenderData.shouldBindOwnShaderProgram()) batchRenderType.shaderProgram.bind();
 
         List<Renderable> start = new ArrayList<>();
         List<Renderable> middle = new ArrayList<>();
@@ -69,8 +69,8 @@ public class BatchRenderer implements Renderable {
 
         for (Closeable closeable : toClose) closeable.close();
 
-        if (!meshRenderData.shouldBindGeometry()) batchRenderType.geometry.unbind();
-        if (!meshRenderData.shouldBindShaderProgram()) batchRenderType.shaderProgram.unbind();
+        if (!meshRenderData.shouldBindOwnGeometry()) batchRenderType.geometry.unbind();
+        if (!meshRenderData.shouldBindOwnShaderProgram()) batchRenderType.shaderProgram.unbind();
 
         return new BatchCloseable(toClose);
     }
