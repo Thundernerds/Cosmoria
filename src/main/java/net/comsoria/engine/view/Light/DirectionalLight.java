@@ -1,17 +1,18 @@
 package net.comsoria.engine.view.Light;
 
-import net.comsoria.engine.view.Color;
+import net.comsoria.engine.view.color.Color3;
+import net.comsoria.engine.view.color.Color4;
 import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import org.joml.Vector3f;
 
 public class DirectionalLight implements GLSLUniformBindable {
-    public final Color color;
+    public final Color3 color;
     public Vector3f direction;
     public float intensity;
 
-    public DirectionalLight(Color color, Vector3f direction, float intensity) {
-        this.color = color.setTransparent(false);
+    public DirectionalLight(Color3 color, Vector3f direction, float intensity) {
+        this.color = color;
         this.direction = direction;
         this.intensity = intensity;
     }
@@ -22,7 +23,7 @@ public class DirectionalLight implements GLSLUniformBindable {
 
     @Override
     public void set(ShaderProgram shaderProgram, String name) {
-        shaderProgram.setUniform(name + ".color", this.color);
+        shaderProgram.setUniform(name + ".color", this.color.getVec3());
         shaderProgram.setUniform(name + ".direction", this.direction);
         shaderProgram.setUniform(name + ".intensity", this.intensity);
     }

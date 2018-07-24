@@ -1,6 +1,7 @@
 package net.comsoria.engine.view;
 
-import net.comsoria.engine.utils.Logger;
+import net.comsoria.engine.view.color.Color3;
+import net.comsoria.engine.view.color.Color4;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -90,9 +91,11 @@ public class Window {
     public void setClearColor(float r, float g, float b, float alpha) {
         glClearColor(r, g, b, alpha);
     }
-
-    public void setClearColor(Color color) {
+    public void setClearColor(Color4 color) {
         setClearColor(color.r, color.g, color.b, color.a);
+    }
+    public void setClearColor(Color3 color) {
+        setClearColor(color.r, color.g, color.b, 1.0f);
     }
 
     public void setPosition(double xP, double yP) { //Percentages

@@ -1,15 +1,14 @@
 package net.comsoria.controller;
 
 import net.comsoria.engine.utils.Logger;
-import net.comsoria.engine.utils.Timer;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.FileLoader;
-import net.comsoria.engine.view.Color;
+import net.comsoria.engine.view.color.Color3;
+import net.comsoria.engine.view.color.Color4;
 import net.comsoria.engine.IGameLogic;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.*;
 import net.comsoria.engine.view.Light.DirectionalLight;
-import net.comsoria.engine.view.Light.PointLight;
 import net.comsoria.engine.view.graph.Texture;
 import net.comsoria.engine.view.input.KeyInput;
 import net.comsoria.engine.view.input.KeyListener;
@@ -19,11 +18,9 @@ import net.comsoria.game.SkyDome;
 import net.comsoria.game.terrain.ChunkLoader;
 import net.comsoria.game.terrain.World;
 import net.comsoria.game.terrain.generation.OctaveGenerator;
-import net.comsoria.game.terrain.generation.Perlin2Generator;
 import org.joml.*;
 
 import java.lang.Math;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,11 +72,11 @@ public class Game implements IGameLogic {
             else window.hideCursor();
         }, false));
 
-        Color background = new Color(23, 32, 42).getOneToZero();
+        Color3 background = new Color3(23, 32, 42).getOneToZero();
         window.setClearColor(background);
         scene.fog = new Fog(0.0015f, skyDomeR - 1000);
 
-        scene.light.directionalLight = new DirectionalLight(new Color(250, 215, 160).getOneToZero(), new Vector3f(), 0.55f);
+        scene.light.directionalLight = new DirectionalLight(new Color3(250, 215, 160).getOneToZero(), new Vector3f(), 0.55f);
 
 //        PointLight pointLight = new PointLight(new Color(1, 1, 1), new Vector3f(0, 0, 1.5f), 0.5f);
 //        pointLight.attenuation = new PointLight.Attenuation(0.0f, 0.0f, 1.0f);

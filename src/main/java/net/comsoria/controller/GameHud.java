@@ -5,7 +5,7 @@ import net.comsoria.engine.loaders.text.FontTexture;
 import net.comsoria.engine.loaders.text.TextLoader;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.OBJLoader;
-import net.comsoria.engine.view.Color;
+import net.comsoria.engine.view.color.Color4;
 import net.comsoria.engine.view.GLSL.Programs.ShaderProgram2D;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.Window;
@@ -13,7 +13,6 @@ import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.engine.view.graph.mesh.Mesh2D;
-import org.joml.Vector4f;
 
 import java.awt.*;
 
@@ -25,7 +24,7 @@ public class GameHud extends Hud {
         ShaderProgram shaderProgram = new ShaderProgram2D();
 
         compass = new Mesh2D(new Geometry(OBJLoader.loadGeometry(Utils.utils.p("$models/compass.obj"))), new Material());
-        compass.material.ambientColour = Color.RED.clone();
+        compass.material.ambientColour = Color4.RED.clone();
         compass.material.shaderProgram = shaderProgram;
         compass.initShaderProgram();
 

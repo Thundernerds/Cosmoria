@@ -1,24 +1,25 @@
 package net.comsoria.engine.view.Light;
 
-import net.comsoria.engine.view.Color;
+import net.comsoria.engine.view.color.Color3;
+import net.comsoria.engine.view.color.Color4;
 import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import org.joml.Vector3f;
 
 public class PointLight implements GLSLUniformBindable {
-    public final Color color;
+    public final Color3 color;
     public Vector3f position;
     public float intensity;
     public Attenuation attenuation;
 
-    public PointLight(Color color, Vector3f position, float intensity) {
+    public PointLight(Color3 color, Vector3f position, float intensity) {
         attenuation = new Attenuation(1, 0, 0);
-        this.color = color.setTransparent(false);
+        this.color = color;
         this.position = position;
         this.intensity = intensity;
     }
 
-    public PointLight(Color color, Vector3f position, float intensity, Attenuation attenuation) {
+    public PointLight(Color3 color, Vector3f position, float intensity, Attenuation attenuation) {
         this(color, position, intensity);
         this.attenuation = attenuation;
     }

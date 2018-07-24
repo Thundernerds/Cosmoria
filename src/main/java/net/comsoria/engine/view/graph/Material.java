@@ -1,9 +1,8 @@
 package net.comsoria.engine.view.graph;
 
-import net.comsoria.engine.view.Color;
+import net.comsoria.engine.view.color.Color4;
 import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
-import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +10,10 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.glDeleteTextures;
 
 public class Material implements GLSLUniformBindable {
-    private static final Color DEFAULT_COLOUR = Color.WHITE;
-    public Color ambientColour;
-    public Color diffuseColour;
-    public Color specularColour;
+    private static final Color4 DEFAULT_COLOUR = Color4.WHITE;
+    public Color4 ambientColour;
+    public Color4 diffuseColour;
+    public Color4 specularColour;
     public float reflectance;
     public List<Texture> textures;
     public ShaderProgram shaderProgram = null;
@@ -27,7 +26,7 @@ public class Material implements GLSLUniformBindable {
         this.reflectance = 0;
     }
 
-    public Material(Color colour, float reflectance) {
+    public Material(Color4 colour, float reflectance) {
         this(colour, colour, colour, null, reflectance);
     }
 
@@ -39,7 +38,7 @@ public class Material implements GLSLUniformBindable {
         this(DEFAULT_COLOUR.clone(), DEFAULT_COLOUR.clone(), DEFAULT_COLOUR.clone(), texture, reflectance);
     }
 
-    public Material(Color ambientColour, Color diffuseColour, Color specularColour, Texture texture, float reflectance) {
+    public Material(Color4 ambientColour, Color4 diffuseColour, Color4 specularColour, Texture texture, float reflectance) {
         this.ambientColour = ambientColour;
         this.diffuseColour = diffuseColour;
         this.specularColour = specularColour;

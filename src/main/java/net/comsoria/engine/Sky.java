@@ -1,24 +1,23 @@
 package net.comsoria.engine;
 
-import net.comsoria.engine.view.Color;
+import net.comsoria.engine.view.color.Color3;
+import net.comsoria.engine.view.color.Color4;
 import net.comsoria.engine.view.graph.mesh.SkyBox;
 import org.joml.Vector3f;
 
 public class Sky {
-    private final static Color day = new Color(102,150,186).getOneToZero();
-    private final static Color night = new Color(23, 32, 42).getOneToZero();
-    private final static Color sunset = new Color(230, 81, 0).getOneToZero();
+    private final static Color3 day = new Color3(102,150,186).getOneToZero();
+    private final static Color3 night = new Color3(23, 32, 42).getOneToZero();
+    private final static Color3 sunset = new Color3(230, 81, 0).getOneToZero();
 
-    private final Color mainColor = Color.WHITE.clone().setTransparent(true);
-    private final Color secondColor = Color.WHITE.clone().setTransparent(true);
+    private final Color3 mainColor = Color3.WHITE.clone();
+    private final Color3 secondColor = Color3.WHITE.clone();
     private float ambience = 1.5f;
     private final Vector3f sunDirection = new Vector3f();
 
     private final float dayStart;
     private final float sunsetTime;
     private final float sunsetBand;
-
-    public SkyBox skyBox = null;
 
     public Sky(float dayStart, float sunsetTime, float sunsetBand) {
         this.dayStart = dayStart;
@@ -44,11 +43,11 @@ public class Sky {
         this.secondColor.set(mainColor.mix(sunset, 1f - Math.min(Math.max(dist * (1f / sunsetBand), 0), 1)));
     }
 
-    public Color getMainColor() {
+    public Color3 getMainColor() {
         return mainColor;
     }
 
-    public Color getSecondColor() {
+    public Color3 getSecondColor() {
         return secondColor;
     }
 
