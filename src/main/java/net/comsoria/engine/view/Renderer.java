@@ -13,9 +13,7 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
-    private Matrix4f projectionMatrix = new Matrix4f();
-    private Matrix4f viewMatrix = new Matrix4f();
-    private Matrix4f orthoMatrix = new Matrix4f();
+    private Transformation transformation = new Transformation();
 
     public List<FrameBuffer> frameBuffers = new ArrayList<>();
 
@@ -23,35 +21,35 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    private final Matrix4f getProjectionMatrix(float fov, float width, float height, float zNear, float zFar) {
-        float aspectRatio = width / height;
-        projectionMatrix.identity();
-        projectionMatrix.perspective(fov, aspectRatio, zNear, zFar);
-        return projectionMatrix;
-    }
-
-    private final Matrix4f getProjectionMatrix(Camera camera, Window window) {
-        return getProjectionMatrix(camera.fov, window.getWidth(), window.getHeight(), camera.near, camera.far);
-    }
-
-    public Matrix4f getViewMatrix(Camera camera) {
-        Vector3f cameraPos = camera.position;
-        Vector3f rotation = camera.rotation;
-
-        viewMatrix.identity();
-        // First do the rotation so camera rotates over its position
-        viewMatrix.rotate((float) Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
-                .rotate((float) Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
-        // Then do the translation
-        viewMatrix.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
-        return viewMatrix;
-    }
-
-    public final Matrix4f getOrthoProjectionMatrix(float left, float right, float bottom, float top) {
-        orthoMatrix.identity();
-        orthoMatrix.setOrtho2D(left, right, bottom, top);
-        return orthoMatrix;
-    }
+//    private final Matrix4f getProjectionMatrix(float fov, float width, float height, float zNear, float zFar) {
+//        float aspectRatio = width / height;
+//        projectionMatrix.identity();
+//        projectionMatrix.perspective(fov, aspectRatio, zNear, zFar);
+//        return projectionMatrix;
+//    }
+//
+//    private final Matrix4f getProjectionMatrix(Camera camera, Window window) {
+//        return getProjectionMatrix(camera.fov, window.getWidth(), window.getHeight(), camera.near, camera.far);
+//    }
+//
+//    public Matrix4f getViewMatrix(Camera camera) {
+//        Vector3f cameraPos = camera.position;
+//        Vector3f rotation = camera.rotation;
+//
+//        viewMatrix.identity();
+//        // First do the rotation so camera rotates over its position
+//        viewMatrix.rotate((float) Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
+//                .rotate((float) Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
+//        // Then do the translation
+//        viewMatrix.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+//        return viewMatrix;
+//    }
+//
+//    public final Matrix4f getOrthoProjectionMatrix(float left, float right, float bottom, float top) {
+//        orthoMatrix.identity();
+//        orthoMatrix.setOrtho2D(left, right, bottom, top);
+//        return orthoMatrix;
+//    }
 
     public void render(Window window, Scene scene) throws Exception {
         if (window.isResized()) {
@@ -59,12 +57,16 @@ public class Renderer {
             for (FrameBuffer frameBuffer : frameBuffers) frameBuffer.setSize(window.getWidth(), window.getHeight());
             window.setResized(false);
             scene.hud.updateSize(window);
+
+            transformation.genProjection(scene.camera, window);
+            transformation.genOrthoProjectionMatrix(0, window.getWidth(), window.getHeight(), 0);
         }
 
-        Transformation transformation = new Transformation();
-        transformation.projection = getProjectionMatrix(scene.camera, window);
-        transformation.view = getViewMatrix(scene.camera);
-        transformation.ortho = getOrthoProjectionMatrix(0, window.getWidth(), window.getHeight(), 0);
+//        transformation.projection = getProjectionMatrix(scene.camera, window);
+//        transformation.view = getViewMatrix(scene.camera);
+//        transformation.ortho = getOrthoProjectionMatrix(0, window.getWidth(), window.getHeight(), 0);
+
+        transformation.genViewMatrices(scene.camera);
 
         if (frameBuffers.size() != 0) frameBuffers.get(0).bind();
 

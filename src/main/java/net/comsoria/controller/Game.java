@@ -33,7 +33,6 @@ public class Game implements IGameLogic {
     private Renderer renderer = new Renderer();
     private GameHud hud = new GameHud();
     private Scene scene = new Scene(hud);
-//    private DayNightHandler dayNightHandler;
 
     private World world;
     private ChunkLoader chunkLoader;
@@ -53,6 +52,7 @@ public class Game implements IGameLogic {
                 FileLoader.loadResourceAsStringFromPath("$shaders/post_processing/post_processing.v.glsl"),
                 FileLoader.loadResourceAsStringFromPath("$shaders/post_processing/post_processing.f.glsl")));
 
+        player = new Player(new Vector3f(0, 0, 0));
         world = new World();
 
         float skyDomeR = scene.camera.far - 100;
@@ -67,7 +67,6 @@ public class Game implements IGameLogic {
         octaves.add(new OctaveGenerator.Octave(0.02f, 1.2f));
 
         chunkLoader = new ChunkLoader(new OctaveGenerator(octaves, (float) Math.random()), 65, 4000, 4, 200, skyDomeR);
-        player = new Player(new Vector3f(0, 0, 0));
 
         keyInput.addListener(new KeyListener(new int[]{GLFW_KEY_ESCAPE}, (charCode, action) -> {
             if (action != GLFW_RELEASE) return;
@@ -78,7 +77,7 @@ public class Game implements IGameLogic {
 
         Color background = new Color(23, 32, 42).getOneToZero();
         window.setClearColor(background);
-        scene.fog = new Fog(0.0015f, skyDomeR - 1000); //0.002
+        scene.fog = new Fog(0.0015f, skyDomeR - 1000);
 
         scene.light.directionalLight = new DirectionalLight(new Color(250, 215, 160).getOneToZero(), new Vector3f(), 0.55f);
 

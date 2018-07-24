@@ -20,5 +20,7 @@ public class ChunkMesh extends Mesh {
                 scale(this.scale);
 
         return modelViewMatrix;
+
+        //Note that what is return is ->NOT<- a model view matrix but is just a model matrix instead
     }
 }

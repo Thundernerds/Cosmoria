@@ -70,10 +70,10 @@ public class Mesh implements Renderable {
 
         if (!this.material.shaderProgram.isUpdated()) {
             this.material.shaderProgram.open();
-            this.material.shaderProgram.setupScene(scene, transformation.projection, transformation.view);
+            this.material.shaderProgram.setupScene(scene, transformation);
         }
 
-        this.material.shaderProgram.setupMesh(this, getModelViewMatrix(transformation));
+        this.material.shaderProgram.setupMesh(this, getModelViewMatrix(transformation), transformation);
 
         if (this.material.textures.size() != this.material.shaderProgram.textures.size())
             throw new Exception("Unequal textures to texture uniforms");

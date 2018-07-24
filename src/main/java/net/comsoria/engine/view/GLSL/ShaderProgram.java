@@ -1,14 +1,11 @@
 package net.comsoria.engine.view.GLSL;
 
 import net.comsoria.engine.Scene;
-import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
-import net.comsoria.engine.view.GLSL.Programs.custom.IExtractSceneData;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import java.io.Closeable;
@@ -158,13 +155,9 @@ public abstract class ShaderProgram implements Closeable {
     }
 
 
-    public void setupScene(Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix) {
+    public abstract void setupScene(Scene scene, Transformation transformation);
 
-    }
-
-    public void setupMesh(Mesh mesh, Matrix4f modelMatrix) {
-
-    }
+    public abstract void setupMesh(Mesh mesh, Matrix4f modelMatrix, Transformation transformation);
 
 
     private void link() {
@@ -214,19 +207,5 @@ public abstract class ShaderProgram implements Closeable {
 
     public int getProgramId() {
         return programId;
-    }
-
-    public ShaderProgram clone() {
-        return new CustomShaderProgram(glGetShaderSource(this.vertexShaderId), glGetShaderSource(this.fragmentShaderId), new ArrayList<>(this.uniforms.keySet()), this.textures, new IExtractSceneData() {
-            @Override
-            public void extractScene(Scene scene, ShaderProgram shaderProgram, Matrix4f projMatrix, Matrix4f viewMatrix) {
-                ShaderProgram.this.setupScene(scene, projMatrix, viewMatrix);
-            }
-
-            @Override
-            public void extractMesh(Mesh mesh, ShaderProgram shaderProgram, Matrix4f matrix) {
-                ShaderProgram.this.setupMesh(mesh, matrix);
-            }
-        });
     }
 }

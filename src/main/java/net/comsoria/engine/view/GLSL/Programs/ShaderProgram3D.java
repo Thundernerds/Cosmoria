@@ -5,6 +5,7 @@ import net.comsoria.engine.loaders.FileLoader;
 import net.comsoria.engine.view.Fog;
 import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
+import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.Light.DirectionalLight;
 import net.comsoria.engine.view.Light.PointLight;
 import net.comsoria.engine.view.Light.SpotLight;
@@ -50,8 +51,8 @@ public class ShaderProgram3D extends ShaderProgram {
 
 
     @Override
-    public void setupScene(Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix) {
-        this.setUniform("projectionMatrix", projectionMatrix);
+    public void setupScene(Scene scene, Transformation transformation) {
+        this.setUniform("projectionMatrix", transformation.projection);
 
         this.setUniform("ambientLight", scene.light.ambientLight);
         this.setUniform("specularPower", 10f);
@@ -63,7 +64,7 @@ public class ShaderProgram3D extends ShaderProgram {
 
             Vector3f lightPos = currPointLight.position;
             Vector4f aux = new Vector4f(lightPos, 1);
-            aux.mul(viewMatrix);
+            aux.mul(transformation.view);
 
             lightPos.x = aux.x;
             lightPos.y = aux.y;
@@ -79,12 +80,12 @@ public class ShaderProgram3D extends ShaderProgram {
             SpotLight currSpotLight = new SpotLight(spotLightList.get(i));
 
             Vector4f dir = new Vector4f(currSpotLight.coneDirection, 0);
-            dir.mul(viewMatrix);
+            dir.mul(transformation.view);
             currSpotLight.coneDirection = new Vector3f(dir.x, dir.y, dir.z);
 
             Vector3f lightPos = currSpotLight.pointLight.position;
             Vector4f aux = new Vector4f(lightPos, 1);
-            aux.mul(viewMatrix);
+            aux.mul(transformation.view);
             lightPos.x = aux.x;
             lightPos.y = aux.y;
             lightPos.z = aux.z;
@@ -94,7 +95,7 @@ public class ShaderProgram3D extends ShaderProgram {
 
         DirectionalLight currDirLight = new DirectionalLight(scene.light.directionalLight);
         Vector4f dir = new Vector4f(currDirLight.direction, 0);
-        dir.mul(viewMatrix);
+        dir.mul(transformation.view);
         currDirLight.direction = new Vector3f(dir.x, dir.y, dir.z);
         this.setUniform("directionalLight", currDirLight);
 
@@ -102,7 +103,7 @@ public class ShaderProgram3D extends ShaderProgram {
     }
 
     @Override
-    public void setupMesh(Mesh mesh, Matrix4f modelViewMatrix) {
+    public void setupMesh(Mesh mesh, Matrix4f modelViewMatrix, Transformation transformation) {
         this.setUniform("modelViewMatrix", modelViewMatrix);
         this.setUniform("material", mesh.material);
     }

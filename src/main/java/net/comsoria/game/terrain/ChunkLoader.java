@@ -32,9 +32,7 @@ public class ChunkLoader {
         this.radius = radius;
 
         ChunkShaderProgram shaderProgram = new ChunkShaderProgram();
-        shaderProgram.constants.put("range", this.range + ".0");
-        shaderProgram.constants.put("graphicalSize", this.graphicalSize + ".0");
-        shaderProgram.constants.put("skyDomeRadius", skyDomeRad + "");
+        shaderProgram.constants.put("skyDomeRadius", String.valueOf(skyDomeRad));
 
         batchRenderer.batchRenderType.shaderProgram = shaderProgram;
         batchRenderer.batchRenderType.shaderProgram.init();

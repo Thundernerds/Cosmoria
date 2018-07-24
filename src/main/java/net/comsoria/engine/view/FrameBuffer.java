@@ -4,8 +4,7 @@ import net.comsoria.engine.Scene;
 import net.comsoria.engine.utils.Timer;
 import net.comsoria.engine.utils.Tuple;
 import net.comsoria.engine.view.batch.RenderData;
-import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
-import net.comsoria.engine.view.GLSL.Programs.custom.IExtractSceneData;
+import net.comsoria.engine.view.GLSL.Programs.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.graph.*;
@@ -18,13 +17,10 @@ import java.util.Arrays;
 
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT24;
 import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT32;
 import static org.lwjgl.opengl.GL20.glDrawBuffers;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
-import static org.lwjgl.opengl.GL30.glBindFramebuffer;
-import static org.lwjgl.opengl.GL32.glFramebufferTexture;
 
 public class FrameBuffer implements Renderable {
     private final Mesh mesh;
@@ -124,19 +120,17 @@ public class FrameBuffer implements Renderable {
     }
 
     public static ShaderProgram generateFrameBufferShader(String vertex, String fragment) {
-        ShaderProgram shaderProgram = new CustomShaderProgram(vertex, fragment, Arrays.asList("time", "fog.density", "fog.start"), Arrays.asList("colorTexture", "depthTexture"), new IExtractSceneData() {
+        return new CustomShaderProgram(vertex, fragment, Arrays.asList("time", "fog.density", "fog.start"), Arrays.asList("colorTexture", "depthTexture")) {
             @Override
-            public void extractScene(Scene scene, ShaderProgram shaderProgram, Matrix4f projMatrix, Matrix4f viewMatrix) {
-                shaderProgram.setUniform("time", Timer.getTime());
-                shaderProgram.setUniform("fog", scene.fog);
+            public void setupScene(Scene scene, Transformation transformation) {
+                this.setUniform("time", Timer.getTime());
+                this.setUniform("fog", scene.fog);
             }
 
             @Override
-            public void extractMesh(Mesh mesh, ShaderProgram shaderProgram, Matrix4f matrix) {
+            public void setupMesh(Mesh mesh1, Matrix4f modelMatrix, Transformation transformation) {
 
             }
-        });
-
-        return shaderProgram;
+        };
     }
 }

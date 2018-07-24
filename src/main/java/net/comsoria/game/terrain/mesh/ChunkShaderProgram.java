@@ -7,6 +7,7 @@ import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.view.Fog;
 import net.comsoria.engine.view.GLSL.Programs.ShaderProgram3D;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
+import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.Light.DirectionalLight;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.game.SkyDome;
@@ -36,9 +37,8 @@ public class ChunkShaderProgram extends ShaderProgram3D {
                 GLSLLoader.loadGLSL(Utils.utils.p("$shaders/chunk/chunk_fragment.f.glsl"), constants));
 
         this.createUniform("projectionMatrix");
-        this.createUniform("modelMatrix");
-        this.createUniform("viewMatrix");
-        this.createUniform("viewMatrixNoRot");
+        this.createUniform("modelViewMatrix");
+        this.createUniform("modelViewMatrixNoRot");
 
         this.createUniform("ambientLight");
 
@@ -51,15 +51,15 @@ public class ChunkShaderProgram extends ShaderProgram3D {
     }
 
     @Override
-    public void setupScene(Scene scene, Matrix4f projectionMatrix, Matrix4f viewMatrix) {
-        this.setUniform("projectionMatrix", projectionMatrix);
+    public void setupScene(Scene scene, Transformation transformation) {
+        this.setUniform("projectionMatrix", transformation.projection);
         this.setUniform("ambientLight", scene.light.ambientLight.getVec3());
 
         this.setUniform("fog", scene.fog);
 
         DirectionalLight currDirLight = new DirectionalLight(scene.light.directionalLight);
         Vector4f dir = new Vector4f(currDirLight.direction, 0);
-        dir.mul(viewMatrix);
+        dir.mul(transformation.view);
         currDirLight.direction = new Vector3f(dir.x, dir.y, dir.z);
         this.setUniform("directionalLight", currDirLight);
 
@@ -67,19 +67,13 @@ public class ChunkShaderProgram extends ShaderProgram3D {
         this.setUniform("color2", scene.sky.getSecondColor().getVec3());
         this.setUniform("sunDirection", scene.light.directionalLight.direction);
 
-        this.setUniform("viewMatrix", viewMatrix);
-        viewMatrix = new Matrix4f(viewMatrix);
-
-        Vector3f cameraPos = scene.camera.position;
-
-        viewMatrix.identity();
-        viewMatrix.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
-
-        this.setUniform("viewMatrixNoRot", viewMatrix);
+//        this.setUniform("modelViewMatrix", transformation.view);
+//        this.setUniform("viewMatrixNoRot", transformation.viewNoRotation);
     }
 
     @Override
-    public void setupMesh(Mesh mesh, Matrix4f modelViewMatrix) {
-        this.setUniform("modelMatrix", modelViewMatrix);
+    public void setupMesh(Mesh mesh, Matrix4f modelMatrix, Transformation transformation) {
+        this.setUniform("modelViewMatrix", new Matrix4f(transformation.view).mul(modelMatrix));
+        this.setUniform("modelViewMatrixNoRot", new Matrix4f(transformation.viewNoRotation).mul(modelMatrix));
     }
 }

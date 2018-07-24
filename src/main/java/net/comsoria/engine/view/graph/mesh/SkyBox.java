@@ -24,10 +24,7 @@ public class SkyBox extends Mesh {
                 rotateZ((float) Math.toRadians(-rotation.z)).
                 scale(this.scale);
 
-        Matrix4f viewCurr = new Matrix4f(transformation.view);
-        viewCurr.m30(0);
-        viewCurr.m31(0);
-        viewCurr.m32(0);
+        Matrix4f viewCurr = new Matrix4f(transformation.viewNoTranslation);
         return viewCurr.mul(modelViewMatrix);
     }
 }

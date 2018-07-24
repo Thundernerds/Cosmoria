@@ -4,12 +4,9 @@ import net.comsoria.engine.Scene;
 import net.comsoria.engine.utils.Tuple;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.OBJLoader;
-import net.comsoria.engine.math.Circle;
-import net.comsoria.engine.view.Color;
-import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
-import net.comsoria.engine.view.GLSL.Programs.custom.CustomShaderProgram;
-import net.comsoria.engine.view.GLSL.Programs.custom.IExtractSceneData;
+import net.comsoria.engine.view.GLSL.Programs.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
+import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.graph.BufferAttribute;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
@@ -29,21 +26,25 @@ public class SkyDome {
         data.getA().remove(1);
         data.getA().remove(1);
         Mesh dome = new SkyBox(new Geometry(data), new Material());
-        dome.material.shaderProgram = new CustomShaderProgram(fragment, vertex, Arrays.asList("color1", "color2", "modelViewMatrix", "projectionMatrix", "sunDirection", "sunLine"), Arrays.asList("sun"), new IExtractSceneData() {
-            @Override public void extractScene(Scene scene, ShaderProgram shaderProgram, Matrix4f projMatrix, Matrix4f viewMatrix) {
-                shaderProgram.setUniform("projectionMatrix", projMatrix);
+
+        dome.material.shaderProgram = new CustomShaderProgram(fragment, vertex, Arrays.asList("color1", "color2", "modelViewMatrix", "projectionMatrix", "sunDirection", "sunLine"), Arrays.asList("sun")) {
+            @Override
+            public void setupScene(Scene scene, Transformation transformation) {
+                this.setUniform("projectionMatrix", transformation.projection);
                 Vector3f direction = scene.light.directionalLight.direction;
-                shaderProgram.setUniform("sunDirection", direction);
+                this.setUniform("sunDirection", direction);
 //                shaderProgram.setUniform("sunLine", new Circle().getTangent((float) Math.atan2(direction.x, direction.y)));
 
-                shaderProgram.setUniform("color1", scene.sky.getMainColor().getVec3());
-                shaderProgram.setUniform("color2", scene.sky.getSecondColor().getVec3());
+                this.setUniform("color1", scene.sky.getMainColor().getVec3());
+                this.setUniform("color2", scene.sky.getSecondColor().getVec3());
             }
 
-            @Override public void extractMesh(Mesh mesh, ShaderProgram shaderProgram, Matrix4f matrix) {
-                shaderProgram.setUniform("modelViewMatrix", matrix);
+            @Override
+            public void setupMesh(Mesh mesh, Matrix4f modelMatrix, Transformation transformation) {
+                this.setUniform("modelViewMatrix", modelMatrix);
             }
-        });
+        };
+
         dome.scale = size;
         dome.initShaderProgram();
         dome.material.textures.add(sun);
