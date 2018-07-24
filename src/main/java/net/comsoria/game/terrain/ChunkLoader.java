@@ -1,11 +1,13 @@
 package net.comsoria.game.terrain;
 
+import net.comsoria.engine.loaders.GLSLLoader;
 import net.comsoria.engine.utils.Grid;
+import net.comsoria.engine.utils.Utils;
+import net.comsoria.engine.view.GLSL.Programs.FadeOutShaderProgram;
 import net.comsoria.engine.view.batch.BatchRenderType;
 import net.comsoria.engine.view.batch.BatchRenderer;
 import net.comsoria.game.coordinate.ChunkPosition;
 import net.comsoria.game.terrain.generation.ITerrainGenerator;
-import net.comsoria.game.terrain.mesh.ChunkShaderProgram;
 import org.joml.Vector2f;
 
 import java.io.IOException;
@@ -31,10 +33,14 @@ public class ChunkLoader {
 
         this.radius = radius;
 
-        ChunkShaderProgram shaderProgram = new ChunkShaderProgram();
-        shaderProgram.constants.put("skyDomeRadius", String.valueOf(skyDomeRad));
+        Map<String, String> constants = new HashMap<>();
+        constants.put("skyDomeRadius", String.valueOf(skyDomeRad));
+        constants.put("width", String.valueOf(this.chunkSize - 1));
 
-        batchRenderer.batchRenderType.shaderProgram = shaderProgram;
+        batchRenderer.batchRenderType.shaderProgram = new FadeOutShaderProgram(
+                GLSLLoader.loadGLSL(Utils.utils.p("$shaders/chunk/chunk_vertex.v.glsl"), constants),
+                GLSLLoader.loadGLSL(Utils.utils.p("$shaders/chunk/chunk_fragment.f.glsl"), constants)
+        );
         batchRenderer.batchRenderType.shaderProgram.init();
     }
 

@@ -4,7 +4,6 @@ import net.comsoria.engine.utils.Logger;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.FileLoader;
 import net.comsoria.engine.view.color.Color3;
-import net.comsoria.engine.view.color.Color4;
 import net.comsoria.engine.IGameLogic;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.*;
@@ -74,7 +73,7 @@ public class Game implements IGameLogic {
 
         Color3 background = new Color3(23, 32, 42).getOneToZero();
         window.setClearColor(background);
-        scene.fog = new Fog(0.0015f, skyDomeR - 1000);
+        scene.fog = new FadeFog(0.0015f, skyDomeR - 1000);
 
         scene.light.directionalLight = new DirectionalLight(new Color3(250, 215, 160).getOneToZero(), new Vector3f(), 0.55f);
 

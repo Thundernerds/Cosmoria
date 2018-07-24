@@ -15,6 +15,7 @@ import net.comsoria.engine.view.graph.mesh.Mesh;
 import net.comsoria.engine.view.graph.mesh.Mesh2D;
 
 import java.awt.*;
+import java.io.File;
 
 public class GameHud extends Hud {
     private Mesh compass;
@@ -34,8 +35,10 @@ public class GameHud extends Hud {
 //        crosshair.material.textures.add(new Texture("$textures/VeryVeryVeryBadCrosshair"));
 //        crosshair.initShaderProgram();
 
-        label = TextLoader.buildMesh("Hello World!", new FontTexture(new Font("Arial", Font.PLAIN, 40), "ISO-8859-1"));
-        label.scale = 1.5f;
+        Font font = Font.createFont(Font.TRUETYPE_FONT, new File(System.getProperty("user.home") + "/Desktop/space age.ttf")).deriveFont(48f);
+
+        label = TextLoader.buildMesh("Press ESC to pause / unpause the game", new FontTexture(font, "ISO-8859-1"));
+        label.scale = 1f;
 
         gameObjects.add(label);
 
@@ -52,7 +55,7 @@ public class GameHud extends Hud {
         compass.position.set(window.getWidth() - size, size + 15, 0);
         compass.scale = size;
 
-//        label.position.set(10f, window.getHeight() - 50f, 0);
+        label.position.set(10, 0, 0);
     }
 
     void rotateCompass(float rotation) {

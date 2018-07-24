@@ -2,8 +2,7 @@ package net.comsoria.engine.view.GLSL.Programs;
 
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.loaders.FileLoader;
-import net.comsoria.engine.view.Fog;
-import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
+import net.comsoria.engine.view.FadeFog;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.Light.DirectionalLight;
@@ -15,7 +14,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -46,7 +44,7 @@ public class ShaderProgram3D extends ShaderProgram {
 
         DirectionalLight.create(this, "directionalLight");
 
-        Fog.create(this, "fog");
+        FadeFog.create(this, "fog");
     }
 
 

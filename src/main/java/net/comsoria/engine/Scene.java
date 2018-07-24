@@ -1,9 +1,8 @@
 package net.comsoria.engine;
 
-import net.comsoria.engine.utils.Timer;
 import net.comsoria.engine.view.batch.RenderData;
 import net.comsoria.engine.view.Camera;
-import net.comsoria.engine.view.Fog;
+import net.comsoria.engine.view.FadeFog;
 import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.Light.SceneLight;
 import net.comsoria.engine.view.Renderable;
@@ -16,7 +15,7 @@ public class Scene {
     public final SceneLight light;
     private final List<Renderable> children;
     public Hud hud;
-    public Fog fog;
+    public FadeFog fog;
     public final Camera camera;
     public Sky sky;
 

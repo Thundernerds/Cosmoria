@@ -7,16 +7,16 @@ import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class Fog implements GLSLUniformBindable {
+public class FadeFog implements GLSLUniformBindable {
     public float density;
     public float start;
 
-    public Fog() {
+    public FadeFog() {
         this.density = 0;
         this.start = 0;
     }
 
-    public Fog(float density, float start) {
+    public FadeFog(float density, float start) {
         this.density = density;
         this.start = start;
     }

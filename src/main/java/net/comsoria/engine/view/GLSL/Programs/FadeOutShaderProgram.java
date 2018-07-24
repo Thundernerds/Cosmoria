@@ -1,40 +1,29 @@
-package net.comsoria.game.terrain.mesh;
+package net.comsoria.engine.view.GLSL.Programs;
 
 import net.comsoria.engine.Scene;
-import net.comsoria.engine.loaders.FileLoader;
-import net.comsoria.engine.loaders.GLSLLoader;
-import net.comsoria.engine.utils.Utils;
-import net.comsoria.engine.view.Fog;
-import net.comsoria.engine.view.GLSL.Programs.ShaderProgram3D;
-import net.comsoria.engine.view.GLSL.ShaderProgram;
+import net.comsoria.engine.view.FadeFog;
 import net.comsoria.engine.view.GLSL.Transformation;
 import net.comsoria.engine.view.Light.DirectionalLight;
 import net.comsoria.engine.view.graph.mesh.Mesh;
-import net.comsoria.game.SkyDome;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
-public class ChunkShaderProgram extends ShaderProgram3D {
-    public Map<String, String> constants;
+public class FadeOutShaderProgram extends ShaderProgram3D {
+    private final String vertex;
+    private final String fragment;
 
-    public ChunkShaderProgram(Map<String, String> constants) {
+    public FadeOutShaderProgram(String vertex, String fragment) {
         super();
 
-        this.constants = constants;
-    }
-
-    public ChunkShaderProgram() {
-        this(new HashMap<>());
+        this.vertex = vertex;
+        this.fragment = fragment;
     }
 
     public void init() throws IOException {
-        this.create(GLSLLoader.loadGLSL(Utils.utils.p("$shaders/chunk/chunk_vertex.v.glsl"), constants),
-                GLSLLoader.loadGLSL(Utils.utils.p("$shaders/chunk/chunk_fragment.f.glsl"), constants));
+        this.create(vertex, fragment);
 
         this.createUniform("projectionMatrix");
         this.createUniform("modelViewMatrix");
@@ -42,7 +31,7 @@ public class ChunkShaderProgram extends ShaderProgram3D {
 
         this.createUniform("ambientLight");
 
-        Fog.create(this, "fog");
+        FadeFog.create(this, "fog");
         DirectionalLight.create(this, "directionalLight");
 
         this.createUniform("color1");
@@ -66,9 +55,6 @@ public class ChunkShaderProgram extends ShaderProgram3D {
         this.setUniform("color1", scene.sky.getMainColor().getVec3());
         this.setUniform("color2", scene.sky.getSecondColor().getVec3());
         this.setUniform("sunDirection", scene.light.directionalLight.direction);
-
-//        this.setUniform("modelViewMatrix", transformation.view);
-//        this.setUniform("viewMatrixNoRot", transformation.viewNoRotation);
     }
 
     @Override
