@@ -1,6 +1,6 @@
 package net.comsoria.game.terrain.mesh;
 
-import net.comsoria.engine.view.GLSL.Transformation;
+import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
 import net.comsoria.engine.view.graph.mesh.Mesh;

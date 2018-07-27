@@ -1,8 +1,9 @@
 package net.comsoria.engine.view.graph.mesh;
 
 import net.comsoria.engine.Scene;
+import net.comsoria.engine.view.Window;
 import net.comsoria.engine.view.batch.RenderData;
-import net.comsoria.engine.view.GLSL.Transformation;
+import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.Renderable;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
@@ -60,11 +61,11 @@ public class Mesh implements Renderable {
                 rotateZ((float) Math.toRadians(-rotation.z)).
                 scale(this.scale);
 
-        Matrix4f viewCurr = new Matrix4f(transformation.view);
+        Matrix4f viewCurr = new Matrix4f(transformation.getView());
         return viewCurr.mul(modelViewMatrix);
     }
 
-    @Override public Closeable render(Transformation transformation, Scene scene, RenderData renderData) throws Exception {
+    @Override public Closeable render(Transformation transformation, Scene scene, RenderData renderData, Window window) throws Exception {
         if (renderData.shouldBindOwnGeometry()) this.geometry.bind();
         if (renderData.shouldBindOwnShaderProgram()) this.material.shaderProgram.bind();
 

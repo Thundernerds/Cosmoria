@@ -6,7 +6,7 @@ import net.comsoria.engine.utils.Tuple;
 import net.comsoria.engine.view.batch.RenderData;
 import net.comsoria.engine.view.GLSL.Programs.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
-import net.comsoria.engine.view.GLSL.Transformation;
+import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.graph.*;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
@@ -89,8 +89,8 @@ public class FrameBuffer implements Renderable {
     }
 
     @Override
-    public Closeable render(Transformation transformation, Scene scene, RenderData renderData) throws Exception {
-        return this.mesh.render(transformation, scene, renderData);
+    public Closeable render(Transformation transformation, Scene scene, RenderData renderData, Window window) throws Exception {
+        return this.mesh.render(transformation, scene, renderData, window);
     }
 
     public void cleanup() {

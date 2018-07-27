@@ -4,7 +4,7 @@ import net.comsoria.engine.Scene;
 import net.comsoria.engine.loaders.FileLoader;
 import net.comsoria.engine.view.FadeFog;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
-import net.comsoria.engine.view.GLSL.Transformation;
+import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.Light.DirectionalLight;
 import net.comsoria.engine.view.Light.PointLight;
 import net.comsoria.engine.view.Light.SpotLight;
@@ -50,7 +50,7 @@ public class ShaderProgram3D extends ShaderProgram {
 
     @Override
     public void setupScene(Scene scene, Transformation transformation) {
-        this.setUniform("projectionMatrix", transformation.projection);
+        this.setUniform("projectionMatrix", transformation.getProjection());
 
         this.setUniform("ambientLight", scene.light.ambientLight);
         this.setUniform("specularPower", 10f);
@@ -62,7 +62,7 @@ public class ShaderProgram3D extends ShaderProgram {
 
             Vector3f lightPos = currPointLight.position;
             Vector4f aux = new Vector4f(lightPos, 1);
-            aux.mul(transformation.view);
+            aux.mul(transformation.getView());
 
             lightPos.x = aux.x;
             lightPos.y = aux.y;
@@ -78,12 +78,12 @@ public class ShaderProgram3D extends ShaderProgram {
             SpotLight currSpotLight = new SpotLight(spotLightList.get(i));
 
             Vector4f dir = new Vector4f(currSpotLight.coneDirection, 0);
-            dir.mul(transformation.view);
+            dir.mul(transformation.getView());
             currSpotLight.coneDirection = new Vector3f(dir.x, dir.y, dir.z);
 
             Vector3f lightPos = currSpotLight.pointLight.position;
             Vector4f aux = new Vector4f(lightPos, 1);
-            aux.mul(transformation.view);
+            aux.mul(transformation.getView());
             lightPos.x = aux.x;
             lightPos.y = aux.y;
             lightPos.z = aux.z;
@@ -93,7 +93,7 @@ public class ShaderProgram3D extends ShaderProgram {
 
         DirectionalLight currDirLight = new DirectionalLight(scene.light.directionalLight);
         Vector4f dir = new Vector4f(currDirLight.direction, 0);
-        dir.mul(transformation.view);
+        dir.mul(transformation.getView());
         currDirLight.direction = new Vector3f(dir.x, dir.y, dir.z);
         this.setUniform("directionalLight", currDirLight);
 

@@ -1,9 +1,10 @@
 package net.comsoria.engine;
 
+import net.comsoria.engine.view.Window;
 import net.comsoria.engine.view.batch.RenderData;
 import net.comsoria.engine.view.Camera;
 import net.comsoria.engine.view.FadeFog;
-import net.comsoria.engine.view.GLSL.Transformation;
+import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.Light.SceneLight;
 import net.comsoria.engine.view.Renderable;
 
@@ -14,15 +15,13 @@ import java.util.List;
 public class Scene {
     public final SceneLight light;
     private final List<Renderable> children;
-    public Hud hud;
     public FadeFog fog;
     public final Camera camera;
     public Sky sky;
 
-    public Scene(Hud hud) {
+    public Scene() {
         this.light = new SceneLight();
         this.children = new ArrayList<>();
-        this.hud = hud;
         this.camera = new Camera();
         this.sky = new Sky(-0.5f, 0.25f, 0.15f);
     }
@@ -31,10 +30,9 @@ public class Scene {
         for (Renderable gameItem : this.children) {
             gameItem.cleanup();
         }
-        hud.cleanup();
     }
 
-    public void render(Transformation transformation) throws Exception {
+    public void render(Transformation transformation, Window window) throws Exception {
         List<Closeable> toClose = new ArrayList<>();
 
         List<Renderable> start = new ArrayList<>();
@@ -60,7 +58,7 @@ public class Scene {
         for (Renderable gameItem : total) {
             if (!gameItem.shouldRender()) continue;
 
-            Closeable item = gameItem.render(transformation, this, RenderData.defaultRenderData);
+            Closeable item = gameItem.render(transformation, this, RenderData.defaultRenderData, window);
             if (item != null && !toClose.contains(item)) toClose.add(item);
         }
 

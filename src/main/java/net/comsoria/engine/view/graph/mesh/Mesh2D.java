@@ -1,6 +1,6 @@
 package net.comsoria.engine.view.graph.mesh;
 
-import net.comsoria.engine.view.GLSL.Transformation;
+import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
 import org.joml.Matrix4f;
@@ -19,7 +19,7 @@ public class Mesh2D extends Mesh {
                 rotateZ((float) Math.toRadians(-rotation.z)).
                 scale(this.scale);
 
-        Matrix4f orthoMatrixCurr = new Matrix4f(transformation.ortho);
+        Matrix4f orthoMatrixCurr = new Matrix4f(transformation.getOrtho());
         orthoMatrixCurr.mul(modelMatrix);
         return orthoMatrixCurr;
     }

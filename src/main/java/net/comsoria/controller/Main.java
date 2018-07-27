@@ -9,9 +9,8 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
         Logger.log("Started game Cosmoria");
-
-        IGameLogic gameLogic = new Game();
-        GameEngine engine = new GameEngine("Cosmoria", 800, 520, gameLogic, true);
+        StartupFileHandler.load();
+        GameEngine engine = new GameEngine("Cosmoria", 800, 520, new LoadingHandler(), true);
         engine.start();
     }
 }

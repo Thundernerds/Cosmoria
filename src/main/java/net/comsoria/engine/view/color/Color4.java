@@ -12,6 +12,7 @@ public class Color4 extends Color3 {
     public final static Color4 RED = new Color4(1, 0, 0);
     public final static Color4 BLUE = new Color4(0, 0, 1);
     public final static Color4 GREEN = new Color4(0, 1, 0);
+    public final static Color4 TRANSPARENT = new Color4(0, 0, 0, 0);
 
     public float a = 1;
 

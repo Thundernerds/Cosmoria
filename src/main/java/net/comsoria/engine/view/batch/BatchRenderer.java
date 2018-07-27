@@ -1,8 +1,9 @@
 package net.comsoria.engine.view.batch;
 
 import net.comsoria.engine.Scene;
-import net.comsoria.engine.view.GLSL.Transformation;
+import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.Renderable;
+import net.comsoria.engine.view.Window;
 
 import java.io.Closeable;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class BatchRenderer implements Renderable {
     }
 
     @Override
-    public Closeable render(Transformation transformation, Scene scene, RenderData renderData) throws Exception {
+    public Closeable render(Transformation transformation, Scene scene, RenderData renderData, Window window) throws Exception {
         List<Closeable> toClose = new ArrayList<>();
 
         RenderData meshRenderData = new RenderData() {
@@ -63,7 +64,7 @@ public class BatchRenderer implements Renderable {
         for (Renderable gameItem : total) {
             if (!gameItem.shouldRender()) continue;
 
-            Closeable item = gameItem.render(transformation, scene, meshRenderData);
+            Closeable item = gameItem.render(transformation, scene, meshRenderData, window);
             if (item != null && !toClose.contains(item)) toClose.add(item);
         }
 

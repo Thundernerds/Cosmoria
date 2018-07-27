@@ -85,7 +85,7 @@ public class Color3 implements GLSLUniformBindable {
         return new Color3(this);
     }
 
-    public Color3 set(float r, float g, float b, float a) {
+    public Color3 set(float r, float g, float b) {
         this.r = r;
         this.g = g;
         this.b = b;
@@ -108,12 +108,14 @@ public class Color3 implements GLSLUniformBindable {
         return this;
     }
 
-    public Color3 set(float r, float g, float b) {
-        return this.set(r, g, b);
-    }
-
     @Override
     public void set(ShaderProgram shaderProgram, String name) {
         shaderProgram.setUniform(name, this.getVec3());
+    }
+
+    public static Color3 valueOf(String string) {
+        String[] parts = string.split(" ");
+
+        return new Color3(Float.valueOf(parts[0]), Float.valueOf(parts[1]), Float.valueOf(parts[2]));
     }
 }

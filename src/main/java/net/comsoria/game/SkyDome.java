@@ -5,8 +5,7 @@ import net.comsoria.engine.utils.Tuple;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.OBJLoader;
 import net.comsoria.engine.view.GLSL.Programs.CustomShaderProgram;
-import net.comsoria.engine.view.GLSL.ShaderProgram;
-import net.comsoria.engine.view.GLSL.Transformation;
+import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.graph.BufferAttribute;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
@@ -30,7 +29,7 @@ public class SkyDome {
         dome.material.shaderProgram = new CustomShaderProgram(fragment, vertex, Arrays.asList("color1", "color2", "modelViewMatrix", "projectionMatrix", "sunDirection", "sunLine"), Arrays.asList("sun")) {
             @Override
             public void setupScene(Scene scene, Transformation transformation) {
-                this.setUniform("projectionMatrix", transformation.projection);
+                this.setUniform("projectionMatrix", transformation.getProjection());
                 Vector3f direction = scene.light.directionalLight.direction;
                 this.setUniform("sunDirection", direction);
 //                shaderProgram.setUniform("sunLine", new Circle().getTangent((float) Math.atan2(direction.x, direction.y)));

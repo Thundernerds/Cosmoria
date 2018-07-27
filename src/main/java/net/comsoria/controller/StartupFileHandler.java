@@ -23,10 +23,11 @@ public class StartupFileHandler {
         Utils.utils.addName("models", "$res/models");
         Utils.utils.addName("textures", "$res/textures");
         Utils.utils.addName("uis", "$res/UIs");
+        Utils.utils.addName("fonts", "$res/fonts");
 
         Logger.log("Creating new dirs...");
         Utils.utils.createDirs(new String[] {
-                "$home", "$saves", "$res", "$models", "$shaders", "$textures", "$uis"
+                "$home", "$saves", "$res", "$models", "$shaders", "$textures", "$uis", "$fonts"
         });
 
         File settings = new File(Utils.utils.p("$home/settings.json"));
@@ -46,7 +47,7 @@ public class StartupFileHandler {
                 if (!file.exists()) {
                     if (gitPath.equals("null")) {
                         file.mkdir();
-                    } else if (gitPath.endsWith(".png")) {
+                    } else if (gitPath.endsWith(".png") || gitPath.endsWith(".ttf")) {
                         WebLoader.copyImageFromNet(Utils.utils.p("$git/" + gitPath), path);
                     } else {
                         FileLoader.writeResource(file, WebLoader.loadResourceFromNet(Utils.utils.p("$git/" + gitPath)));
