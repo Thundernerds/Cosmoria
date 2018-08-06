@@ -24,10 +24,11 @@ public class StartupFileHandler {
         Utils.utils.addName("textures", "$res/textures");
         Utils.utils.addName("uis", "$res/UIs");
         Utils.utils.addName("fonts", "$res/fonts");
+        Utils.utils.addName("audio", "$res/audio");
 
         Logger.log("Creating new dirs...");
         Utils.utils.createDirs(new String[] {
-                "$home", "$saves", "$res", "$models", "$shaders", "$textures", "$uis", "$fonts"
+                "$home", "$saves", "$res", "$models", "$shaders", "$textures", "$uis", "$fonts", "$audio"
         });
 
         File settings = new File(Utils.utils.p("$home/settings.json"));

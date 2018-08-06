@@ -41,10 +41,11 @@ public abstract class UINode implements Renderable {
 
     protected abstract void genMesh(Window window) throws Exception;
 
-    public void initStyleSets(Window window) throws Exception {
-        for (String name : styleSet.ruleMap.keySet()) {
-            styleSet.ruleMap.get(name).updateMesh(mesh, window);
-        }
+    public void updateStyleSets(Window window) throws Exception {
+        if (this.mesh != null)
+            for (String name : styleSet.ruleMap.keySet()) {
+                styleSet.ruleMap.get(name).updateMesh(mesh, window);
+            }
     }
 
     public Mesh getMesh() {
@@ -68,7 +69,7 @@ public abstract class UINode implements Renderable {
 
     @Override
     public void cleanup() {
-        mesh.cleanup();
+        if (this.mesh != null) mesh.cleanup();
     }
 
     @Override

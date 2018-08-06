@@ -135,6 +135,19 @@ public class StyleSet {
             this.written = rule2.written;
         }
 
+        public void setValue(String value) {
+            this.value = value;
+            this.written = true;
+        }
+        public void setValue(Object value) {
+            this.value = value.toString();
+            this.written = true;
+        }
+        public void setValue(float value) {
+            this.value = String.valueOf(value);
+            this.written = true;
+        }
+
         protected StyleRule clone() {
             return new StyleRule(this.value) {
                 @Override

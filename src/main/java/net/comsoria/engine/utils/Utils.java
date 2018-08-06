@@ -1,8 +1,10 @@
 package net.comsoria.engine.utils;
 
 import org.joml.Vector4f;
+import org.lwjgl.BufferUtils;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.*;
 
 public class Utils {
@@ -75,5 +77,12 @@ public class Utils {
     public static float map(float startMin, float startMax, float endMin, float endMax, float number) {
         float pc = (number - startMin) / (startMax - startMin);
         return ((endMax - endMin) * pc) + endMin;
+    }
+
+    public static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) {
+        ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
+        buffer.flip();
+        newBuffer.put(buffer);
+        return newBuffer;
     }
 }

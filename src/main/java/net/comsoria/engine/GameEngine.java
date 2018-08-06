@@ -116,5 +116,6 @@ public class GameEngine implements Runnable {
 
     private void cleanup() {
         document.cleanup();
+        documentHandler.cleanup();
     }
 }

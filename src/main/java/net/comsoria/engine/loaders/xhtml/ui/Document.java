@@ -14,7 +14,7 @@ public class Document {
     public final List<UINode> nodeList = new ArrayList<>();
     public Color3 background = Color3.WHITE.clone();
 
-    protected final FrameBufferRenderer frameBufferRenderer = new FrameBufferRenderer();
+    public final FrameBufferRenderer frameBufferRenderer = new FrameBufferRenderer();
 
     private Transformation transformation = new Transformation();
 
@@ -39,7 +39,7 @@ public class Document {
 
     public void updateAllStyleSets(Window window) throws Exception {
         for (UINode node : this.nodeList) {
-            node.initStyleSets(window);
+            node.updateStyleSets(window);
         }
     }
 
@@ -55,6 +55,7 @@ public class Document {
     }
 
     public void cleanup() {
-        for (UINode node : this.nodeList) node.getMesh().cleanup();
+        for (UINode node : this.nodeList)
+            if (node.getMesh() != null) node.getMesh().cleanup();
     }
 }

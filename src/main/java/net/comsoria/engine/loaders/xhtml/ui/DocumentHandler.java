@@ -12,5 +12,6 @@ public abstract class DocumentHandler {
     public final MouseInput mouseInput = new MouseInput();
 
     public abstract Document init(Window window) throws Exception;
+    public abstract void cleanup();
     public abstract DocumentHandler update(Window window, Document document, float interval) throws Exception;
 }

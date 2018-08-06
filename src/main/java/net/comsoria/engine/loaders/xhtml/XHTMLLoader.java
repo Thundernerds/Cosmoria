@@ -4,6 +4,7 @@ import net.comsoria.engine.loaders.xhtml.ui.Document;
 import net.comsoria.engine.loaders.xhtml.ui.UINode;
 import net.comsoria.engine.loaders.xhtml.ui.StyleSet;
 import net.comsoria.engine.loaders.xhtml.ui.node.Canvas;
+import net.comsoria.engine.loaders.xhtml.ui.node.Model;
 import net.comsoria.engine.loaders.xhtml.ui.node.Paragraph;
 import net.comsoria.engine.loaders.xhtml.ui.node.Rectangle;
 import net.comsoria.engine.loaders.xml.XMLLoader;
@@ -24,6 +25,7 @@ public class XHTMLLoader {
         nodeTypes.put("p", Paragraph.class);
         nodeTypes.put("canvas", Canvas.class);
         nodeTypes.put("rect", Rectangle.class);
+        nodeTypes.put("model", Model.class);
     }
 
     public static Document loadDocument(String text, Window window) throws Exception {

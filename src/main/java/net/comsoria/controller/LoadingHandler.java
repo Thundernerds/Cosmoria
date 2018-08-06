@@ -16,10 +16,15 @@ public class LoadingHandler extends DocumentHandler {
         return document;
     }
 
+    @Override
+    public void cleanup() {
+
+    }
+
     @Override public DocumentHandler update(Window window, Document document, float interval) throws Exception {
         if (window.isResized()) {
             StyleSet.StyleRule rule = document.getElementByID("center").styleSet.ruleMap.get("scale");
-            rule.value = String.valueOf(Float.valueOf(rule.value) * (window.getWidth() / 800f));
+            rule.setValue(Float.valueOf(rule.value) * (window.getWidth() / 800f));
 
             document.updateAllStyleSets(window);
         }

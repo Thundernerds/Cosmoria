@@ -21,6 +21,7 @@ import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT32;
 import static org.lwjgl.opengl.GL20.glDrawBuffers;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class FrameBuffer implements Renderable {
     private final Mesh mesh;
@@ -53,7 +54,7 @@ public class FrameBuffer implements Renderable {
     public void setSize(int width, int height) {
         cleanup();
         mesh.material.textures.add(new Texture(width, height));
-        mesh.material.textures.add(new Texture(() -> glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0)));
+        mesh.material.textures.add(new Texture(() -> glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL)));
 
         fbo = glGenFramebuffersEXT();
         this.bind();
@@ -120,11 +121,10 @@ public class FrameBuffer implements Renderable {
     }
 
     public static ShaderProgram generateFrameBufferShader(String vertex, String fragment) {
-        return new CustomShaderProgram(vertex, fragment, Arrays.asList("time", "fog.density", "fog.start"), Arrays.asList("colorTexture", "depthTexture")) {
+        return new CustomShaderProgram(vertex, fragment, Arrays.asList("time"), Arrays.asList("colorTexture", "depthTexture")) {
             @Override
             public void setupScene(Scene scene, Transformation transformation) {
                 this.setUniform("time", Timer.getTime());
-                this.setUniform("fog", scene.fog);
             }
 
             @Override

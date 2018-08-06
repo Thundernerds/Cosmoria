@@ -44,9 +44,9 @@
 //
 //        hud.init();
 //
-////        renderer.frameBuffers.add(new FrameBuffer(window.getWidth(), window.getHeight(),
-////                FileLoader.loadResourceAsStringFromPath("$shaders/post_processing/post_processing.v.glsl"),
-////                FileLoader.loadResourceAsStringFromPath("$shaders/post_processing/post_processing.f.glsl")));
+//        renderer.frameBuffers.add(new FrameBuffer(window.getWidth(), window.getHeight(),
+//                FileLoader.loadResourceAsStringFromPath("$shaders/post_processing/post_processing.v.glsl"),
+//                FileLoader.loadResourceAsStringFromPath("$shaders/post_processing/post_processing.f.glsl")));
 //
 //        player = new Player(new Vector3f(0, 0, 0));
 //        world = new World();

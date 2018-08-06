@@ -2,20 +2,27 @@ package net.comsoria.engine.loaders.xhtml.ui.node;
 
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.loaders.xhtml.ui.StyleSet;
+import net.comsoria.engine.loaders.xhtml.ui.UINode;
 import net.comsoria.engine.loaders.xml.XMLNode;
 import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.Renderable;
 import net.comsoria.engine.view.Renderer;
 import net.comsoria.engine.view.Window;
 import net.comsoria.engine.view.batch.RenderData;
+import net.comsoria.engine.view.graph.mesh.Mesh2D;
 
 import java.io.Closeable;
 
-public class Canvas extends Rectangle {
+public class Canvas extends UINode {
     public Scene scene = new Scene();
 
     public Canvas(StyleSet styleSet, XMLNode xmlNode) {
         super(styleSet, xmlNode);
+    }
+
+    @Override
+    protected void genMesh(Window window) throws Exception {
+        this.mesh = null;
     }
 
     @Override
@@ -34,13 +41,18 @@ public class Canvas extends Rectangle {
 
         scene.render(transformation, window);
 
-//        System.out.println("RENDER");
-
         return null;
     }
 
     @Override
     public RenderOrder getRenderOrder() {
         return RenderOrder.First;
+    }
+
+    @Override
+    public void cleanup() {
+        super.cleanup();
+
+        scene.cleanup();
     }
 }

@@ -27,8 +27,10 @@ public class FrameBufferRenderer {
     }
 
     public void bindInitialFramebuffer() {
+        if (frameBuffers.size() != 0) {
+            frameBuffers.get(0).bind();
+        }
         clear();
-        if (frameBuffers.size() != 0) frameBuffers.get(0).bind();
     }
 
     public void renderFramebuffers(Window window) throws Exception {
