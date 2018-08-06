@@ -1,5 +1,6 @@
 package net.comsoria.controller;
 
+import net.comsoria.engine.LibraryImplementation.AudioLibrary;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.audio.AudioBuffer;
 import net.comsoria.engine.audio.AudioNode;
@@ -104,7 +105,7 @@ public class GameHandler extends DocumentHandler {
         scene.add(chunkLoader.batchRenderer);
 
         soundManager.init();
-        soundManager.setAttenuationModel(AL11.AL_EXPONENT_DISTANCE);
+        soundManager.setAttenuationModel(AudioLibrary.Model.Exponent);
 
         AudioBuffer buffBack = new AudioBuffer(Utils.utils.p("$audio/bg2.ogg"));
         soundManager.addSoundBuffer(buffBack);

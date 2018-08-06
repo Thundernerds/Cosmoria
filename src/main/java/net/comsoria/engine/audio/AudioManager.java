@@ -1,22 +1,16 @@
 package net.comsoria.engine.audio;
 
+import net.comsoria.engine.LibraryImplementation.AudioLibrary;
 import net.comsoria.engine.view.Camera;
 import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.lwjgl.openal.AL;
-import org.lwjgl.openal.ALC;
-import org.lwjgl.openal.ALCCapabilities;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.lwjgl.openal.AL10.alDistanceModel;
-import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class AudioManager {
@@ -34,17 +28,20 @@ public class AudioManager {
     }
 
     public void init() throws Exception {
-        this.device = alcOpenDevice((ByteBuffer) null);
+        this.device = AudioLibrary.AL.openDevice(null);
         if (device == NULL) {
             throw new IllegalStateException("Failed to open the default OpenAL device.");
         }
-        ALCCapabilities deviceCaps = ALC.createCapabilities(device);
-        this.context = alcCreateContext(device, (IntBuffer) null);
+//        ALCCapabilities deviceCaps = ALC.createCapabilities(device);
+        int deviceCaps = AudioLibrary.AL.createCapabilites(device);
+        this.context = AudioLibrary.AL.createContext(device, null);
         if (context == NULL) {
             throw new IllegalStateException("Failed to create OpenAL context.");
         }
-        alcMakeContextCurrent(context);
-        AL.createCapabilities(deviceCaps);
+        AudioLibrary.AL.makeContextCurrent(context);
+//        alcMakeContextCurrent(context);
+//        AL.createCapabilities(deviceCaps);
+        AudioLibrary.AL.createCapabilites(deviceCaps);
     }
 
     public void addSoundSource(String name, AudioSource soundSource) {
@@ -90,8 +87,8 @@ public class AudioManager {
         listener.setOrientation(at, up);
     }
 
-    public void setAttenuationModel(int model) {
-        alDistanceModel(model);
+    public void setAttenuationModel(AudioLibrary.Model model) {
+        AudioLibrary.AL.setDistanceModel(model);
     }
 
     public void cleanup() {
@@ -104,10 +101,10 @@ public class AudioManager {
         }
         soundBufferList.clear();
         if (context != NULL) {
-            alcDestroyContext(context);
+            AudioLibrary.AL.destroyContext(context);
         }
         if (device != NULL) {
-            alcCloseDevice(device);
+            AudioLibrary.AL.closeDevice(device);
         }
     }
 }

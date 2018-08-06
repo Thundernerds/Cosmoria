@@ -2,8 +2,8 @@ package net.comsoria.engine.audio;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import static org.lwjgl.openal.AL10.*;
 
+import net.comsoria.engine.LibraryImplementation.AudioLibrary;
 import net.comsoria.engine.loaders.FileLoader;
 import org.lwjgl.stb.STBVorbisInfo;
 import java.nio.ShortBuffer;
@@ -18,12 +18,12 @@ public class AudioBuffer {
     private ByteBuffer vorbis = null;
 
     public AudioBuffer(String file) throws Exception {
-        this.bufferId = alGenBuffers();
+        this.bufferId = AudioLibrary.AL.genBuffer();
         try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
             ShortBuffer pcm = readVorbis(file, 32 * 1024, info);
 
             // Copy to buffer
-            alBufferData(bufferId, info.channels() == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, pcm, info.sample_rate());
+            AudioLibrary.AL.bufferData(bufferId, info.channels() == 1 ? AudioLibrary.Format.MONO_16 : AudioLibrary.Format.STEREO_16, pcm, info.sample_rate());
         }
     }
 
@@ -32,7 +32,7 @@ public class AudioBuffer {
     }
 
     public void cleanup() {
-        alDeleteBuffers(this.bufferId);
+        AudioLibrary.AL.deleteBuffers(this.bufferId);
         if (pcm != null) {
             MemoryUtil.memFree(pcm);
         }
