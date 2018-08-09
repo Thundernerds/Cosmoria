@@ -131,4 +131,16 @@ public class Color4 extends Color3 {
     public void set(ShaderProgram shaderProgram, String name) {
         shaderProgram.setUniform(name, this.getVec4());
     }
+
+    public String toString(boolean full) {
+        if (full)
+            return "Color3[" + this.r + "," + this.g + "," + this.b + "," + this.a + "]";
+        else
+            return this.r + " " + this.g + " " + this.b + " " + this.a;
+    }
+
+    @Override
+    public String toString() {
+        return this.toString(true);
+    }
 }

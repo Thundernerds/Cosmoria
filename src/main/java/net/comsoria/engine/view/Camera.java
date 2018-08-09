@@ -6,7 +6,7 @@ public class Camera {
     public final Vector3f position;
     public final Vector3f rotation;
 
-    public float fov = (float) Math.toRadians(80);
+    public float fov = (float) Math.toRadians(100);
     public float near = 0.01f;
     public float far = 4000f;
 

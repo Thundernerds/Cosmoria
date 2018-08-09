@@ -1,6 +1,6 @@
 package net.comsoria.engine.audio;
 
-import net.comsoria.engine.LibraryImplementation.AudioLibrary;
+import net.comsoria.engine.libraryImplementation.AudioLibrary;
 import org.joml.Vector3f;
 
 public class AudioNode {

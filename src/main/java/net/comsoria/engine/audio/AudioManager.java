@@ -1,6 +1,6 @@
 package net.comsoria.engine.audio;
 
-import net.comsoria.engine.LibraryImplementation.AudioLibrary;
+import net.comsoria.engine.libraryImplementation.AudioLibrary;
 import net.comsoria.engine.view.Camera;
 import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import org.joml.Matrix4f;
@@ -32,15 +32,14 @@ public class AudioManager {
         if (device == NULL) {
             throw new IllegalStateException("Failed to open the default OpenAL device.");
         }
-//        ALCCapabilities deviceCaps = ALC.createCapabilities(device);
+
         int deviceCaps = AudioLibrary.AL.createCapabilites(device);
         this.context = AudioLibrary.AL.createContext(device, null);
         if (context == NULL) {
             throw new IllegalStateException("Failed to create OpenAL context.");
         }
+
         AudioLibrary.AL.makeContextCurrent(context);
-//        alcMakeContextCurrent(context);
-//        AL.createCapabilities(deviceCaps);
         AudioLibrary.AL.createCapabilites(deviceCaps);
     }
 

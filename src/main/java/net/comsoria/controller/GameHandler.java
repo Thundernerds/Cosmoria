@@ -1,6 +1,6 @@
 package net.comsoria.controller;
 
-import net.comsoria.engine.LibraryImplementation.AudioLibrary;
+import net.comsoria.engine.libraryImplementation.AudioLibrary;
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.audio.AudioBuffer;
 import net.comsoria.engine.audio.AudioNode;
@@ -22,24 +22,22 @@ import net.comsoria.engine.view.graph.Texture;
 import net.comsoria.engine.view.input.KeyListener;
 import net.comsoria.game.Player;
 import net.comsoria.game.SkyDome;
-import net.comsoria.game.terrain.ChunkLoader;
+import net.comsoria.game.terrain.terrainFeature.surfaceChunk.SurfaceChunkLoader;
 import net.comsoria.game.terrain.World;
 
 import net.comsoria.game.terrain.generation.OctaveGenerator;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
-import org.lwjgl.openal.AL11;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.openal.AL10.AL_FREQUENCY;
 
 public class GameHandler extends DocumentHandler {
     private World world;
-    private ChunkLoader chunkLoader;
+    private SurfaceChunkLoader chunkLoader;
     private Player player;
 
     private boolean paused = true;
@@ -64,11 +62,14 @@ public class GameHandler extends DocumentHandler {
 
         scene = ((Canvas) document.getElementByID("main")).scene;
 //        scene = new Scene();
+        scene.camera.far = 6000;
+
         compass = document.getElementByID("compass");
         compass.getMesh().rotation.z = 180;
 
         player = new Player(new Vector3f(0, 0, 0));
         world = new World();
+        scene.add(world);
 
         float skyDomeR = scene.camera.far - 100;
         scene.add(SkyDome.genSkyDome(
@@ -78,19 +79,23 @@ public class GameHandler extends DocumentHandler {
         ));
 
         List<OctaveGenerator.Octave> octaves = new ArrayList<>();
-        octaves.add(new OctaveGenerator.Octave(0.05f, 1.2f));
-        octaves.add(new OctaveGenerator.Octave(0.02f, 1.2f));
 
-        chunkLoader = new ChunkLoader(new OctaveGenerator(octaves, (float) Math.random()), 65, 4000, 4, 200, skyDomeR);
+        octaves.add(new OctaveGenerator.Octave(0.05f, 1.2f, (float) Math.random() * 100));
+        octaves.add(new OctaveGenerator.Octave(0.035f, 1.5f, (float) Math.random() * 100));
+        octaves.add(new OctaveGenerator.Octave(0.02f, 2f, (float) Math.random() * 100));
+
+        world.addLoader(new SurfaceChunkLoader(new OctaveGenerator(octaves), 65, 4000, 200, skyDomeR));
+//        chunkLoader.updateAroundPlayer(player.get2DPosition(), world);
+        world.updateAroundPlayer(player.get2DPosition());
 
         keyInput.addListener(new KeyListener(new int[]{GLFW_KEY_ESCAPE}, (charCode, action) -> {
             if (action != GLFW_RELEASE) return;
             paused = !paused;
             if (paused) {
                 window.showCursor();
+                window.setMousePos((double) window.getWidth() * 0.25, (double) window.getHeight() * 0.25);
                 sourceBack.pause();
-            }
-            else {
+            } else {
                 sourceBack.play();
                 window.hideCursor();
             }
@@ -98,16 +103,16 @@ public class GameHandler extends DocumentHandler {
 
         Color3 background = new Color3(23, 32, 42).getOneToZero();
         window.setClearColor(background);
-        scene.fog = new FadeFog(0.0008f, skyDomeR - 1500);
+        scene.fog = new FadeFog(0.0009f, skyDomeR - 1500);
 
         scene.light.directionalLight = new DirectionalLight(new Color3(250, 215, 160).getOneToZero(), new Vector3f(), 0.55f);
 
-        scene.add(chunkLoader.batchRenderer);
+//        scene.add(chunkLoader.batchRenderer);
 
         soundManager.init();
         soundManager.setAttenuationModel(AudioLibrary.Model.Exponent);
 
-        AudioBuffer buffBack = new AudioBuffer(Utils.utils.p("$audio/bg2.ogg"));
+        AudioBuffer buffBack = new AudioBuffer(Utils.utils.p("$audio/bg.ogg"));
         soundManager.addSoundBuffer(buffBack);
         sourceBack = new AudioSource(true, true);
         sourceBack.setBuffer(buffBack.getBufferId());
@@ -152,6 +157,13 @@ public class GameHandler extends DocumentHandler {
                 movement.y -= 1;
             }
 
+            if (keyInput.isKeyPressed(GLFW_KEY_P)) {
+                scene.camera.fov += 0.1;
+            }
+            if (keyInput.isKeyPressed(GLFW_KEY_L)) {
+                scene.camera.fov -= 0.1;
+            }
+
             float speed = player.getSpeed(keyInput.isKeyPressed(GLFW_KEY_LEFT_CONTROL));
             scene.camera.movePosition((movement.x / 15f) * speed, ((movement.y / 15f) * speed), ((movement.z / 15f) * speed));
 
@@ -176,13 +188,7 @@ public class GameHandler extends DocumentHandler {
 //        time += 0.005;
         scene.updateLight(time);
 
-        try {
-            chunkLoader.updateAroundPlayer(player.get2DPosition(), world);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-
+        world.updateAroundPlayer(player.get2DPosition());
         return null;
     }
 

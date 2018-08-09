@@ -1,7 +1,8 @@
 package net.comsoria.game.terrain.generation;
 
 import net.comsoria.engine.utils.Grid;
-import net.comsoria.game.coordinate.ChunkPosition;
+import org.joml.Vector2f;
+import org.joml.Vector2i;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -52,12 +53,12 @@ public class OctaveGenerator implements ITerrainGenerator {
     }
 
     @Override
-    public void updateGrid(Grid<Float> grid, ChunkPosition chunkPosition) {
+    public void updateGrid(Grid<Float> grid, Vector2i chunkPosition) {
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int y = 0; y < grid.getHeight(); y++) {
                 grid.set(x, y, this.get(
-                        (x + (chunkPosition.getX() * grid.getWidth()) - chunkPosition.getX()) * this.overallMultiplier,
-                        (y + (chunkPosition.getY() * grid.getHeight()) - chunkPosition.getY()) * this.overallMultiplier
+                        (x + (chunkPosition.x * grid.getWidth()) - chunkPosition.x) * this.overallMultiplier,
+                        (y + (chunkPosition.y * grid.getHeight()) - chunkPosition.y) * this.overallMultiplier
                 ) * this.overallHeight);
             }
         }
@@ -85,9 +86,16 @@ public class OctaveGenerator implements ITerrainGenerator {
         public Float seed = null;
 
         public Octave() {}
+
         public Octave(float multiplier, float height) {
             this.height = height;
             this.multiplier = multiplier;
+        }
+
+        public Octave(float multiplier, float height, float seed) {
+            this.height = height;
+            this.multiplier = multiplier;
+            this.seed = seed;
         }
     }
 }

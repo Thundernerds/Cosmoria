@@ -1,4 +1,4 @@
-package net.comsoria.engine.LibraryImplementation;
+package net.comsoria.engine.libraryImplementation;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;

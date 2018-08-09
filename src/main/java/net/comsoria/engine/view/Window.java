@@ -138,4 +138,8 @@ public class Window {
     public void showCursor() {
         glfwSetInputMode(this.windowHandle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
+
+    public void setMousePos(double x, double y) {
+        glfwSetCursorPos(this.windowHandle, x, y);
+    }
 }

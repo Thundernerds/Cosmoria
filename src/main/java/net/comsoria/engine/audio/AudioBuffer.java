@@ -3,7 +3,7 @@ package net.comsoria.engine.audio;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import net.comsoria.engine.LibraryImplementation.AudioLibrary;
+import net.comsoria.engine.libraryImplementation.AudioLibrary;
 import net.comsoria.engine.loaders.FileLoader;
 import org.lwjgl.stb.STBVorbisInfo;
 import java.nio.ShortBuffer;

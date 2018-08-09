@@ -96,6 +96,7 @@ public class Color3 implements GLSLUniformBindable {
     public Color3 set(float x) {
         this.r = x;
         this.g = x;
+        this.b = x;
 
         return this;
     }
@@ -117,5 +118,17 @@ public class Color3 implements GLSLUniformBindable {
         String[] parts = string.split(" ");
 
         return new Color3(Float.valueOf(parts[0]), Float.valueOf(parts[1]), Float.valueOf(parts[2]));
+    }
+
+    public String toString(boolean full) {
+        if (full)
+            return "Color3[" + this.r + "," + this.g + "," + this.b + "]";
+        else
+            return this.r + " " + this.g + " " + this.b;
+    }
+
+    @Override
+    public String toString() {
+        return this.toString(true);
     }
 }

@@ -1,4 +1,4 @@
-package net.comsoria.engine.LibraryImplementation;
+package net.comsoria.engine.libraryImplementation;
 
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALCCapabilities;
