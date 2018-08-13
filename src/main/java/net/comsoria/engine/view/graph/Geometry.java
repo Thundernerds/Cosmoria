@@ -16,10 +16,11 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class Geometry {
     private final int vaoId;
-    private final List<Integer> vboIdList;
     private final int vertexCount;
     private final int indicesBufferID;
     private int culledFace = -1;
+
+    private final List<BufferAttribute> vbos;
 
     public Geometry(Tuple<List<BufferAttribute>, int[]> data) {
         this(data.getA(), data.getB());
@@ -27,16 +28,12 @@ public class Geometry {
 
     public Geometry(List<BufferAttribute> attributes, int[] indices) {
         vertexCount = indices.length;
-        vboIdList = new ArrayList<>();
+        this.vbos = attributes;
 
         vaoId = glGenVertexArrays();
         glBindVertexArray(vaoId);
 
-        for (BufferAttribute attribute : attributes) {
-            int id = attribute.bind(this.vboIdList.size());
-            if (id == -1) throw new RuntimeException("ERROR CREATING VBO");
-            vboIdList.add(id);
-        }
+        for (int i = 0; i < attributes.size(); i++) attributes.get(i).bind(i);
 
         IntBuffer indicesBuffer = null;
         try {
@@ -84,9 +81,7 @@ public class Geometry {
         glDisableVertexAttribArray(0);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        for (int vboId : vboIdList) {
-            glDeleteBuffers(vboId);
-        }
+        for (BufferAttribute vbo : vbos) vbo.cleanup();
         glDeleteBuffers(indicesBufferID);
 
         glBindVertexArray(0);
@@ -94,14 +89,14 @@ public class Geometry {
     }
 
     public void bindAttributes() {
-        for (int i = 0; i < vboIdList.size(); i++) {
-            glEnableVertexAttribArray(i);
+        for (int i = 0; i < vbos.size(); i++) {
+            vbos.get(i).enable(i);
         }
     }
 
     public void unbindAttributes() {
-        for (int i = 0; i < vboIdList.size(); i++) {
-            glDisableVertexAttribArray(i);
+        for (int i = 0; i < vbos.size(); i++) {
+            vbos.get(i).disable(i);
         }
     }
 
