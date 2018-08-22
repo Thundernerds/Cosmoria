@@ -1,5 +1,8 @@
 package net.comsoria.engine.utils;
 
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 
@@ -84,5 +87,45 @@ public class Utils {
         buffer.flip();
         newBuffer.put(buffer);
         return newBuffer;
+    }
+
+    public static <K,V> HashMap<K, V> buildMap(Object... input) {
+        HashMap<K, V> map = new HashMap<>();
+        for (int i = 0; i < input.length; i += 2) {
+            map.put((K) input[i], (V) input[i + 1]);
+        }
+
+        return map;
+    }
+
+    public static void println(Vector3f vec, PrintStream stream) {
+        stream.println("Vector3f[" + vec.x + "," + vec.y + "," + vec.z + "]");
+    }
+
+    public static void println(Vector3i vec, PrintStream stream) {
+        stream.println("Vector3i[" + vec.x + "," + vec.y + "," + vec.z + "]");
+    }
+
+    public static <T> T last(List<T> items) {
+        return items.get(items.size() - 1);
+    }
+
+    public static float round(float value, int precision) {
+        int scale = (int) Math.pow(10, precision);
+        return (float) Math.round(value * scale) / scale;
+    }
+
+    public static Vector2f round(Vector2f value, int precision) {
+        return new Vector2f(Utils.round(value.x, precision), Utils.round(value.y, precision));
+    }
+
+    public static float distance(float... coordinates) {
+        float added = 0;
+
+        for (float coordItem : coordinates) {
+            added += coordItem * coordItem;
+        }
+
+        return (float) Math.sqrt(added);
     }
 }

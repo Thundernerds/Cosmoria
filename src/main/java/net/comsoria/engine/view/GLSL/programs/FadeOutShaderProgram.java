@@ -1,9 +1,9 @@
-package net.comsoria.engine.view.GLSL.Programs;
+package net.comsoria.engine.view.GLSL.programs;
 
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.view.FadeFog;
 import net.comsoria.engine.view.GLSL.matrices.Transformation;
-import net.comsoria.engine.view.Light.DirectionalLight;
+import net.comsoria.engine.view.light.DirectionalLight;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;

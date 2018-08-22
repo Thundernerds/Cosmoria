@@ -1,8 +1,7 @@
 package net.comsoria.engine.loaders.text;
 
 import net.comsoria.engine.utils.Utils;
-import net.comsoria.engine.view.GLSL.Programs.ShaderProgram2D;
-import net.comsoria.engine.view.Renderable;
+import net.comsoria.engine.view.GLSL.programs.ShaderProgram2D;
 import net.comsoria.engine.view.graph.BufferAttribute;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
@@ -78,10 +77,10 @@ public class TextLoader {
         Geometry geometry = new Geometry(new ArrayList<>(Arrays.asList(pos, texCoords)), indicesArr);
 
         Mesh mesh = new Mesh2D(geometry, new Material());
-        mesh.material.shaderProgram = new ShaderProgram2D();
+        mesh.shaderProgram = new ShaderProgram2D();
         mesh.initShaderProgram();
         mesh.material.textures.add(texture.getTexture());
-        mesh.material.shaderProgram.createTextureUniform("texture_sampler");
+        mesh.shaderProgram.createTextureUniform("texture_sampler");
         mesh.material.ambientColour.set(1f, 1f, 1f, 1f);
         mesh.position.z -= 100;
 

@@ -1,17 +1,15 @@
 package net.comsoria.engine.loaders;
 
+import net.comsoria.engine.utils.Random;
 import net.comsoria.engine.utils.Tuple;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.view.graph.BufferAttribute;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.mesh.Mesh2D;
-import org.joml.Vector2i;
-import org.joml.Vector3f;
-import org.joml.Vector3i;
+import org.joml.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.Math;
+import java.util.*;
 
 public final class Shape {
     public static Tuple<List<BufferAttribute>, int[]> genRect(float w, float h) {
@@ -37,29 +35,51 @@ public final class Shape {
        });
     }
 
-    private static List<Vector3f> genCircle(int c, float offsetX) {
+    private static List<Vector3f> genCircle(int c, float r, Vector3f offset) {
         float angle = (float) ((2 * Math.PI) / c);
 
         List<Vector3f> result = new ArrayList<>();
-        for (int i = 0; i < c; i++) {
-            float sin = (float) Math.sin(i * angle);
-            result.add(new Vector3f(offsetX, sin, sin));
+        for (int i = 0; i < c + 1; i++) {
+            result.add(new Vector3f(offset).add(
+                    (float) Math.sin(i * angle) * r,
+                    0,
+                    (float) Math.cos(i * angle) * r
+            ));
         }
 
         return result;
     }
 
-    public static Tuple<List<BufferAttribute>, int[]> genCylinder(int c, int h) {
+    public static Tuple<List<BufferAttribute>, int[]> genCylinder(int c, int h, float r) {
+        return genCylinder(c, h, new CylinderGenerator() {
+            @Override
+            public float radius(int h) {
+                return r;
+            }
+
+            @Override
+            public Vector3f offset(int h) {
+                return new Vector3f(0, h, 0);
+            }
+        });
+    }
+
+    public static Tuple<List<BufferAttribute>, int[]> genCylinder(int c, int h, CylinderGenerator generator) {
         List<Vector3f> points = new ArrayList<>();
         List<Vector3i> faces = new ArrayList<>();
+        List<Vector2f> planePoints = new ArrayList<>();
 
-        points.addAll(genCircle(c, 0));
+        points.addAll(genCircle(c, generator.radius(0), generator.offset(0)));
         final int pointsPerCircle = points.size();
 
-        for (int i = 1; i < h; i++) {
-            points.addAll(genCircle(c, i));
+        for (int i = 0; i < pointsPerCircle; i++) planePoints.add(new Vector2f(i, 0));
 
-            for (int x = 0; x < pointsPerCircle; x++) {
+        for (int i = 1; i < h; i++) {
+            points.addAll(genCircle(c, generator.radius(i), generator.offset(i)));
+
+            for (int x = 0; x < pointsPerCircle; x++) planePoints.add(new Vector2f(x, i));
+
+            for (int x = 0; x < c; x++) {
                 faces.add(new Vector3i(
                         ((i - 1) * pointsPerCircle) + x,
                         (i * pointsPerCircle) + x,
@@ -77,38 +97,62 @@ public final class Shape {
         int[] indices = new int[faces.size() * 3];
         for (int i = 0; i < faces.size(); i++) {
             Vector3i face = faces.get(i);
-            indices[i] = face.x;
-            indices[i + 1] = face.y;
-            indices[i + 2] = face.z;
+            indices[(i * 3)] = face.x;
+            indices[(i * 3) + 1] = face.y;
+            indices[(i * 3) + 2] = face.z;
         }
 
-        float[] pointsArr = new float[points.size() * 3];
-        for (int i = 0; i < points.size(); i++) {
-            Vector3f vertex = points.get(i);
-            pointsArr[i] = vertex.x;
-            pointsArr[i + 1] = vertex.y;
-            pointsArr[i + 2] = vertex.z;
-        }
-
-        return new Tuple<>(Arrays.asList(
-                new BufferAttribute(pointsArr, 3)
-        ), indices);
+        return new Tuple<>(new ArrayList<>(Arrays.asList(
+                BufferAttribute.create3f(points), BufferAttribute.create2f(planePoints)
+        )), indices);
     }
 
-    public static BufferAttribute gen2dPlan(int pointsLength) {
-        float[] newPoints = new float[pointsLength * 2];
+    public static Tuple<List<BufferAttribute>, int[]> genSphere(int p, float radius) {
+        return genCylinder(p, p + 1, new CylinderGenerator() {
+            @Override
+            public float radius(int h) {
+                return (float) Math.sin((Math.PI / p) * (float) h) * radius;
+            }
 
-        for (int i = 0; i < pointsLength; i += 3) {
-            newPoints[i] = (float) i;
-            newPoints[i + 1] = 0f;
+            @Override
+            public Vector3f offset(int h) {
+                return new Vector3f(0, ((float) Math.cos((Math.PI / p) * (float) h) * radius), 0);
+            }
+        });
+    }
 
-            newPoints[i + 2] = (float) i;
-            newPoints[i + 3] = 1f;
+    public static BufferAttribute generateDisplacement(BufferAttribute points, float scale, int d) {
+        return generateDisplacement(points, (x, y, z) -> scale, d);
+    }
 
-            newPoints[i + 4] = (float) i + 1;
-            newPoints[i + 5] = 1f;
+    public static BufferAttribute generateSphereDisplacement(BufferAttribute points, float scale, int d, int radius) {
+        return generateDisplacement(points, (x, y, z) -> (Utils.distance(x, z) / radius) * scale, d);
+    }
+
+    public static BufferAttribute generateDisplacement(BufferAttribute points, DisplacementGenerator generator, int d) {
+        int parts = points.parts();
+
+        float[] data = new float[parts * d];
+
+        for (int i = 0; i < parts; i++) {
+            float x = Utils.round(points.get(i * 3), 2);
+            float y = Utils.round(points.get((i * 3) + 1), 2);
+            float z = Utils.round(points.get((i * 3) + 2), 2);
+
+            for (int a = 0; a < d; a++) {
+                data[(i * d) + a] = Random.noise(x, y, z, 23 * a) * generator.scale(x, y, z);
+            }
         }
 
-        return new BufferAttribute(newPoints, 2);
+        return new BufferAttribute(data, d);
+    }
+
+    public interface DisplacementGenerator {
+        float scale(float x, float y, float z);
+    }
+
+    public interface CylinderGenerator {
+        float radius(int h);
+        Vector3f offset(int h);
     }
 }

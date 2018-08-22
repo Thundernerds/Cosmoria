@@ -4,7 +4,7 @@ import net.comsoria.engine.Scene;
 import net.comsoria.engine.utils.Timer;
 import net.comsoria.engine.utils.Tuple;
 import net.comsoria.engine.view.batch.RenderData;
-import net.comsoria.engine.view.GLSL.Programs.CustomShaderProgram;
+import net.comsoria.engine.view.GLSL.programs.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.graph.*;
@@ -44,8 +44,7 @@ public class FrameBuffer implements Renderable {
         }));
 
         Material material = new Material();
-        material.shaderProgram = shaderProgram;
-        mesh = new Mesh(geometry, material);
+        mesh = new Mesh(geometry, material, shaderProgram);
         mesh.initShaderProgram();
 
         setSize(width, height);

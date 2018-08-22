@@ -22,6 +22,10 @@ public class FileLoader {
         return new FileInputStream(new File(path));
     }
 
+    public static InputStream loadResourceAsStream(File file) throws FileNotFoundException {
+        return new FileInputStream(file);
+    }
+
     public static List<String> loadResourceLines(String path) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(loadResourceAsStream(path)));
         List<String> lines = new ArrayList<>();
@@ -53,6 +57,10 @@ public class FileLoader {
 
     public static String loadResourceAsString(String path) throws IOException {
         return loadResourceAsStringFromStream(loadResourceAsStream(path));
+    }
+
+    public static String loadResourceAsString(File file) throws IOException {
+        return loadResourceAsStringFromStream(loadResourceAsStream(file));
     }
 
     public static void writeResource(String path, String text) throws IOException {

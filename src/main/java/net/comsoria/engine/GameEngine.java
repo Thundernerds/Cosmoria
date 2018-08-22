@@ -33,7 +33,7 @@ public class GameEngine implements Runnable {
         this.documentHandler = initHandler;
     }
 
-    public void start() {
+    public void start() throws IOException {
         if (this.verbose) Logger.log("Starting loop...");
         if (System.getProperty("os.name").contains("Mac")) {
             this.run();
@@ -75,7 +75,9 @@ public class GameEngine implements Runnable {
 
             Timer.update();
         }
-        if (this.verbose) Logger.log("Stopping.");
+        if (this.verbose) {
+            Logger.log("Stopping on tick index: " + Timer.getGameLoopIndex());
+        }
     }
 
     private void render() throws Exception {

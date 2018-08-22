@@ -16,7 +16,6 @@ public class Material implements GLSLUniformBindable {
     public Color4 specularColour;
     public float reflectance;
     public List<Texture> textures;
-    public ShaderProgram shaderProgram = null;
 
     public Material() {
         this.ambientColour = DEFAULT_COLOUR.clone();
@@ -51,7 +50,6 @@ public class Material implements GLSLUniformBindable {
 
     public void cleanup() {
         for (Texture texture : textures) texture.cleanup();
-        shaderProgram.cleanup();
     }
 
     public boolean isTextured() {

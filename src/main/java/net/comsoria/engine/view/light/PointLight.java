@@ -1,7 +1,6 @@
-package net.comsoria.engine.view.Light;
+package net.comsoria.engine.view.light;
 
 import net.comsoria.engine.view.color.Color3;
-import net.comsoria.engine.view.color.Color4;
 import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import org.joml.Vector3f;

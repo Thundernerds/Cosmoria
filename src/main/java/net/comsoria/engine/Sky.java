@@ -31,12 +31,12 @@ public class Sky {
         this.sunDirection.set((float) Math.sin(time), cos, 0);
 
         mainColor.set(night);
-        ambience = 1.5f;
+        ambience = 2f;
         if (cos > dayStart) {
             float nCos = cos - dayStart;
 
             mainColor.set(mainColor.mix(day, nCos));
-            ambience += nCos * 0.3;
+            ambience += nCos * 0.1;
         }
 
         float dist = Math.abs(mod - sunsetTime);

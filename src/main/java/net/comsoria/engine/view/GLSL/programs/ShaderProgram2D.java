@@ -1,4 +1,4 @@
-package net.comsoria.engine.view.GLSL.Programs;
+package net.comsoria.engine.view.GLSL.programs;
 
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.loaders.FileLoader;

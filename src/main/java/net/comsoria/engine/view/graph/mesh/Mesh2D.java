@@ -1,13 +1,14 @@
 package net.comsoria.engine.view.graph.mesh;
 
+import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
 import org.joml.Matrix4f;
 
 public class Mesh2D extends Mesh {
-    public Mesh2D(Geometry geometry, Material material) {
-        super(geometry, material);
+    public Mesh2D(Geometry geometry, Material material, ShaderProgram shaderProgram) {
+        super(geometry, material, shaderProgram);
     }
 
     @Override
@@ -22,5 +23,9 @@ public class Mesh2D extends Mesh {
         Matrix4f orthoMatrixCurr = new Matrix4f(transformation.getOrtho());
         orthoMatrixCurr.mul(modelMatrix);
         return orthoMatrixCurr;
+    }
+
+    public Mesh2D clone() {
+        return (Mesh2D) super.clone();
     }
 }

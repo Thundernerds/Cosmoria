@@ -1,4 +1,4 @@
-package net.comsoria.engine.view.Light;
+package net.comsoria.engine.view.light;
 
 import net.comsoria.engine.view.GLSL.GLSLUniformBindable;
 import net.comsoria.engine.view.GLSL.ShaderProgram;

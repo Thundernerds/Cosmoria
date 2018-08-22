@@ -1,7 +1,6 @@
-package net.comsoria.engine.view.Light;
+package net.comsoria.engine.view.light;
 
 import net.comsoria.engine.view.color.Color3;
-import net.comsoria.engine.view.color.Color4;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -98,8 +98,12 @@ public class Window {
         setClearColor(color.r, color.g, color.b, 1.0f);
     }
 
+    public static GLFWVidMode getVidMode() {
+        return glfwGetVideoMode(glfwGetPrimaryMonitor());
+    }
+
     public void setPosition(double xP, double yP) { //Percentages
-        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        GLFWVidMode vidmode = getVidMode();
         int x = (int) ((vidmode.width() - width) * xP);
         int y = (int) ((vidmode.height() - height) * yP);
 

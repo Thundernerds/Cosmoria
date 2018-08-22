@@ -1,5 +1,6 @@
 package net.comsoria.engine.view.graph;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.lwjgl.system.MemoryUtil;
@@ -16,14 +17,13 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 
 public class BufferAttribute {
-    private final float[] data;
+    private float[] data;
     private final int indices;
 
     private int id;
 
-    public BufferAttribute(List<Vector3f> vecs) {
-        data = new float[vecs.size() * 3];
-        indices = 3;
+    public static BufferAttribute create3f(List<Vector3f> vecs) {
+        float[] data = new float[vecs.size() * 3];
         for (int i = 0; i < vecs.size(); i++) {
             Vector3f vec = vecs.get(i);
 
@@ -31,6 +31,20 @@ public class BufferAttribute {
             data[(i * 3) + 1] = vec.y;
             data[(i * 3) + 2] = vec.z;
         }
+
+        return new BufferAttribute(data, 3);
+    }
+
+    public static BufferAttribute create2f(List<Vector2f> vecs) {
+        float[] data = new float[vecs.size() * 2];
+        for (int i = 0; i < vecs.size(); i++) {
+            Vector2f vec = vecs.get(i);
+
+            data[(i * 2)] = vec.x;
+            data[(i * 2) + 1] = vec.y;
+        }
+
+        return new BufferAttribute(data, 2);
     }
 
     public BufferAttribute(float[] data, int indices) {
@@ -74,6 +88,39 @@ public class BufferAttribute {
 
     public void set(int x, float value) {
         data[x] = value;
+    }
+
+    public void add(int x, float value) {
+        data[x] += value;
+    }
+
+    public void set(float[] value) {
+        data = value;
+    }
+
+    public void update(int start, int length) {
+        float[] newData = new float[length];
+        System.arraycopy(data, start, newData, 0, length);
+
+        glBindBuffer(GL_ARRAY_BUFFER, this.id);
+        glBufferSubData(GL_ARRAY_BUFFER, start, newData);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+    public Vector3f getVec3(int index) {
+        return new Vector3f(data[index * 3], data[(index * 3) + 1], data[(index * 3) + 2]);
+    }
+
+    public void updateAll() {
+        this.update(0, this.size());
+    }
+
+    public int size() {
+        return this.data.length;
+    }
+
+    public int parts() {
+        return this.data.length / this.indices;
     }
 
     public BufferAttribute clone() {

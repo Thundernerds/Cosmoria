@@ -1,14 +1,14 @@
-package net.comsoria.game.terrain.mesh;
+package net.comsoria.engine.view.graph.mesh;
 
+import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
-import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
 
-public class ChunkMesh extends Mesh {
-    public ChunkMesh(Geometry geometry, Material material) {
-        super(geometry, material);
+public class NoViewMatrixMesh extends Mesh {
+    public NoViewMatrixMesh(Geometry geometry, Material material, ShaderProgram shaderProgram) {
+        super(geometry, material, shaderProgram);
     }
 
     @Override
@@ -22,5 +22,9 @@ public class ChunkMesh extends Mesh {
         return modelViewMatrix;
 
         //Note that what is return is ->NOT<- a model view matrix but is just a model matrix instead
+    }
+
+    public NoViewMatrixMesh clone() {
+        return (NoViewMatrixMesh) super.clone();
     }
 }

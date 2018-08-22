@@ -1,5 +1,6 @@
 package net.comsoria.engine.view.graph.mesh;
 
+import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
@@ -8,8 +9,8 @@ import org.joml.Matrix4f;
 import static org.lwjgl.opengl.GL11.GL_FRONT;
 
 public class SkyBox extends Mesh {
-    public SkyBox(Geometry geometry, Material material) {
-        super(geometry, material);
+    public SkyBox(Geometry geometry, Material material, ShaderProgram shaderProgram) {
+        super(geometry, material, shaderProgram);
         this.renderPosition = RenderOrder.End;
         this.geometry.setCullFace(GL_FRONT);
     }
@@ -24,5 +25,9 @@ public class SkyBox extends Mesh {
 
         Matrix4f viewCurr = new Matrix4f(transformation.getViewNoTranslation());
         return viewCurr.mul(modelViewMatrix);
+    }
+
+    public SkyBox clone() {
+        return (SkyBox) super.clone();
     }
 }

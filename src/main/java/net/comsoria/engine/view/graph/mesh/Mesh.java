@@ -1,6 +1,7 @@
 package net.comsoria.engine.view.graph.mesh;
 
 import net.comsoria.engine.Scene;
+import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.Window;
 import net.comsoria.engine.view.batch.RenderData;
 import net.comsoria.engine.view.GLSL.matrices.Transformation;
@@ -28,22 +29,26 @@ public class Mesh implements Renderable {
     public boolean visible = true;
     public RenderOrder renderPosition = RenderOrder.Any;
 
+    public ShaderProgram shaderProgram = null;
+
     protected final static Matrix4f modelViewMatrix = new Matrix4f();
 
-    public Mesh(Geometry geometry, Material material) {
+    public Mesh(Geometry geometry, Material material, ShaderProgram shaderProgram) {
         this.geometry = geometry;
         this.material = material;
+        this.shaderProgram = shaderProgram;
     }
 
     public void initShaderProgram() throws IOException {
         this.geometry.bind();
-        this.material.shaderProgram.init();
+        this.shaderProgram.init();
         this.geometry.unbind();
     }
 
     public void cleanup() {
         geometry.cleanup();
         material.cleanup();
+        shaderProgram.cleanup();
     }
 
     @Override public boolean shouldRender() {
@@ -67,21 +72,21 @@ public class Mesh implements Renderable {
 
     @Override public Closeable render(Transformation transformation, Scene scene, RenderData renderData, Window window) throws Exception {
         if (renderData.shouldBindOwnGeometry()) this.geometry.bind();
-        if (renderData.shouldBindOwnShaderProgram()) this.material.shaderProgram.bind();
+        if (renderData.shouldBindOwnShaderProgram()) this.shaderProgram.bind();
 
-        if (!this.material.shaderProgram.isUpdated()) {
-            this.material.shaderProgram.open();
-            this.material.shaderProgram.setupScene(scene, transformation);
+        if (!this.shaderProgram.isUpdated()) {
+            this.shaderProgram.open();
+            this.shaderProgram.setupScene(scene, transformation);
         }
 
-        this.material.shaderProgram.setupMesh(this, getModelViewMatrix(transformation), transformation);
+        this.shaderProgram.setupMesh(this, getModelViewMatrix(transformation), transformation);
 
-        if (this.material.textures.size() != this.material.shaderProgram.textures.size())
+        if (this.material.textures.size() != this.shaderProgram.textures.size())
             throw new Exception("Unequal textures to texture uniforms");
 
         for (int i = 0; i < this.material.textures.size(); i++) {
             Texture texture = this.material.textures.get(i);
-            this.material.shaderProgram.setUniform(this.material.shaderProgram.textures.get(i), i);
+            this.shaderProgram.setUniform(this.shaderProgram.textures.get(i), i);
 
             glActiveTexture(GL_TEXTURE0 + i);
             texture.bind();
@@ -96,8 +101,18 @@ public class Mesh implements Renderable {
         if (this.material.textures.size() != 0) Texture.unbind();
 
         if (renderData.shouldBindOwnGeometry()) this.geometry.unbind();
-        if (renderData.shouldBindOwnShaderProgram()) this.material.shaderProgram.unbind();
+        if (renderData.shouldBindOwnShaderProgram()) this.shaderProgram.unbind();
 
-        return this.material.shaderProgram;
+        return this.shaderProgram;
+    }
+
+    public Mesh clone() {
+        Mesh mesh = new Mesh(this.geometry, this.material, this.shaderProgram);
+        mesh.position.set(this.position);
+        mesh.rotation.set(this.rotation);
+        mesh.scale = this.scale;
+        mesh.visible = this.visible;
+        mesh.renderPosition = this.renderPosition;
+        return mesh;
     }
 }

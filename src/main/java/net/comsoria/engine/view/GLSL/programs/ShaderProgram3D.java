@@ -1,13 +1,12 @@
-package net.comsoria.engine.view.GLSL.Programs;
+package net.comsoria.engine.view.GLSL.programs;
 
 import net.comsoria.engine.Scene;
 import net.comsoria.engine.loaders.FileLoader;
-import net.comsoria.engine.view.FadeFog;
 import net.comsoria.engine.view.GLSL.ShaderProgram;
 import net.comsoria.engine.view.GLSL.matrices.Transformation;
-import net.comsoria.engine.view.Light.DirectionalLight;
-import net.comsoria.engine.view.Light.PointLight;
-import net.comsoria.engine.view.Light.SpotLight;
+import net.comsoria.engine.view.light.DirectionalLight;
+import net.comsoria.engine.view.light.PointLight;
+import net.comsoria.engine.view.light.SpotLight;
 import net.comsoria.engine.view.graph.Material;
 import net.comsoria.engine.view.graph.mesh.Mesh;
 import org.joml.Matrix4f;
@@ -43,8 +42,6 @@ public class ShaderProgram3D extends ShaderProgram {
         }
 
         DirectionalLight.create(this, "directionalLight");
-
-        FadeFog.create(this, "fog");
     }
 
 
@@ -96,8 +93,6 @@ public class ShaderProgram3D extends ShaderProgram {
         dir.mul(transformation.getView());
         currDirLight.direction = new Vector3f(dir.x, dir.y, dir.z);
         this.setUniform("directionalLight", currDirLight);
-
-        this.setUniform("fog", scene.fog);
     }
 
     @Override

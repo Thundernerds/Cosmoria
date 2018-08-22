@@ -100,6 +100,16 @@ public class Geometry {
         }
     }
 
+    public BufferAttribute getVBO(int index) {
+        return this.vbos.get(index);
+    }
+
+    public void updateVBO(int index) {
+        this.bind();
+        this.vbos.get(index).updateAll();
+        this.unbind();
+    }
+
     public void bind() {
         glBindVertexArray(vaoId);
     }

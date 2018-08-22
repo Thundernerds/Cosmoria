@@ -5,7 +5,7 @@ import net.comsoria.engine.view.batch.RenderData;
 import net.comsoria.engine.view.Camera;
 import net.comsoria.engine.view.FadeFog;
 import net.comsoria.engine.view.GLSL.matrices.Transformation;
-import net.comsoria.engine.view.Light.SceneLight;
+import net.comsoria.engine.view.light.SceneLight;
 import net.comsoria.engine.view.Renderable;
 
 import java.io.Closeable;
