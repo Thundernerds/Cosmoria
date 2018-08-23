@@ -23,8 +23,7 @@ public class Rectangle extends UINode {
                 Float.valueOf(styleSet.ruleMap.get("width").value) * (window.getWidth() / 100f),
                 Float.valueOf(styleSet.ruleMap.get("height").value) * (window.getHeight() / 100f)
         ));
-        mesh = new Mesh2D(geometry, new Material());
-        mesh.shaderProgram = new ShaderProgram2D();
+        mesh = new Mesh2D(geometry, new Material(), new ShaderProgram2D());
         mesh.initShaderProgram();
 
         String texturePath = originalXML.getParam("imageSrc");

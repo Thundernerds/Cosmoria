@@ -18,10 +18,8 @@ public class CaveTunnel implements TerrainFeature {
         this.position = position;
     }
 
-    @Override
     public void loadGameObject(int graphicalSize, int range, ShaderProgram shaderProgram) throws IOException {
-        this.mesh = new Mesh(new Geometry(Shape.genCylinder(10, 20)), new Material());
-        this.mesh.material.shaderProgram = shaderProgram;
+        this.mesh = new Mesh(new Geometry(Shape.genCylinder(10, 20, 1)), new Material(), shaderProgram);
     }
 
     @Override
@@ -29,7 +27,7 @@ public class CaveTunnel implements TerrainFeature {
         return null;
     }
 
-    @Override
+
     public Vector2f getPosition() {
         return null;
     }

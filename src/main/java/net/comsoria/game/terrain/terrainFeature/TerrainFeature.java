@@ -7,7 +7,5 @@ import org.joml.Vector2f;
 import java.io.IOException;
 
 public interface TerrainFeature {
-    void loadGameObject(int graphicalSize, int range, ShaderProgram shaderProgram) throws IOException;
     Mesh getGameObject();
-    Vector2f getPosition();
 }

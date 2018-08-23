@@ -1,6 +1,7 @@
 package net.comsoria.game.terrain.terrainFeature.surfaceChunk;
 
 import net.comsoria.engine.utils.Grid;
+import net.comsoria.engine.utils.random.Random;
 import net.comsoria.engine.utils.Tuple;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.OBJLoader;
@@ -9,7 +10,7 @@ import net.comsoria.engine.view.graph.BufferAttribute;
 import net.comsoria.engine.view.graph.Geometry;
 import net.comsoria.engine.view.graph.Material;
 import net.comsoria.engine.view.graph.mesh.Mesh;
-import net.comsoria.game.terrain.mesh.ChunkMesh;
+import net.comsoria.engine.view.graph.mesh.NoViewMatrixMesh;
 import net.comsoria.game.terrain.terrainFeature.TerrainFeature;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
@@ -35,10 +36,6 @@ public class SurfaceChunk implements TerrainFeature {
         this.position = new Vector2f(position);
     }
 
-    public float random(int x, int y, float seed) {
-        return (float) (((Math.abs(Math.sin((x * 172.192) + (y * 827.232)) * seed) % 1) - 0.5) * 2);
-    }
-
     static {
         try {
             vertices = OBJLoader.loadGeometry(Utils.utils.p("$models/chunk_plane.obj"));
@@ -56,8 +53,7 @@ public class SurfaceChunk implements TerrainFeature {
         return result;
     }
 
-    @Override
-    public void loadGameObject(int graphicalSize, int range, ShaderProgram shaderProgram) throws IOException {
+    public void loadGameObject(float graphicalSize, ShaderProgram shaderProgram) throws IOException {
         this.position = this.position.mul(graphicalSize);
 
         Tuple<List<BufferAttribute>, int[]> data = getVertices();
@@ -70,18 +66,17 @@ public class SurfaceChunk implements TerrainFeature {
         for (int i = 0; i < array.length; i++) {
             Vector2i vec = grid.getXY(i).add(relative);
 
-            displacement[i * 2] = random(vec.x, vec.y, 10) * 0.005f;
-            displacement[(i * 2) + 1] = random(vec.x, vec.y, 76) * 0.005f;
+            displacement[i * 2] = Random.random.noise(vec.x, vec.y, 10) * 0.005f;
+            displacement[(i * 2) + 1] = Random.random.noise(vec.x, vec.y, 76) * 0.005f;
 
-            data.getA().get(0).set((i * 3) + 1, (array[i] / graphicalSize) * range);
+            data.getA().get(0).set((i * 3) + 1, array[i]);
         }
 
         data.getA().add(new BufferAttribute(displacement, 2));
 
-        gameObject = new ChunkMesh(new Geometry(data), new Material());
+        gameObject = new NoViewMatrixMesh(new Geometry(data), new Material(), shaderProgram);
 
         gameObject.material.ambientColour.set(0, 0, 0, 0);
-        gameObject.material.shaderProgram = shaderProgram;
         gameObject.geometry.setCullFace(GL_BACK);
 
         gameObject.position.set(position.x, 0, position.y);
@@ -91,10 +86,5 @@ public class SurfaceChunk implements TerrainFeature {
     @Override
     public Mesh getGameObject() {
         return gameObject;
-    }
-
-    @Override
-    public Vector2f getPosition() {
-        return position;
     }
 }

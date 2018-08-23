@@ -18,8 +18,7 @@ public class Model extends UINode {
 
     @Override
     protected void genMesh(Window window) throws Exception {
-        mesh = new Mesh2D(new Geometry(OBJLoader.loadGeometry(Utils.utils.p(this.originalXML.getParam("path")))), new Material());
-        mesh.shaderProgram = new ShaderProgram2D();
+        mesh = new Mesh2D(new Geometry(OBJLoader.loadGeometry(Utils.utils.p(this.originalXML.getParam("path")))), new Material(), new ShaderProgram2D());
         mesh.initShaderProgram();
     }
 

@@ -1,11 +1,9 @@
 package net.comsoria.engine.loaders;
 
-import net.comsoria.engine.utils.Random;
+import net.comsoria.engine.utils.random.Random;
 import net.comsoria.engine.utils.Tuple;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.view.graph.BufferAttribute;
-import net.comsoria.engine.view.graph.Geometry;
-import net.comsoria.engine.view.graph.mesh.Mesh2D;
 import org.joml.*;
 
 import java.lang.Math;
@@ -88,8 +86,8 @@ public final class Shape {
 
                 faces.add(new Vector3i(
                         ((i - 1) * pointsPerCircle) + x,
-                        ((i - 1) * pointsPerCircle) + x + 1,
-                        (i * pointsPerCircle) + x + 1
+                        (i * pointsPerCircle) + x + 1,
+                        ((i - 1) * pointsPerCircle) + x + 1
                 ));
             }
         }
@@ -125,7 +123,7 @@ public final class Shape {
         return generateDisplacement(points, (x, y, z) -> scale, d);
     }
 
-    public static BufferAttribute generateSphereDisplacement(BufferAttribute points, float scale, int d, int radius) {
+    public static BufferAttribute generateSphereDisplacement(BufferAttribute points, float scale, int d, float radius) {
         return generateDisplacement(points, (x, y, z) -> (Utils.distance(x, z) / radius) * scale, d);
     }
 
@@ -140,7 +138,7 @@ public final class Shape {
             float z = Utils.round(points.get((i * 3) + 2), 2);
 
             for (int a = 0; a < d; a++) {
-                data[(i * d) + a] = Random.noise(x, y, z, 23 * a) * generator.scale(x, y, z);
+                data[(i * d) + a] = Random.random.noise(x, y, z, 23.65f * a) * generator.scale(x, y, z);
             }
         }
 

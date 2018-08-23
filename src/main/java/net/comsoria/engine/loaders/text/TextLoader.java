@@ -76,8 +76,7 @@ public class TextLoader {
 
         Geometry geometry = new Geometry(new ArrayList<>(Arrays.asList(pos, texCoords)), indicesArr);
 
-        Mesh mesh = new Mesh2D(geometry, new Material());
-        mesh.shaderProgram = new ShaderProgram2D();
+        Mesh mesh = new Mesh2D(geometry, new Material(), new ShaderProgram2D());
         mesh.initShaderProgram();
         mesh.material.textures.add(texture.getTexture());
         mesh.shaderProgram.createTextureUniform("texture_sampler");

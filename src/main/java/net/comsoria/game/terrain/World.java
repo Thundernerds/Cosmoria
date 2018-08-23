@@ -14,69 +14,80 @@ import org.joml.Vector2i;
 import org.joml.Vector3f;
 
 import java.io.Closeable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class World implements Renderable {
-    private final List<TerrainFeature> buffer = new ArrayList<>();
+    public final static int MAX_DEPTH = 20000;
 
     private final List<TerrainFeatureLoader> loaders = new ArrayList<>();
-    private final List<TerrainFeature> features = new ArrayList<>();
+    private List<Chunk> chunks = new ArrayList<>();
 
-    private int radius = 16000;
+    private int radius = 4;
+    private float scale;
+
+    public World(float scale) {
+        this.scale = scale;
+    }
 
     public void addLoader(TerrainFeatureLoader loader) {
         this.loaders.add(loader);
     }
 
-    public TerrainFeature getFeature(Vector2f position) {
-        for (TerrainFeature feature : features) {
-            if (position.x == feature.getPosition().x && position.y == feature.getPosition().y) return feature;
-        }
-        return null;
+    public Chunk loadChunk(Vector2i position) throws IOException {
+        Chunk chunk = new Chunk(position);
+        chunk.load(loaders, scale);
+        return chunk;
     }
 
-    public void addFeature(TerrainFeature feature) {
-        features.add(feature);
-//        buffer.add(feature);
-    }
-
-    public List<TerrainFeature> getBuffer() {
-//        List<TerrainFeature> oldBuffer = new ArrayList<>();
-//        oldBuffer.addAll(buffer);
-//        buffer.clear();
+    public Chunk getChunk(Vector2i position) {
+        for (Chunk chunk : chunks)
+            if (position.x == chunk.position.x && position.y == chunk.position.y) return chunk;
 
         return null;
     }
 
-    public List<TerrainFeature> getFeatures() {
-        return features;
-    }
+    public void updateAroundPlayer(Vector2f playerPosition) throws IOException {
+        playerPosition = playerPosition.mul(1 / scale);
 
-    public void updateAroundPlayer(Vector2f playerPosition) throws Exception {
-        for (TerrainFeature feature : this.features) {
-            if (feature.getGameObject().visible && feature.getPosition().distance(playerPosition) > radius) {
-                feature.getGameObject().visible = false;
+        Vector2i chunkPosition = new Vector2i((int) playerPosition.x, (int) playerPosition.y);
+
+        for (int x = -radius; x < radius; x++) {
+            for (int y = -radius; y < radius; y++) {
+                Vector2i relativePosition = new Vector2i(x + chunkPosition.x, y + chunkPosition.y);
+
+                Chunk existing = this.getChunk(relativePosition);
+
+                if (existing == null) {
+                    Chunk chunk = this.loadChunk(relativePosition);
+                    this.chunks.add(chunk);
+                } else if (!existing.isShown()) existing.show();
             }
         }
 
-        for (TerrainFeatureLoader loader : loaders) loader.updateAroundPlayer(playerPosition, this, radius);
+        for (Chunk chunk : this.chunks) {
+            if (chunk.isShown() && new Vector2f(chunk.position).distance(playerPosition) > radius) {
+                chunk.hide();
+            }
+        }
     }
 
     @Override
     public Closeable render(Transformation transformation, Scene scene, RenderData renderData, Window window) throws Exception {
         List<Closeable> toClose = new ArrayList<>();
 
-        for (TerrainFeatureLoader loader : loaders)
+        for (TerrainFeatureLoader loader : loaders) {
             toClose.add(loader.getBatchRenderer().render(transformation, scene, renderData, window));
+        }
 
         return new BatchCloseable(toClose);
     }
 
     @Override
     public void cleanup() {
-        for (TerrainFeatureLoader loader : loaders) loader.getBatchRenderer().cleanup();
-        for (TerrainFeature feature : features) feature.getGameObject().cleanup();
+        for (TerrainFeatureLoader loader : loaders)
+            loader.getBatchRenderer().cleanup();
     }
 
     @Override

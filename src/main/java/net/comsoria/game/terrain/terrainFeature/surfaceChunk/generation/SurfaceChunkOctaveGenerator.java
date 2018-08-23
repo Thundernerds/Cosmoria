@@ -1,33 +1,30 @@
-package net.comsoria.game.terrain.generation;
+package net.comsoria.game.terrain.terrainFeature.surfaceChunk.generation;
 
 import net.comsoria.engine.utils.Grid;
-import org.joml.Vector2f;
+import net.comsoria.engine.utils.SimplexNoise;
+import net.comsoria.game.terrain.terrainFeature.Octave;
 import org.joml.Vector2i;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OctaveGenerator implements ITerrainGenerator {
+public class SurfaceChunkOctaveGenerator implements SurfaceChunkTerrainGenerator {
     public List<Octave> octaves;
     public float overallHeight = 1;
     public float overallMultiplier = 1;
 
-    public OctaveGenerator(List<Octave> octaves) {
+    public SurfaceChunkOctaveGenerator(List<Octave> octaves) {
         this.octaves = octaves;
     }
 
-    public OctaveGenerator(List<Octave> octaves, float seed) {
+    public SurfaceChunkOctaveGenerator(List<Octave> octaves, float seed) {
         for (Octave octave : octaves) {
             octave.seed = seed;
         }
         this.octaves = octaves;
     }
 
-    public OctaveGenerator(int octaves, float seed) {
+    public SurfaceChunkOctaveGenerator(int octaves, float seed) {
         this.octaves = new ArrayList<>();
         for (int i = 0; i < octaves; i++) {
             Octave octave = new Octave();
@@ -38,7 +35,7 @@ public class OctaveGenerator implements ITerrainGenerator {
         }
     }
 
-    public OctaveGenerator(int octaves, float seed, float overallMultiplier, float overallHeight) {
+    public SurfaceChunkOctaveGenerator(int octaves, float seed, float overallMultiplier, float overallHeight) {
         this(octaves, seed);
         this.overallHeight = overallHeight;
         this.overallMultiplier = overallMultiplier;
@@ -61,41 +58,6 @@ public class OctaveGenerator implements ITerrainGenerator {
                         (y + (chunkPosition.y * grid.getHeight()) - chunkPosition.y) * this.overallMultiplier
                 ) * this.overallHeight);
             }
-        }
-    }
-
-    public void writeToImage(String path) throws IOException {
-        int WIDTH = 100, HEIGHT = 100;
-        BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        for (int y = 0; y < HEIGHT; y++)
-        {
-            for (int x = 0; x < WIDTH; x++)
-            {
-                double value = this.get(x, y);
-                System.out.println(value);
-                int rgb = 0x010101 * (int)((value + 1) * 127.5);
-                image.setRGB(x, y, rgb);
-            }
-        }
-        ImageIO.write(image, "png", new File(path));
-    }
-
-    public static class Octave {
-        public Float height = null;
-        public Float multiplier = null;
-        public Float seed = null;
-
-        public Octave() {}
-
-        public Octave(float multiplier, float height) {
-            this.height = height;
-            this.multiplier = multiplier;
-        }
-
-        public Octave(float multiplier, float height, float seed) {
-            this.height = height;
-            this.multiplier = multiplier;
-            this.seed = seed;
         }
     }
 }

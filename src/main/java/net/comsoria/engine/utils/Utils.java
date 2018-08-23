@@ -1,12 +1,10 @@
 package net.comsoria.engine.utils;
 
-import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector3i;
-import org.joml.Vector4f;
+import org.joml.*;
 import org.lwjgl.BufferUtils;
 
 import java.io.*;
+import java.lang.Math;
 import java.nio.ByteBuffer;
 import java.util.*;
 
@@ -98,12 +96,11 @@ public class Utils {
         return map;
     }
 
-    public static void println(Vector3f vec, PrintStream stream) {
-        stream.println("Vector3f[" + vec.x + "," + vec.y + "," + vec.z + "]");
-    }
-
-    public static void println(Vector3i vec, PrintStream stream) {
-        stream.println("Vector3i[" + vec.x + "," + vec.y + "," + vec.z + "]");
+    public static void println(PrintStream stream, Object... objects) {
+        for (Object object : objects) {
+            stream.print(object + " ");
+        }
+        stream.print('\n');
     }
 
     public static <T> T last(List<T> items) {
@@ -127,5 +124,21 @@ public class Utils {
         }
 
         return (float) Math.sqrt(added);
+    }
+
+    public static String getString(Vector3f vec) {
+        return "Vector3f[" + vec.x + "," + vec.y + "," + vec.z + "]";
+    }
+
+    public static String getString(Vector2f vec) {
+        return "Vector2f[" + vec.x + "," + vec.y + "]";
+    }
+
+    public static String getString(Vector2i vec) {
+        return "Vector2i[" + vec.x + "," + vec.y + "]";
+    }
+
+    public static String getString(Vector3i vec) {
+        return "Vector3i[" + vec.x + "," + vec.y + "," + vec.z + "]";
     }
 }

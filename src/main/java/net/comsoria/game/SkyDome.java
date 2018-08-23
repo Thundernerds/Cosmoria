@@ -4,7 +4,7 @@ import net.comsoria.engine.Scene;
 import net.comsoria.engine.utils.Tuple;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.loaders.OBJLoader;
-import net.comsoria.engine.view.GLSL.Programs.CustomShaderProgram;
+import net.comsoria.engine.view.GLSL.programs.CustomShaderProgram;
 import net.comsoria.engine.view.GLSL.matrices.Transformation;
 import net.comsoria.engine.view.graph.BufferAttribute;
 import net.comsoria.engine.view.graph.Geometry;
@@ -24,9 +24,9 @@ public class SkyDome {
         Tuple<List<BufferAttribute>, int[]> data = OBJLoader.loadGeometry(Utils.utils.p("$models/skydome.obj"));
         data.getA().remove(1);
         data.getA().remove(1);
-        Mesh dome = new SkyBox(new Geometry(data), new Material());
+        Mesh dome = new SkyBox(new Geometry(data), new Material(), null);
 
-        dome.material.shaderProgram = new CustomShaderProgram(fragment, vertex, Arrays.asList("color1", "color2", "modelViewMatrix", "projectionMatrix", "sunDirection", "sunLine"), Arrays.asList("sun")) {
+        dome.shaderProgram = new CustomShaderProgram(fragment, vertex, Arrays.asList("color1", "color2", "modelViewMatrix", "projectionMatrix", "sunDirection", "sunLine"), Arrays.asList("sun")) {
             @Override
             public void setupScene(Scene scene, Transformation transformation) {
                 this.setUniform("projectionMatrix", transformation.getProjection());

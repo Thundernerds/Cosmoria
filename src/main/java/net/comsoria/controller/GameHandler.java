@@ -15,23 +15,25 @@ import net.comsoria.engine.loaders.xhtml.ui.node.Canvas;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.view.FadeFog;
 import net.comsoria.engine.view.FrameBuffer;
-import net.comsoria.engine.view.Light.DirectionalLight;
+import net.comsoria.engine.view.light.DirectionalLight;
 import net.comsoria.engine.view.Window;
 import net.comsoria.engine.view.color.Color3;
 import net.comsoria.engine.view.graph.Texture;
 import net.comsoria.engine.view.input.KeyListener;
 import net.comsoria.game.Player;
 import net.comsoria.game.SkyDome;
+import net.comsoria.game.terrain.terrainFeature.Octave;
+import net.comsoria.game.terrain.terrainFeature.cave.cave.CaveLoader;
+import net.comsoria.game.terrain.terrainFeature.cave.cave.generation.CaveOctaveGenerator;
 import net.comsoria.game.terrain.terrainFeature.surfaceChunk.SurfaceChunkLoader;
 import net.comsoria.game.terrain.World;
 
-import net.comsoria.game.terrain.generation.OctaveGenerator;
+import net.comsoria.game.terrain.terrainFeature.surfaceChunk.generation.SurfaceChunkOctaveGenerator;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -61,14 +63,13 @@ public class GameHandler extends DocumentHandler {
         );
 
         scene = ((Canvas) document.getElementByID("main")).scene;
-//        scene = new Scene();
         scene.camera.far = 6000;
 
         compass = document.getElementByID("compass");
         compass.getMesh().rotation.z = 180;
 
         player = new Player(new Vector3f(0, 0, 0));
-        world = new World();
+        world = new World(4000);
         scene.add(world);
 
         float skyDomeR = scene.camera.far - 100;
@@ -78,13 +79,28 @@ public class GameHandler extends DocumentHandler {
                 skyDomeR, new Texture(Utils.utils.getPath("$textures/sun.png"))
         ));
 
-        List<OctaveGenerator.Octave> octaves = new ArrayList<>();
+        SurfaceChunkOctaveGenerator generator = new SurfaceChunkOctaveGenerator(Arrays.asList(
+                new Octave(0.05f, 0.06f, (float) Math.random() * 100),
+                new Octave(0.025f, 0.12f, (float) Math.random() * 100),
+                new Octave(0.015f, 0.25f, (float) Math.random() * 100)
+        ));
+        generator.overallHeight = 0.7f;
 
-        octaves.add(new OctaveGenerator.Octave(0.05f, 1.2f, (float) Math.random() * 100));
-        octaves.add(new OctaveGenerator.Octave(0.035f, 1.5f, (float) Math.random() * 100));
-        octaves.add(new OctaveGenerator.Octave(0.02f, 2f, (float) Math.random() * 100));
-
-        world.addLoader(new SurfaceChunkLoader(new OctaveGenerator(octaves), 65, 4000, 200, skyDomeR));
+        world.addLoader(new SurfaceChunkLoader(generator, 65, skyDomeR));
+        world.addLoader(new CaveLoader(
+                skyDomeR,
+                (float) Math.random() * 100,
+                (float) Math.random() * 100,
+                (float) Math.random() * 100,
+                2,
+                new CaveOctaveGenerator(Arrays.asList(
+                        new Octave(0.05f, 5f, (float) Math.random() * 100),
+                        new Octave(0.1f, 2f, (float) Math.random() * 100),
+                        new Octave(0.2f, 1f, (float) Math.random() * 100)
+                )),
+                100,
+                0.01f
+        ));
 //        chunkLoader.updateAroundPlayer(player.get2DPosition(), world);
         world.updateAroundPlayer(player.get2DPosition());
 
@@ -155,13 +171,6 @@ public class GameHandler extends DocumentHandler {
 
             if (keyInput.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
                 movement.y -= 1;
-            }
-
-            if (keyInput.isKeyPressed(GLFW_KEY_P)) {
-                scene.camera.fov += 0.1;
-            }
-            if (keyInput.isKeyPressed(GLFW_KEY_L)) {
-                scene.camera.fov -= 0.1;
             }
 
             float speed = player.getSpeed(keyInput.isKeyPressed(GLFW_KEY_LEFT_CONTROL));
