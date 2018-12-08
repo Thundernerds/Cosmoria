@@ -39,7 +39,6 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class GameHandler extends DocumentHandler {
     private World world;
-    private SurfaceChunkLoader chunkLoader;
     private Player player;
 
     private boolean paused = true;

@@ -96,6 +96,13 @@ public class Utils {
         return map;
     }
 
+    public static void println(PrintStream stream, float[] data) {
+        for (Object object : data) {
+            stream.print(object + " ");
+        }
+        stream.print('\n');
+    }
+
     public static void println(PrintStream stream, Object... objects) {
         for (Object object : objects) {
             stream.print(object + " ");

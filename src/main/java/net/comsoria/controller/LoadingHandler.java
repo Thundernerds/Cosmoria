@@ -30,8 +30,8 @@ public class LoadingHandler extends DocumentHandler {
 
     @Override public DocumentHandler update(Window window, Document document, float interval) throws Exception {
         if (window.isResized()) {
-            StyleSet.StyleRule rule = this.center.styleSet.ruleMap.get("scale");
-            rule.setValue(Float.valueOf(rule.value) * (window.getWidth() / 800f));
+//            StyleSet.StyleRule rule = this.center.styleSet.ruleMap.get("scale");
+//            rule.setValue(Float.valueOf(rule.value) * (window.getWidth() / 800f));
 
             document.updateAllStyleSets(window);
         }

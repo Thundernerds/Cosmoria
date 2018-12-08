@@ -1,5 +1,6 @@
 package net.comsoria.engine.loaders.text;
 
+import net.comsoria.engine.utils.Tuple;
 import net.comsoria.engine.utils.Utils;
 import net.comsoria.engine.view.GLSL.programs.ShaderProgram2D;
 import net.comsoria.engine.view.graph.BufferAttribute;
@@ -17,7 +18,7 @@ public class TextLoader {
     private static final float ZPOS = 0.0f;
     private static final int VERTICES_PER_QUAD = 4;
 
-    public static Mesh buildMesh(String text, FontTexture texture) throws IOException {
+    public static Tuple<List<BufferAttribute>, int[]> buildGeometryData(String text, FontTexture texture) {
         List<Float> positions = new ArrayList<>();
         List<Float> textCoords = new ArrayList<>();
         List<Integer> indices   = new ArrayList<>();
@@ -74,7 +75,11 @@ public class TextLoader {
         BufferAttribute pos = new BufferAttribute(Utils.listToArray(positions), 3);
         BufferAttribute texCoords = new BufferAttribute(Utils.listToArray(textCoords), 2);
 
-        Geometry geometry = new Geometry(new ArrayList<>(Arrays.asList(pos, texCoords)), indicesArr);
+        return new Tuple<>(new ArrayList<>(Arrays.asList(pos, texCoords)), indicesArr);
+    }
+
+    public static Mesh buildMesh(String text, FontTexture texture) throws IOException {
+        Geometry geometry = new Geometry(buildGeometryData(text, texture));
 
         Mesh mesh = new Mesh2D(geometry, new Material(), new ShaderProgram2D());
         mesh.initShaderProgram();

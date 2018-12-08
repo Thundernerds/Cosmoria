@@ -123,6 +123,12 @@ public class BufferAttribute {
         return this.data.length / this.indices;
     }
 
+    public void translate(float... dimensions) {
+        for (int i = 0; i < data.length; i++) {
+            data[i] += dimensions[i % dimensions.length];
+        }
+    }
+
     public BufferAttribute clone() {
         return new BufferAttribute(this.data.clone(), this.indices);
     }

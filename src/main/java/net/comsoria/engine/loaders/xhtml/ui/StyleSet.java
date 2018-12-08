@@ -32,7 +32,7 @@ public class StyleSet {
                 mesh.position.y = (Float.valueOf(parts[1]) / 100f) * window.getHeight();
             }
         });
-        ruleMap.put("color", new StyleRule("1 1 1") {
+        ruleMap.put("color", new StyleRule("0 0 0") {
             @Override
             void modifyMesh(Mesh mesh, Window window, String value) throws Exception {
                 String[] parts = value.split(" ");

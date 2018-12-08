@@ -145,6 +145,31 @@ public final class Shape {
         return new BufferAttribute(data, d);
     }
 
+    public static void reanchor(BufferAttribute points, float x, float y, float z) {
+        float[] min = new float[] {0, 0, 0};
+        float[] max = new float[] {0, 0, 0};
+
+        for (int i = 0; i < points.parts(); i++) {
+            Vector3f vec = points.getVec3(i);
+
+            if (vec.x < min[0]) min[0] = vec.x;
+            if (vec.y < min[1]) min[1] = vec.y;
+            if (vec.z < min[2]) min[2] = vec.z;
+
+            if (vec.x > max[0]) max[0] = vec.x;
+            if (vec.y > max[1]) max[1] = vec.y;
+            if (vec.z > max[2]) max[2] = vec.z;
+        }
+
+        float[] diff = new float[] {max[0] - min[0], max[1] - min[1], max[2] - min[2]};
+
+        points.translate(
+                -((diff[0] * x) + min[0]),
+                -((diff[1] * y) + min[1]),
+                -((diff[2] * z) + min[2])
+        );
+    }
+
     public interface DisplacementGenerator {
         float scale(float x, float y, float z);
     }
