@@ -48,7 +48,7 @@ public class StartupFileHandler {
         Utils.utils.addName("git", "https://raw.githubusercontent.com/Thundernerds/CosmoriaResources/master/", true);
         try {
             Logger.log("Downloading new data...");
-            CSVLoader csvFile = new CSVLoader(WebLoader.loadResourceFromNet(Utils.utils.p("$git/gitPath.csv")));
+            CSVLoader csvFile = new CSVLoader(WebLoader.loadResourceFromNet(Utils.utils.np("$git/gitPath.csv")));
 
             for (int i = 0; i < csvFile.rows(); i++) {
                 CSVLoader.Row row = csvFile.getRow(i);

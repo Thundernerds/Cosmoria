@@ -15,10 +15,14 @@ public class Utils {
     public JSONFile settings;
 
     public String getPath(String path) {
+        return getNetPath(path).replace("/", File.separator);
+    }
+
+    public String getNetPath(String path) {
         for (String name : names.keySet()) {
             path = path.replace(name, names.get(name));
         }
-        return path.replace("/", File.separator);
+        return path;
     }
 
     public void addName(String name, String path) {
@@ -33,6 +37,10 @@ public class Utils {
     public String p(String path) {
         return getPath(path);
     }
+    public String np(String path) {
+        return getNetPath(path);
+    }
+
 
     public void createDirs(String[] paths) {
         for (String path : paths) {
