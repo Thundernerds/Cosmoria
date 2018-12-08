@@ -61,9 +61,9 @@ public class StartupFileHandler {
                     if (gitPath.equals("null")) {
                         file.mkdir();
                     } else if (gitPath.endsWith(".png") || gitPath.endsWith(".ttf") || gitPath.endsWith(".ogg")) {
-                        WebLoader.copyImageFromNet(Utils.utils.p("$git/" + gitPath), path);
+                        WebLoader.copyImageFromNet(Utils.utils.np("$git/" + gitPath), path);
                     } else {
-                        FileLoader.writeResource(file, WebLoader.loadResourceFromNet(Utils.utils.p("$git/" + gitPath)));
+                        FileLoader.writeResource(file, WebLoader.loadResourceFromNet(Utils.utils.np("$git/" + gitPath)));
                     }
                 }
             }
